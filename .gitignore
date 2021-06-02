@@ -38,7 +38,8 @@ neck
 *.out
 *.app
 
-# cache
+# Cache
 .cache/
 
+# Compile Commands
 compile_commands.json
