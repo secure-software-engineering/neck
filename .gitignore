@@ -37,3 +37,8 @@ neck
 *.exe
 *.out
 *.app
+
+# cache
+.cache/
+
+compile_commands.json

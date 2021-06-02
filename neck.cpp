@@ -31,17 +31,17 @@
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/raw_ostream.h"
 
-template <typename MapT, typename Pred>
-std::size_t my_erase_if(MapT &c, Pred pred) {
-  auto old_size = c.size();
-  for (auto i = c.begin(), last = c.end(); i != last;) {
-    if (pred(*i)) {
-      i = c.erase(i);
+template <typename MapT, typename Predicate>
+std::size_t eraseIf(MapT &C, Predicate Pred) {
+  auto OldSize = C.size();
+  for (auto It = C.begin(), Last = C.end(); It != Last;) {
+    if (Pred(*It)) {
+      It = C.erase(It);
     } else {
-      ++i;
+      ++It;
     }
   }
-  return old_size - c.size();
+  return OldSize - C.size();
 }
 
 class NeckAnalysis {
@@ -53,13 +53,14 @@ private:
   llvm::BasicBlock *Neck;
 
   /// Breadth-first search.
-  bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst) {
+  static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst) {
     size_t Dummy = 0;
     return isReachable(Src, Dst, Dummy);
   }
 
   /// Breadth-first search that computes distance.
-  bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst, size_t &Dist) {
+  static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
+                          size_t &Dist) {
     if (Src->getParent() != Dst->getParent()) {
       return false;
     }
@@ -119,7 +120,7 @@ private:
     size_t ShortestDist = std::numeric_limits<size_t>::max();
     llvm::BasicBlock *Closest = nullptr;
     for (auto *NeckCandidate : NeckCandidates) {
-      size_t Dist;
+      size_t Dist = 0;
       if (isReachable(&F.getEntryBlock(), NeckCandidate, Dist)) {
         if (Dist < ShortestDist) {
           ShortestDist = Dist;
@@ -139,7 +140,7 @@ private:
     if (!BB->getTerminator()->getNumSuccessors()) {
       return false;
     }
-    for (const auto *BBSucc : llvm::successors(BB)) {
+    for (const auto *BBSucc : llvm::successors(BB)) { // NOLINT
       if (!DT.dominates(BB, BBSucc)) {
         return false;
       }
@@ -185,19 +186,17 @@ public:
       }
     }
     // remove all basic blocks that are part of a loop
-    my_erase_if(NeckCandidates,
-                [this](auto *BB) { return isInLoopStructue(BB); });
+    eraseIf(NeckCandidates, [this](auto *BB) { return isInLoopStructue(BB); });
     // add the loops' respective exit blocks
     NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
     // remove all basic blocks that do not dominate their successors
-    my_erase_if(NeckCandidates,
-                [this](auto *BB) { return !dominatesSuccessors(BB); });
+    eraseIf(NeckCandidates,
+            [this](auto *BB) { return !dominatesSuccessors(BB); });
     // remove all basic blocks that do not succeed a loop
-    my_erase_if(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
+    eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
     // remove all basic blocks that are not reachable from main
-    my_erase_if(NeckCandidates, [this](auto *BB) {
-      return !isReachable(&this->F.front(), BB);
-    });
+    eraseIf(NeckCandidates,
+            [this](auto *BB) { return !isReachable(&this->F.front(), BB); });
     // compute the neck
     Neck = closestNeckCandidateReachableFromEntry();
   }
@@ -240,11 +239,11 @@ struct GraphTraits<const NeckAnalysisCFG *>
 
   using nodes_iterator = pointer_iterator<Function::iterator>;
 
-  static nodes_iterator nodes_begin(const NeckAnalysisCFG *NACFG) {
+  static nodes_iterator nodes_begin(const NeckAnalysisCFG *NACFG) { // NOLINT
     return nodes_iterator(NACFG->F.begin());
   }
 
-  static nodes_iterator nodes_end(const NeckAnalysisCFG *NACFG) {
+  static nodes_iterator nodes_end(const NeckAnalysisCFG *NACFG) { // NOLINT
     return nodes_iterator(NACFG->F.end());
   }
 
@@ -278,8 +277,9 @@ struct DOTGraphTraits<const NeckAnalysisCFG *>
     return "";
   }
 
-  std::string getEdgeAttributes(const BasicBlock *Node, const_succ_iterator I,
-                                const NeckAnalysisCFG *NACFG) {
+  static std::string getEdgeAttributes(const BasicBlock *Node,
+                                       const_succ_iterator I,
+                                       const NeckAnalysisCFG *NACFG) {
     return DOTGraphTraits<const Function *>::getEdgeAttributes(Node, I,
                                                                &NACFG->F);
   }
@@ -298,7 +298,8 @@ int main(int argc, char **argv) {
   // Parse an LLVM IR file.
   llvm::SMDiagnostic Diag;
   llvm::LLVMContext CTX;
-  std::unique_ptr<llvm::Module> M = llvm::parseIRFile(argv[1], Diag, CTX);
+  std::unique_ptr<llvm::Module> M =
+      llvm::parseIRFile(argv[1], Diag, CTX); // NOLINT
   // Check if the module is valid.
   bool BrokenDbgInfo = false;
   if (llvm::verifyModule(*M, &llvm::errs(), &BrokenDbgInfo)) {
@@ -312,6 +313,7 @@ int main(int argc, char **argv) {
   auto *Main = M->getFunction("main");
   if (!Main) {
     llvm::errs() << "error: could not retrieve 'main()'!\n";
+    return 1;
   }
   NeckAnalysis NA(*Main);
   NeckAnalysisCFG G(NA);
