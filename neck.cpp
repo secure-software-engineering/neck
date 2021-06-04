@@ -27,6 +27,7 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/IRReader/IRReader.h"
+#include "llvm/Support/DOTGraphTraits.h"
 #include "llvm/Support/GraphWriter.h"
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/raw_ostream.h"
@@ -251,18 +252,19 @@ struct GraphTraits<const NeckAnalysisCFG *>
 };
 
 template <>
-struct DOTGraphTraits<const NeckAnalysisCFG *>
-    : public DOTGraphTraits<const Function *> {
-  DOTGraphTraits(bool IsSimple = false)
-      : DOTGraphTraits<const Function *>(IsSimple) {}
+struct DOTGraphTraits<const NeckAnalysisCFG *> : DefaultDOTGraphTraits {
+  DOTGraphTraits(bool IsSimple = false) : DefaultDOTGraphTraits(IsSimple) {}
 
   static std::string getGraphName(const NeckAnalysisCFG *NACFG) {
+    llvm::outs() << "called getGraphName()!\n";
     return "Neck Analysis for '" + NACFG->F.getName().str() + "' Function";
   }
 
   std::string getNodeLabel(const BasicBlock *Node,
                            const NeckAnalysisCFG *NACFG) {
-    return DOTGraphTraits<const Function *>::getNodeLabel(Node, &NACFG->F);
+    FuncInfos.push_back(std::make_unique<DOTFuncInfo>(&NACFG->F));
+    return DOTGraphTraits<DOTFuncInfo *>::getCompleteNodeLabel(
+        Node, FuncInfos.back().get());
   }
 
   static std::string getNodeAttributes(const BasicBlock *Node,
@@ -280,9 +282,10 @@ struct DOTGraphTraits<const NeckAnalysisCFG *>
   static std::string getEdgeAttributes(const BasicBlock *Node,
                                        const_succ_iterator I,
                                        const NeckAnalysisCFG *NACFG) {
-    return DOTGraphTraits<const Function *>::getEdgeAttributes(Node, I,
-                                                               &NACFG->F);
+    return DefaultDOTGraphTraits::getEdgeAttributes(Node, I, &NACFG->F);
   }
+
+  std::vector<std::unique_ptr<DOTFuncInfo>> FuncInfos;
 };
 
 } // namespace llvm
