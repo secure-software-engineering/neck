@@ -1,5 +1,5 @@
-# The final binary
-neck
+# The build directory
+build/
 
 # LLVM IR
 *.ll

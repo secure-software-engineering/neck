@@ -1,0 +1,6 @@
+#ifndef NECKID_CONFIG_VERSION_H
+#define NECKID_CONFIG_VERSION_H
+
+#define NECKID_VERSION v0.1
+
+#endif
