@@ -11,7 +11,23 @@ $ git submodule init
 $ git submodule update
 ```
 
-Build the project using:
+The custom coreutils also need to be checked out correctly:
+
+```
+$ cd external/custom-coreutils/
+$ git submodule init
+$ git submodule update
+```
+
+Next, the coreutils programs must be compiled to LLVM intermediate representation (LLVM IR):
+
+```
+$ cd external/custom-coreutils/
+$ CC=wllvm configure --disable-nls CFLAGS="-g -O1 -Xclang -disable-llvm-passes -D__NO_STRING_INLINES  -D_FORTIFY_SOURCE=0 -U__OPTIMIZE__"
+$ make
+```
+
+Build the actual project using (assuming you are in the project's root directory):
 
 ```
 $ mkdir build
