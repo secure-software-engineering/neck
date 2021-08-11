@@ -26,3 +26,4 @@ include_directories(TestUtils)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/TestUtils)
 
 add_subdirectory(NeckBenchmark)
+add_subdirectory(NeckCoreutilsBenchmark)
