@@ -93,7 +93,7 @@ neckid::NeckAnalysis::getLoopExitBlocks(llvm::BasicBlock *BB) {
   auto *Loop = LI.getLoopFor(BB);
   if (Loop) {
     llvm::SmallVector<llvm::BasicBlock *, 5> Exits;
-    Loop->getExitBlocks(Exits);
+    Loop->getUniqueExitBlocks(Exits);
     std::unordered_set<llvm::BasicBlock *> Result;
     Result.insert(Exits.begin(), Exits.end());
     return Result;
@@ -122,15 +122,51 @@ bool neckid::NeckAnalysis::isInLoopStructue(llvm::BasicBlock *BB) {
   return Loop != nullptr;
 }
 
+// SOURCE: https://llvm.org/doxygen/SanitizerCoverage_8cpp_source.html#l00516
+// True if block has successors and it dominates all of them.
+bool neckid::NeckAnalysis::isFullDominator(const llvm::BasicBlock *BB, const llvm::DominatorTree *DT) {
+  if (succ_empty(BB)) {
+    return false;
+  }
+
+  return llvm::all_of(successors(BB), [&](const llvm::BasicBlock *SUCC) {
+    return DT->dominates(BB, SUCC);
+  });
+}
+
+bool neckid::NeckAnalysis::isBackEdge(llvm::BasicBlock *From, llvm::BasicBlock *To,
+                      const llvm::DominatorTree *DT) {
+    // check if any successor of From dominates To
+    // in case of basename, there is a backedge from From to To
+    // essentially, DT->dominates(To, To) which will return True
+    for (auto *Succ : llvm::successors(From)) { // NOLINT
+      if (DT->dominates(Succ, To)) {
+        return true;
+      }
+    }
+
+  return false;
+}
+
 bool neckid::NeckAnalysis::dominatesSuccessors(llvm::BasicBlock *BB) {
   if (!BB->getTerminator()->getNumSuccessors()) {
     return false;
   }
-  for (const auto *BBSucc : llvm::successors(BB)) { // NOLINT
+  for (auto *BBSucc : llvm::successors(BB)) { // NOLINT
     if (!DT.dominates(BB, BBSucc)) {
       return false;
     }
+    else {
+      // if BB dominates BBSucc
+      // make sure no edge from BBSucc to BB
+      if(isBackEdge(BBSucc, BB, &DT)) {
+        return false;
+      }
+    }
   }
+
+  // or use this function directly.
+  // return isFullDominator(BB, &DT);
   return true;
 }
 
@@ -170,7 +206,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Function &F) : F(F), DT(F), LI(DT) {
       LoopBBs.insert(ExitBlocks.begin(), ExitBlocks.end());
     }
   }
-  // remove all basic blocks that are part of a loop
+  // remove all basic blocks that are part of a loop (also removes loop exits)
   eraseIf(NeckCandidates, [this](auto *BB) { return isInLoopStructue(BB); });
   // add the loops' respective exit blocks
   NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
@@ -178,7 +214,13 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Function &F) : F(F), DT(F), LI(DT) {
   eraseIf(NeckCandidates,
           [this](auto *BB) { return !dominatesSuccessors(BB); });
   // remove all basic blocks that do not succeed a loop
-  eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
+  // eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
+
+  // remove all basic blocks that are not loop exits (LoopBBs contain all loop exits; take AND of NeckCandidates and LoopBBs)
+  eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB); });
+
+  // TODO: remove all basic blocks that are Loop latches which have a direct/indirect backedge to the loop header
+ 
   // remove all basic blocks that are not reachable from main
   eraseIf(NeckCandidates,
           [this](auto *BB) { return !isReachable(&this->F.front(), BB); });
