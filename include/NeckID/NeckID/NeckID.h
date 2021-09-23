@@ -72,6 +72,11 @@ private:
 
   bool isInLoopStructue(llvm::BasicBlock *BB);
 
+  static bool isFullDominator(const llvm::BasicBlock *BB, const llvm::DominatorTree *DT);
+
+  static bool isBackEdge(llvm::BasicBlock *From, llvm::BasicBlock *To,
+                      const llvm::DominatorTree *DT);
+
   bool dominatesSuccessors(llvm::BasicBlock *BB);
 
   bool succeedsLoop(llvm::BasicBlock *BB);
