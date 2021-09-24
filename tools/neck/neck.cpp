@@ -96,5 +96,7 @@ int main(int Argc, char **Argv) {
   neckid::NeckAnalysis NA(*Main);
   neckid::NeckAnalysisCFG G(NA);
   G.viewCFG();
+  NA.markIdentifiedNeck();
+  NA.dumpModule();
   return 0;
 }

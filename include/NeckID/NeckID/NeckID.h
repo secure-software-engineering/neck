@@ -93,6 +93,12 @@ public:
 
   /// Returns the definite neck or nullptr, if no neck could be found.
   [[nodiscard]] llvm::BasicBlock *getNeck();
+
+  /// Inserts a special function call to '' to denote the basic block that has been identified as the neck.
+  void markIdentifiedNeck(const std::string &FunName = "_klee_dump_memory_");
+
+  /// Dumps the underlying module to the output stream.
+  void dumpModule(llvm::raw_ostream &OS = llvm::outs());
 };
 
 struct NeckAnalysisCFG {

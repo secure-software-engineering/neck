@@ -13,30 +13,66 @@
 
 #include "NeckID/NeckID/NeckID.h"
 
-TEST(NeckIDTest, HandleBasic_01) {
-  // Setup
-  std::string File =
-      neckid::unittest::PathToLLTestFiles + "basic/example_01_cpp_dbg.ll";
-  // Parsing
+namespace {
+const std::string NeckIDFunctionName = "_neck_identification_mark_as_neck_";
+} // anonymous namespace
+
+// ============== TEST FIXTURE ============== //
+class NeckBenchmarkTest : public ::testing::Test {
+protected:
   llvm::SMDiagnostic Diag;
   llvm::LLVMContext CTX;
-  std::unique_ptr<llvm::Module> M = llvm::parseIRFile(File, Diag, CTX);
-  bool BrokenDbgInfo = false;
-  if (llvm::verifyModule(*M, &llvm::errs(), &BrokenDbgInfo)) {
-    llvm::errs() << "error: invalid module\n";
+  std::unique_ptr<llvm::Module> M;
+
+  void SetUp() override {}
+
+  void TearDown() override {}
+
+  llvm::BasicBlock *identifyNeck(const std::string &LlvmFilePath,
+                                 [[maybe_unused]] bool Debug = false) {
+    // Parsing
+    bool BrokenDbgInfo = false;
+    M = llvm::parseIRFile(LlvmFilePath, Diag, CTX);
+    if (llvm::verifyModule(*M, &llvm::errs(), &BrokenDbgInfo)) {
+      llvm::errs() << "error: invalid module\n";
+    }
+    if (BrokenDbgInfo) {
+      llvm::errs() << "caution: debug info is broken\n";
+    }
+    // Neck identification
+    auto *F = M->getFunction("main");
+    neckid::NeckAnalysis NA(*F);
+    return NA.getNeck();
   }
-  if (BrokenDbgInfo) {
-    llvm::errs() << "caution: debug info is broken\n";
+
+  void checkResult(llvm::BasicBlock *IdentifiedNeck) {
+    // Get ground truth and compare with the computed result
+    auto *NeckID = M->getFunction(NeckIDFunctionName);
+    assert(NeckID->hasOneUse() &&
+           "Expect one and only one use of the neck-id function!");
+    llvm::CallBase *NeckIDCallSite = nullptr;
+    for (auto *User : NeckID->users()) {
+      // get the call to the special neck id function
+      if ((NeckIDCallSite = llvm::dyn_cast<llvm::CallBase>(User))) {
+        break;
+      }
+    }
+    assert(NeckIDCallSite &&
+           "Expected to find a call to the neck-id function!");
+    // get the callsites respective basic block
+    const llvm::BasicBlock *GroundTruth = NeckIDCallSite->getParent();
+    // Unit test
+    EXPECT_EQ(IdentifiedNeck, GroundTruth); // NOLINT
   }
-  auto *F = M->getFunction("main");
-  neckid::NeckAnalysis NA(*F);
-  const llvm::BasicBlock *Neck = NA.getNeck();
-  // Ground truth
-  // TODO specify
-  const llvm::BasicBlock *GroundTruth = nullptr;
-  // Unit test
-  // TODO fixme
-  EXPECT_EQ(Neck, GroundTruth);
+
+}; // Test Fixture
+
+TEST_F(NeckBenchmarkTest, HandleBasic_01) {
+  // Setup and check results
+  const std::string File =
+      neckid::unittest::PathToLLTestFiles + "basic/example_01_cpp_dbg.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
 }
 
 // main function for the test case
