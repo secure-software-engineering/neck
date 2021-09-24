@@ -93,7 +93,7 @@ int main(int Argc, char **Argv) {
     llvm::errs() << "error: could not retrieve 'main()'!\n";
     return 1;
   }
-  neckid::NeckAnalysis NA(*Main);
+  neckid::NeckAnalysis NA(*Main, Vars.count("verbose"));
   neckid::NeckAnalysisCFG G(NA);
   G.viewCFG();
   NA.markIdentifiedNeck();

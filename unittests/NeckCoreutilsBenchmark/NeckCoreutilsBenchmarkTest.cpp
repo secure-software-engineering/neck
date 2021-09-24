@@ -53,6 +53,7 @@ protected:
   void checkResult(llvm::BasicBlock *IdentifiedNeck) {
     // Get ground truth and compare with the computed result
     auto *NeckID = M->getFunction(NeckIDFunctionName);
+    assert(NeckID && "Expect to find neck identification function!");
     assert(NeckID->hasOneUse() &&
            "Expect one and only one use of the neck-id function!");
     llvm::CallBase *NeckIDCallSite = nullptr;
@@ -76,9 +77,23 @@ protected:
 
 }; // Test Fixture
 
-TEST_F(CoreutilsTest, HandleWcProgram) { // NOLINT
+TEST_F(CoreutilsTest, HandleBasenameProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "wc.ll";
+  const std::string File = "basename.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleBasencProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "basenc.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleCommProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "Comm.ll";
   auto *Neck = identifyNeck(File);
   checkResult(Neck);
 }
@@ -86,6 +101,97 @@ TEST_F(CoreutilsTest, HandleWcProgram) { // NOLINT
 TEST_F(CoreutilsTest, HandleDateProgram) { // NOLINT
   // Setup and check results
   const std::string File = "date.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleDuProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "du.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleEchoProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "echo.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleFmtProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "fmt.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleHeadProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "head.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleFoldProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "fold.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleIdProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "id.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleKillProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "kill.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleRealpathProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "realpath.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleSortProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "sort.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleUniqProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "uniq.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleWcProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "wc.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleChownProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "chown.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
+}
+
+TEST_F(CoreutilsTest, HandleRmProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "rm.ll";
   auto *Neck = identifyNeck(File);
   checkResult(Neck);
 }

@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include <cassert>
 #include <string>
 
 #include "llvm/IR/BasicBlock.h"
@@ -15,6 +16,8 @@
 
 namespace {
 const std::string NeckIDFunctionName = "_neck_identification_mark_as_neck_";
+const std::string NeckIDFunctionNameMangled =
+    "_ZL34_neck_identification_mark_as_neck_v";
 } // anonymous namespace
 
 // ============== TEST FIXTURE ============== //
@@ -48,6 +51,10 @@ protected:
   void checkResult(llvm::BasicBlock *IdentifiedNeck) {
     // Get ground truth and compare with the computed result
     auto *NeckID = M->getFunction(NeckIDFunctionName);
+    if (!NeckID) {
+      NeckID = M->getFunction(NeckIDFunctionNameMangled);
+    }
+    assert(NeckID && "Expect to find neck identification function!");
     assert(NeckID->hasOneUse() &&
            "Expect one and only one use of the neck-id function!");
     llvm::CallBase *NeckIDCallSite = nullptr;

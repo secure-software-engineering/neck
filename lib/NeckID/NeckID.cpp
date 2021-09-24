@@ -193,14 +193,17 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
 }
 
 /// Computes neck candidates and the definitive neck.
-neckid::NeckAnalysis::NeckAnalysis(llvm::Function &F) : F(F), DT(F), LI(DT) {
+neckid::NeckAnalysis::NeckAnalysis(llvm::Function &F, bool Debug)
+    : F(F), DT(F), LI(DT), Debug(Debug) {
   // initialize with potential neck candidates
   if (F.hasName() && F.getName() == "main") {
     for (auto &Arg : F.args()) {
       for (auto *User : Arg.users()) {
         if (auto *Inst = llvm::dyn_cast<llvm::Instruction>(User)) {
           NeckCandidates.insert(Inst->getParent());
-          Inst->getParent()->print(llvm::outs());
+          if (Debug) {
+            Inst->getParent()->print(llvm::outs());
+          }
         }
       }
     }
@@ -255,8 +258,8 @@ llvm::BasicBlock *neckid::NeckAnalysis::getNeck() { return Neck; }
 void neckid::NeckAnalysis::markIdentifiedNeck(const std::string &FunName) {
   // Create artificial marker function
   llvm::LLVMContext &CTX = F.getParent()->getContext();
-  llvm::FunctionType *MarkerFunTy = llvm::FunctionType::get(
-      llvm::Type::getVoidTy(CTX), false);
+  llvm::FunctionType *MarkerFunTy =
+      llvm::FunctionType::get(llvm::Type::getVoidTy(CTX), false);
   llvm::Function *MarkerFun = llvm::Function::Create(
       MarkerFunTy, llvm::Function::ExternalLinkage, FunName, F.getParent());
   llvm::BasicBlock *BB = llvm::BasicBlock::Create(CTX, "entry", MarkerFun);

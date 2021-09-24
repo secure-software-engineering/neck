@@ -57,6 +57,7 @@ private:
   llvm::LoopInfo LI;
   std::unordered_set<llvm::BasicBlock *> NeckCandidates;
   llvm::BasicBlock *Neck;
+  [[maybe_unused]] bool Debug;
 
   /// Breadth-first search.
   static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst);
@@ -83,7 +84,7 @@ private:
 
 public:
   /// Computes neck candidates and the definitive neck.
-  NeckAnalysis(llvm::Function &F);
+NeckAnalysis(llvm::Function &F, bool Debug = false);
 
   /// Returns the analyzed function.
   [[nodiscard]] llvm::Function &getFunction();
