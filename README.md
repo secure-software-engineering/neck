@@ -4,7 +4,9 @@ Automated neck detection for LLVM's intermediate representation (LLVM IR).
 
 ## How to Build the Project?
 
-Prerequisites: please perform the one-time check out of Git submodules before building the project:
+### Prerequisites: 
+
+Please perform the one-time check out of Git submodules before building the project:
 
 ```
 $ git submodule init
@@ -18,6 +20,19 @@ $ cd external/custom-coreutils/
 $ git submodule init
 $ git submodule update
 ```
+
+On any non *nix env, use the VM's Vagrantfile provided as follows 
+
+```
+vagrant up
+vagrant ssh-config
+```
+
+This will install a VM with all dependencies and pre-requisities.
+
+If you wish to use your local *nix environment, run `build.sh`.
+
+### LLVM IR
 
 Next, the coreutils programs must be compiled to LLVM intermediate representation (LLVM IR):
 
