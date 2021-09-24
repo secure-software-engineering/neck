@@ -118,8 +118,13 @@ neckid::NeckAnalysis::closestNeckCandidateReachableFromEntry() {
 }
 
 bool neckid::NeckAnalysis::isInLoopStructue(llvm::BasicBlock *BB) {
-  auto *Loop = LI.getLoopFor(BB);
-  return Loop != nullptr;
+  // auto *Loop = LI.getLoopFor(BB);
+  // return Loop != nullptr;
+  auto Depth =  LI.getLoopDepth(BB);
+  if (Depth == 0) {
+    return false;
+  }
+  return true;
 }
 
 // SOURCE: https://llvm.org/doxygen/SanitizerCoverage_8cpp_source.html#l00516
@@ -191,6 +196,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Function &F) : F(F), DT(F), LI(DT) {
       for (auto *User : Arg.users()) {
         if (auto *Inst = llvm::dyn_cast<llvm::Instruction>(User)) {
           NeckCandidates.insert(Inst->getParent());
+          Inst->getParent()->print(llvm::outs());
         }
       }
     }
