@@ -43,5 +43,5 @@ build/
 
 # Compile Commands
 compile_commands.json
-.vscode/
+# .vscode/
 .vagrant/
