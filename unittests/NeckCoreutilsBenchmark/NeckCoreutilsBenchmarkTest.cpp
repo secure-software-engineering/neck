@@ -38,6 +38,7 @@ protected:
     // Parsing
     bool BrokenDbgInfo = false;
     M = llvm::parseIRFile(PathToLlFiles + LlvmFilePath, Diag, CTX);
+    assert(M && "Could not parse module!");
     if (llvm::verifyModule(*M, &llvm::errs(), &BrokenDbgInfo)) {
       llvm::errs() << "error: invalid module\n";
     }
@@ -51,6 +52,7 @@ protected:
   }
 
   void checkResult(llvm::BasicBlock *IdentifiedNeck) {
+    ASSERT_NE(IdentifiedNeck, nullptr);
     // Get ground truth and compare with the computed result
     auto *NeckID = M->getFunction(NeckIDFunctionName);
     assert(NeckID && "Expect to find neck identification function!");
@@ -93,7 +95,7 @@ TEST_F(CoreutilsTest, HandleBasencProgram) { // NOLINT
 
 TEST_F(CoreutilsTest, HandleCommProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "Comm.ll";
+  const std::string File = "comm.ll";
   auto *Neck = identifyNeck(File);
   checkResult(Neck);
 }
@@ -179,6 +181,11 @@ TEST_F(CoreutilsTest, HandleWcProgram) { // NOLINT
   // Setup and check results
   const std::string File = "wc.ll";
   auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
   checkResult(Neck);
 }
 

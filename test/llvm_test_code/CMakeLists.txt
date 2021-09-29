@@ -1,4 +1,4 @@
-add_custom_target(LLFileGeneration ALL)
+add_custom_target(NeckIDLLFileGeneration ALL)
 
 subdirlist(subdirs ${CMAKE_CURRENT_SOURCE_DIR})
 foreach(subdir ${subdirs})

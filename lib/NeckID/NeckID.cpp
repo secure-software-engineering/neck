@@ -138,7 +138,6 @@ bool neckid::NeckAnalysis::isFullDominator(const llvm::BasicBlock *BB,
   if (succ_empty(BB)) {
     return false;
   }
-
   return llvm::all_of(successors(BB), [&](const llvm::BasicBlock *SUCC) {
     return DT->dominates(BB, SUCC);
   });
@@ -155,7 +154,6 @@ bool neckid::NeckAnalysis::isBackEdge(llvm::BasicBlock *From,
       return true;
     }
   }
-
   return false;
 }
 
@@ -201,15 +199,21 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Function &F, bool Debug)
       for (auto *User : Arg.users()) {
         if (auto *Inst = llvm::dyn_cast<llvm::Instruction>(User)) {
           NeckCandidates.insert(Inst->getParent());
-          if (Debug) {
-            Inst->getParent()->print(llvm::outs());
-          }
         }
       }
     }
   }
   if (NeckCandidates.empty()) {
+    llvm::outs() << "No neck candidates found.\n";
     return;
+  }
+  if (Debug) {
+    unsigned Counter = 0;
+    for (auto *NeckCandidate : NeckCandidates) {
+      llvm::outs() << "Neck candidate " << Counter << ":\n";
+      NeckCandidate->print(llvm::outs());
+      ++Counter;
+    }
   }
   // collect all neck candidates that are part of a loop
   std::unordered_set<llvm::BasicBlock *> LoopBBs;
@@ -256,6 +260,9 @@ neckid::NeckAnalysis::getNeckCandidates() {
 llvm::BasicBlock *neckid::NeckAnalysis::getNeck() { return Neck; }
 
 void neckid::NeckAnalysis::markIdentifiedNeck(const std::string &FunName) {
+  if (!Neck) {
+    return;
+  }
   // Create artificial marker function
   llvm::LLVMContext &CTX = F.getParent()->getContext();
   llvm::FunctionType *MarkerFunTy =

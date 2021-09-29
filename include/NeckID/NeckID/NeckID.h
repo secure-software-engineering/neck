@@ -73,10 +73,11 @@ private:
 
   bool isInLoopStructue(llvm::BasicBlock *BB);
 
-  static bool isFullDominator(const llvm::BasicBlock *BB, const llvm::DominatorTree *DT);
+  static bool isFullDominator(const llvm::BasicBlock *BB,
+                              const llvm::DominatorTree *DT);
 
   static bool isBackEdge(llvm::BasicBlock *From, llvm::BasicBlock *To,
-                      const llvm::DominatorTree *DT);
+                         const llvm::DominatorTree *DT);
 
   bool dominatesSuccessors(llvm::BasicBlock *BB);
 
@@ -84,7 +85,7 @@ private:
 
 public:
   /// Computes neck candidates and the definitive neck.
-NeckAnalysis(llvm::Function &F, bool Debug = false);
+  NeckAnalysis(llvm::Function &F, bool Debug = false);
 
   /// Returns the analyzed function.
   [[nodiscard]] llvm::Function &getFunction();
@@ -95,7 +96,8 @@ NeckAnalysis(llvm::Function &F, bool Debug = false);
   /// Returns the definite neck or nullptr, if no neck could be found.
   [[nodiscard]] llvm::BasicBlock *getNeck();
 
-  /// Inserts a special function call to '' to denote the basic block that has been identified as the neck.
+  /// Inserts a special function call to '' to denote the basic block that has
+  /// been identified as the neck.
   void markIdentifiedNeck(const std::string &FunName = "_klee_dump_memory_");
 
   /// Dumps the underlying module to the output stream.

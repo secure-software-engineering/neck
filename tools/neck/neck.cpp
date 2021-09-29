@@ -43,7 +43,8 @@ int main(int Argc, char **Argv) {
   // clang-format off
   Config.add_options()
     ("module,m", boost::program_options::value<std::string>()->multitoken()->zero_tokens()->composing()->notifier(&validateParamModule), "Path to the module under analysis")
-    ("verbose,v", "Print output to the command line (=default is false)");
+    ("verbose,v", "Print output to the command line (=default is false)")
+    ("annotate", "Dump neck-annotated LLVM IR to the commandline (=default is false)");
   // clang-format on
   boost::program_options::options_description CmdlineOptions;
   CmdlineOptions.add(Generic).add(Config);
@@ -94,9 +95,16 @@ int main(int Argc, char **Argv) {
     return 1;
   }
   neckid::NeckAnalysis NA(*Main, Vars.count("verbose"));
+  if (!NA.getNeck()) {
+    llvm::outs() << "No neck found!\n";
+  }
   neckid::NeckAnalysisCFG G(NA);
   G.viewCFG();
-  NA.markIdentifiedNeck();
-  NA.dumpModule();
+  if (NA.getNeck()) {
+    NA.markIdentifiedNeck();
+  }
+  if (Vars.count("annotate")) {
+    NA.dumpModule();
+  }
   return 0;
 }

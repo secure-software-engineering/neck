@@ -18,6 +18,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "DebugSan")
   message(STATUS "Select Debug Build with Sanitizers")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -MP -fstack-protector-strong -g -fno-omit-frame-pointer -fsanitize=address,undefined")
   set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address,undefined")
+  # Required to communicate enabled sanitizers to PhASAR
+  set(LLVM_USE_SANITIZER "Address,Undefined")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 # Standard debug build
   message(STATUS "Select Debug Build")
@@ -58,6 +60,9 @@ include_directories(
   ${NECKID_SRC_DIR}/include
 )
 
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 if (LLVM_ENABLE_LIBCXX)
   set(NECKID_STD_FILESYSTEM c++fs)
 else()
@@ -72,7 +77,21 @@ find_package(Threads)
 find_package(Boost 1.65.1 COMPONENTS filesystem graph system program_options log ${BOOST_THREAD} REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
-add_subdirectory(external/googletest EXCLUDE_FROM_ALL)
+# Disable clang-tidy for the external projects
+set(CMAKE_CXX_CLANG_TIDY "")
+
+# PhASAR
+add_subdirectory(external/phasar)
+# find_package(phasar COMPONENTS db REQUIRED)
+include_directories(external/phasar/include/)
+# include_directories(${PHASAR_INCLUDE_DIR})
+link_directories(${PHASAR_LIBRARY_DIR})
+
+# Googletest
+# Set up Googletest only if it is not already available through PhASAR
+if (NOT TARGET gtest OR NOT TARGET gmock)
+  add_subdirectory(external/googletest)
+endif()
 include_directories(external/googletest/googletest/include)
 include_directories(external/googletest/googlemock/include)
 

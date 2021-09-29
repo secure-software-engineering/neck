@@ -4,3 +4,6 @@
 [submodule "external/custom-coreutils"]
 	path = external/custom-coreutils
 	url = irb-git@git.cs.uni-paderborn.de:pdschbrt/custom-coreutils.git
+[submodule "external/phasar"]
+	path = external/phasar
+	url = git@github.com:secure-software-engineering/phasar.git
