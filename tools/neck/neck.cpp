@@ -30,6 +30,20 @@ void validateParamModule(const std::string &Module) {
   }
 }
 
+void validateParamConfig(const std::string &TaintConfig) {
+  if (TaintConfig.empty()) {
+    throw boost::program_options::error_with_option_name(
+        "Taint configuration is required!");
+  }
+  std::filesystem::path TaintConfigPath(TaintConfig);
+  if (!(std::filesystem::exists(TaintConfigPath) &&
+        !std::filesystem::is_directory(TaintConfigPath) &&
+        (TaintConfigPath.extension() == ".json"))) {
+    throw boost::program_options::error_with_option_name(
+        "Taint configuration '" + TaintConfig + "' does not exist!");
+  }
+}
+
 } // anonymous namespace
 
 int main(int Argc, char **Argv) {
@@ -43,6 +57,7 @@ int main(int Argc, char **Argv) {
   // clang-format off
   Config.add_options()
     ("module,m", boost::program_options::value<std::string>()->multitoken()->zero_tokens()->composing()->notifier(&validateParamModule), "Path to the module under analysis")
+    ("taint-config,c", boost::program_options::value<std::string>()->multitoken()->zero_tokens()->composing()->notifier(&validateParamConfig), "Path to the taint configuration")
     ("verbose,v", "Print output to the command line (=default is false)")
     ("annotate", "Dump neck-annotated LLVM IR to the commandline (=default is false)");
   // clang-format on
@@ -74,6 +89,11 @@ int main(int Argc, char **Argv) {
     llvm::outs() << "Need to specify an LLVM (.ll/.bc) module for analysis.\n";
     return 0;
   }
+  if (!Vars.count("taint-config")) {
+    llvm::outs() << "Need to specify a taint configuration to determine "
+                    "potential neck candidates.\n";
+    return 0;
+  }
   // Parse an LLVM IR file.
   llvm::SMDiagnostic Diag;
   llvm::LLVMContext CTX;
@@ -88,17 +108,15 @@ int main(int Argc, char **Argv) {
   if (BrokenDbgInfo) {
     llvm::errs() << "caution: debug info is broken!\n";
   }
-
-  auto *Main = M->getFunction("main");
-  if (!Main) {
-    llvm::errs() << "error: could not retrieve 'main()'!\n";
-    return 1;
-  }
-  neckid::NeckAnalysis NA(*Main, Vars.count("verbose"));
+  neckid::NeckAnalysis NA(*M, Vars["taint-config"].as<std::string>(),
+                          Vars.count("verbose"));
   if (!NA.getNeck()) {
     llvm::outs() << "No neck found!\n";
   }
-  neckid::NeckAnalysisCFG G(NA);
+  llvm::outs() << "Display identified neck and neck candidates within 'main'\n";
+  auto *Main = M->getFunction("main");
+  assert(Main && "Expected to find a 'main' function!");
+  neckid::NeckAnalysisCFG G(NA, *Main);
   G.viewCFG();
   if (NA.getNeck()) {
     NA.markIdentifiedNeck();

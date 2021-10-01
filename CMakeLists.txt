@@ -136,10 +136,11 @@ endif()
 set(CMAKE_CXX_CLANG_TIDY
   clang-tidy;
   -header-filter=NeckID.*;
-  -warnings-as-errors=*;
+  # -warnings-as-errors=*;
 )
 
 # Add the Neck-ID subdirectories
+add_subdirectory(config)
 add_subdirectory(include)
 add_subdirectory(lib)
 add_subdirectory(tools)

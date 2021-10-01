@@ -14,6 +14,14 @@ endif()
 
 target_link_libraries(neckid_neckid
   LINK_PUBLIC
+  phasar_config
+  phasar_utils
+  phasar_pointer
+  phasar_typehierarchy
+  phasar_controlflow
+  phasar_phasarllvm_utils
+  phasar_db
+  phasar_ifdside
 )
 
 set_target_properties(neckid_neckid

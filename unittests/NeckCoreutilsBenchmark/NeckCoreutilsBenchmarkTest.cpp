@@ -18,6 +18,7 @@
 namespace {
 const std::string PathToCoreutils =
     neckid::NeckIDConfig::neckidDirectory() + "external/custom-coreutils/";
+const std::string PathToCmdToolConfigFile = "config/cmd-tool-config.json";
 const std::string NeckIDFunctionName = "_neck_identification_mark_as_neck_";
 } // anonymous namespace
 
@@ -46,8 +47,7 @@ protected:
       llvm::errs() << "caution: debug info is broken\n";
     }
     // Neck identification
-    auto *F = M->getFunction("main");
-    neckid::NeckAnalysis NA(*F);
+    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile);
     return NA.getNeck();
   }
 

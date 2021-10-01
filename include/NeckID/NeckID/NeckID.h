@@ -52,7 +52,7 @@ namespace neckid {
 
 class NeckAnalysis {
 private:
-  llvm::Function &F;
+  llvm::Module &M;
   llvm::DominatorTree DT;
   llvm::LoopInfo LI;
   std::unordered_set<llvm::BasicBlock *> NeckCandidates;
@@ -85,10 +85,11 @@ private:
 
 public:
   /// Computes neck candidates and the definitive neck.
-  NeckAnalysis(llvm::Function &F, bool Debug = false);
+  NeckAnalysis(llvm::Module &M, const std::string &TaintConfigPath,
+               bool Debug = false);
 
-  /// Returns the analyzed function.
-  [[nodiscard]] llvm::Function &getFunction();
+  /// Returns the analyzed module.
+  [[nodiscard]] llvm::Module &getModule();
 
   /// Returns the set of neck candidate.
   [[nodiscard]] std::unordered_set<llvm::BasicBlock *> getNeckCandidates();
@@ -105,11 +106,14 @@ public:
 };
 
 struct NeckAnalysisCFG {
-  NeckAnalysisCFG(NeckAnalysis &NA);
+  // Displays the basic blocks for the specified function. Neck candidates and
+  // the identified neck a highlighted (if they are located in the chosen
+  // function).
+  NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F);
 
   void viewCFG() const;
 
-  llvm::Function &F;
+  llvm::Function &DisplayFunction;
   llvm::BasicBlock *Neck;
   std::unordered_set<llvm::BasicBlock *> NeckBBs;
 };
@@ -125,23 +129,23 @@ struct GraphTraits<const neckid::NeckAnalysisCFG *>
   using ChildIteratorType = GraphTraits<const BasicBlock *>::ChildIteratorType;
 
   static NodeRef getEntryNode(const neckid::NeckAnalysisCFG *NACFG) {
-    return &NACFG->F.getEntryBlock();
+    return &NACFG->DisplayFunction.getEntryBlock();
   }
 
   using nodes_iterator = pointer_iterator<Function::iterator>;
 
   static nodes_iterator
   nodes_begin(const neckid::NeckAnalysisCFG *NACFG) { // NOLINT
-    return nodes_iterator(NACFG->F.begin());
+    return nodes_iterator(NACFG->DisplayFunction.begin());
   }
 
   static nodes_iterator
   nodes_end(const neckid::NeckAnalysisCFG *NACFG) { // NOLINT
-    return nodes_iterator(NACFG->F.end());
+    return nodes_iterator(NACFG->DisplayFunction.end());
   }
 
   static size_t size(const neckid::NeckAnalysisCFG *NACFG) {
-    return NACFG->F.size();
+    return NACFG->DisplayFunction.size();
   }
 };
 
@@ -151,12 +155,13 @@ struct DOTGraphTraits<const neckid::NeckAnalysisCFG *> : DefaultDOTGraphTraits {
 
   static std::string getGraphName(const neckid::NeckAnalysisCFG *NACFG) {
     llvm::outs() << "called getGraphName()!\n";
-    return "Neck Analysis for '" + NACFG->F.getName().str() + "' Function";
+    return "Neck Analysis for '" + NACFG->DisplayFunction.getName().str() +
+           "' Function";
   }
 
   std::string getNodeLabel(const BasicBlock *Node,
                            const neckid::NeckAnalysisCFG *NACFG) {
-    FuncInfos.push_back(std::make_unique<DOTFuncInfo>(&NACFG->F));
+    FuncInfos.push_back(std::make_unique<DOTFuncInfo>(&NACFG->DisplayFunction));
     return DOTGraphTraits<DOTFuncInfo *>::getCompleteNodeLabel(
         Node, FuncInfos.back().get());
   }
@@ -176,7 +181,8 @@ struct DOTGraphTraits<const neckid::NeckAnalysisCFG *> : DefaultDOTGraphTraits {
   static std::string getEdgeAttributes(const BasicBlock *Node,
                                        const_succ_iterator I,
                                        const neckid::NeckAnalysisCFG *NACFG) {
-    return DefaultDOTGraphTraits::getEdgeAttributes(Node, I, &NACFG->F);
+    return DefaultDOTGraphTraits::getEdgeAttributes(Node, I,
+                                                    &NACFG->DisplayFunction);
   }
 
   std::vector<std::unique_ptr<DOTFuncInfo>> FuncInfos;

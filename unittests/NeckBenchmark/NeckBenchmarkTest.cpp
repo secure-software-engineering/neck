@@ -18,6 +18,7 @@ namespace {
 const std::string NeckIDFunctionName = "_neck_identification_mark_as_neck_";
 const std::string NeckIDFunctionNameMangled =
     "_ZL34_neck_identification_mark_as_neck_v";
+const std::string PathToCmdToolConfigFile = "config/cmd-tool-config.json";
 } // anonymous namespace
 
 // ============== TEST FIXTURE ============== //
@@ -43,8 +44,7 @@ protected:
       llvm::errs() << "caution: debug info is broken\n";
     }
     // Neck identification
-    auto *F = M->getFunction("main");
-    neckid::NeckAnalysis NA(*F);
+    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile);
     return NA.getNeck();
   }
 
