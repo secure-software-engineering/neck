@@ -59,6 +59,9 @@ private:
   llvm::BasicBlock *Neck;
   [[maybe_unused]] bool Debug;
 
+  /// Breadth-first search starting from main's entry point.
+  bool isReachableFromMain(llvm::BasicBlock *Dst);
+
   /// Breadth-first search.
   static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst);
 

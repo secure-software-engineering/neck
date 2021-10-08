@@ -7,6 +7,7 @@
  *     Philipp Schubert and others
  *****************************************************************************/
 
+#include <llvm/IR/Instructions.h>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -35,11 +36,16 @@ analyzeTaintFlows(llvm::Module &M, const std::string &TaintConfigPath) {
   std::vector<llvm::Module *> Modules;
   Modules.push_back(&M);
   psr::initializeLogger(false);
+  llvm::outs() << "Building project IR database ...\n";
   psr::ProjectIRDB IR(Modules, psr::IRDBOptions::WPA);
+  llvm::outs() << "Building type hierarchy ...\n";
   psr::LLVMTypeHierarchy T(IR);
+  llvm::outs() << "Building points-to sets ...\n";
   psr::LLVMPointsToSet P(IR);
-  psr::LLVMBasedICFG I(IR, psr::CallGraphAnalysisType::OTF, {"main"}, &T, &P);
+  llvm::outs() << "Building inter-procedural control-flow graph ...\n";
+  psr::LLVMBasedICFG I(IR, psr::CallGraphAnalysisType::CHA, {"main"}, &T, &P);
   // Parse the taint configuration
+  llvm::outs() << "Conducting data-flow analysis ...\n";
   psr::TaintConfig Config([&]() {
     try {
       return psr::TaintConfig(IR, psr::parseTaintConfig(TaintConfigPath));
@@ -50,13 +56,16 @@ analyzeTaintFlows(llvm::Module &M, const std::string &TaintConfigPath) {
       return psr::TaintConfig(IR);
     }
   }());
-  std::stringstream Tos;
-  Tos << Config;
-  llvm::outs() << Tos.str() << '\n';
+  std::stringstream Ss;
+  Ss << Config;
+  llvm::outs() << Ss.str() << '\n';
   // Set up analysis and solver
+  llvm::outs() << "Setting up data-flow analysis ...\n";
   psr::IDEExtendedTaintAnalysis TaintAnalysis(&IR, &T, &I, &P, Config);
   psr::IDESolver Solver(TaintAnalysis);
+  llvm::outs() << "Solving data-flow analysis ...\n";
   Solver.solve();
+  llvm::outs() << "Data-flow analysis has been solved.\n";
   Solver.dumpResults();
   // Retrieve all usages of data that is depending on the initial seeds. In case
   // of command-line tools, these are data-flow facts that are transitively
@@ -75,10 +84,17 @@ analyzeTaintFlows(llvm::Module &M, const std::string &TaintConfigPath) {
     // Iterate all operands of an instruction an check if one of them is
     // tainted. If so, this instruction is a potential neck candidate.
     for ([[maybe_unused]] const auto &Op : Inst->operands()) {
-      //   if (ResAtInst.find(Op) != ResAtInst.end()) {
-      // NeckCandidates.push_back(
-      // const_cast<llvm::Instruction *>(Inst)); // NOLINT ;-)
-      //   }
+      for (auto &[Fact, Value] : ResAtInst) {
+        llvm::Value *PotentialGepPointerOp = nullptr;
+        if (auto *Gep = llvm::dyn_cast<llvm::GetElementPtrInst>(Op)) {
+          PotentialGepPointerOp = Gep->getPointerOperand();
+        }
+        if (Op == Fact->base() ||
+            (PotentialGepPointerOp && PotentialGepPointerOp == Fact->base())) {
+          NeckCandidates.push_back(
+              const_cast<llvm::Instruction *>(Inst)); // NOLINT ;-)
+        }
+      }
     }
   }
   return NeckCandidates;

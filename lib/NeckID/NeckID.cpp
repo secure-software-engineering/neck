@@ -11,6 +11,7 @@
 #include <deque>
 #include <limits>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -40,6 +41,14 @@
 #include "NeckID/NeckID/NeckID.h"
 
 namespace neckid {
+
+/// Breadth-first search starting from main's entry point.
+bool NeckAnalysis::isReachableFromMain(llvm::BasicBlock *Dst) {
+  auto *Main = M.getFunction("main");
+  assert(Main && !Main->isDeclaration() &&
+         "Expected to find a 'main' function!");
+  return isReachable(&Main->front(), Dst);
+}
 
 /// Breadth-first search.
 bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
@@ -194,64 +203,55 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
   // Compute potential neck candidates using data-flow analysis
   std::vector<llvm::Instruction *> InterestingInstructions =
       analyzeTaintFlows(M, TaintConfigPath);
+  // initialize with potential neck candidates
   for (auto *InterestingInstruction : InterestingInstructions) {
     NeckCandidates.insert(InterestingInstruction->getParent());
   }
-  // initialize with potential neck candidates
-  // if (F.hasName() && F.getName() == "main") {
-  //   for (auto &Arg : F.args()) {
-  //     for (auto *User : Arg.users()) {
-  //       if (auto *Inst = llvm::dyn_cast<llvm::Instruction>(User)) {
-  //         NeckCandidates.insert(Inst->getParent());
-  //       }
-  //     }
-  //   }
-  // }
   if (NeckCandidates.empty()) {
     llvm::outs() << "No neck candidates found.\n";
     return;
   }
-  if (Debug) {
-    unsigned Counter = 0;
+  if (!NeckCandidates.empty() && Debug) {
+    unsigned Counter = 1;
     for (auto *NeckCandidate : NeckCandidates) {
-      llvm::outs() << "Neck candidate " << Counter << ":\n";
+      std::string Msg = "Neck candidate " + std::to_string(Counter) + ":\n";
+      llvm::outs() << Msg;
+      llvm::outs() << std::string(Msg.size() - 1, '=') << '\n';
       NeckCandidate->print(llvm::outs());
+      llvm::outs() << '\n';
       ++Counter;
     }
   }
-  // // collect all neck candidates that are part of a loop
-  // std::unordered_set<llvm::BasicBlock *> LoopBBs;
-  // for (auto *NeckCandidate : NeckCandidates) {
-  //   if (isInLoopStructue(NeckCandidate)) {
-  //     auto ExitBlocks = getLoopExitBlocks(NeckCandidate);
-  //     LoopBBs.insert(ExitBlocks.begin(), ExitBlocks.end());
-  //   }
-  // }
-  // // remove all basic blocks that are part of a loop (also removes loop
-  // exits) eraseIf(NeckCandidates, [this](auto *BB) { return
-  // isInLoopStructue(BB); });
-  // // add the loops' respective exit blocks
-  // NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
-  // // remove all basic blocks that do not dominate their successors
-  // eraseIf(NeckCandidates,
-  //         [this](auto *BB) { return !dominatesSuccessors(BB); });
-  // // remove all basic blocks that do not succeed a loop
-  // // eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
+  // collect all neck candidates that are part of a loop
+  std::unordered_set<llvm::BasicBlock *> LoopBBs;
+  for (auto *NeckCandidate : NeckCandidates) {
+    if (isInLoopStructue(NeckCandidate)) {
+      auto ExitBlocks = getLoopExitBlocks(NeckCandidate);
+      LoopBBs.insert(ExitBlocks.begin(), ExitBlocks.end());
+    }
+  }
+  // remove all basic blocks that are part of a loop (also removes loop exits)
+  eraseIf(NeckCandidates, [this](auto *BB) { return isInLoopStructue(BB); });
+  // add the loops' respective exit blocks
+  NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
+  // remove all basic blocks that do not dominate their successors
+  eraseIf(NeckCandidates,
+          [this](auto *BB) { return !dominatesSuccessors(BB); });
+  // remove all basic blocks that do not succeed a loop
+  eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
 
-  // // remove all basic blocks that are not loop exits (LoopBBs contain all
-  // loop
-  // // exits; take AND of NeckCandidates and LoopBBs)
-  // eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB);
-  // });
+  // remove all basic blocks that are not loop exits (LoopBBs contain all loop
+  // exits; take AND of NeckCandidates and LoopBBs)
+  eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB); });
 
-  // // TODO: remove all basic blocks that are Loop latches which have a
-  // // direct/indirect backedge to the loop header
+  // TODO: remove all basic blocks that are Loop latches which have a
+  // direct/indirect backedge to the loop header
 
-  // // remove all basic blocks that are not reachable from main
-  // eraseIf(NeckCandidates,
-  //         [this](auto *BB) { return !isReachable(&this->F.front(), BB); });
-  // // compute the neck
-  // Neck = closestNeckCandidateReachableFromEntry();
+  // remove all basic blocks that are not reachable from main
+  eraseIf(NeckCandidates,
+          [this](auto *BB) { return !isReachableFromMain(BB); });
+  // compute the neck
+  Neck = closestNeckCandidateReachableFromEntry();
 }
 
 llvm::Module &neckid::NeckAnalysis::getModule() { return M; }
@@ -287,10 +287,8 @@ void neckid::NeckAnalysis::markIdentifiedNeck(const std::string &FunName) {
 
 void neckid::NeckAnalysis::dumpModule(llvm::raw_ostream &OS) { OS << M; }
 
-neckid::NeckAnalysisCFG::NeckAnalysisCFG(NeckAnalysis &NA,
-                                         llvm::Function &F)
-    : DisplayFunction(F), Neck(NA.getNeck()),
-      NeckBBs(NA.getNeckCandidates()) {}
+neckid::NeckAnalysisCFG::NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F)
+    : DisplayFunction(F), Neck(NA.getNeck()), NeckBBs(NA.getNeckCandidates()) {}
 
 void neckid::NeckAnalysisCFG::viewCFG() const {
   ViewGraph(this, "Neck-Analysis-CFG:" + DisplayFunction.getName());
