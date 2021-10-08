@@ -79,11 +79,12 @@ private:
   bool isReachableFromMain(llvm::BasicBlock *Dst);
 
   /// Breadth-first search.
-  static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst);
+  static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
+                          bool InterProcSearch);
 
   /// Breadth-first search that computes distance.
   static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
-                          size_t &Dist);
+                          size_t &Dist, bool InterProcSearch);
 
   std::unordered_set<llvm::BasicBlock *>
   getLoopExitBlocks(llvm::BasicBlock *BB);

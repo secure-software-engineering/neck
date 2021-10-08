@@ -66,7 +66,7 @@ analyzeTaintFlows(llvm::Module &M, const std::string &TaintConfigPath) {
   llvm::outs() << "Solving data-flow analysis ...\n";
   Solver.solve();
   llvm::outs() << "Data-flow analysis has been solved.\n";
-  Solver.dumpResults();
+  // Solver.dumpResults();
   // Retrieve all usages of data that is depending on the initial seeds. In case
   // of command-line tools, these are data-flow facts that are transitively
   // reachable from the argc and argv parameters of the main function.

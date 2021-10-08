@@ -48,7 +48,7 @@ void print(std::unordered_set<llvm::BasicBlock *> &BBs) {
   for (auto *BB : BBs) {
     std::string Msg = "BB " + std::to_string(Counter) + ":\n";
     llvm::outs() << Msg;
-    llvm::outs() << std::string(Msg.size() - 1, '=') << '\n';
+    llvm::outs() << std::string(Msg.size() - 1, '=');
     BB->print(llvm::outs());
     llvm::outs() << '\n';
     ++Counter;
@@ -83,19 +83,26 @@ bool NeckAnalysis::isReachableFromMain(llvm::BasicBlock *Dst) {
   auto *Main = M.getFunction("main");
   assert(Main && !Main->isDeclaration() &&
          "Expected to find a 'main' function!");
-  return isReachable(&Main->front(), Dst);
+  // FIXME update once we have an inter-procedural search.
+  return isReachable(&Main->front(), Dst, false);
 }
 
 /// Breadth-first search.
+/// FIXME add an option (and implementation) that allows for inter-procedural
+/// checks using PhASAR's callgraph algorithm.
 bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
-                                       llvm::BasicBlock *Dst) {
+                                       llvm::BasicBlock *Dst,
+                                       bool InterProcSearch) {
   size_t Dummy = 0;
-  return isReachable(Src, Dst, Dummy);
+  return isReachable(Src, Dst, Dummy, InterProcSearch);
 }
 
 /// Breadth-first search that computes distance.
+/// FIXME add an option (and implementation) that allows for inter-procedural
+/// checks using PhASAR's callgraph algorithm.
 bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
-                                       llvm::BasicBlock *Dst, size_t &Dist) {
+                                       llvm::BasicBlock *Dst, size_t &Dist,
+                                       [[maybe_unused]] bool InterProcSearch) {
   if (Src->getParent() != Dst->getParent()) {
     return false;
   }
@@ -155,16 +162,20 @@ llvm::BasicBlock *
 neckid::NeckAnalysis::closestNeckCandidateReachableFromEntry() { // NOLINT
   size_t ShortestDist = std::numeric_limits<size_t>::max();
   llvm::BasicBlock *Closest = nullptr;
-  // FIXME
-  // for (auto *NeckCandidate : NeckCandidates) {
-  //   size_t Dist = 0;
-  //   if (isReachable(&F.getEntryBlock(), NeckCandidate, Dist)) {
-  //     if (Dist < ShortestDist) {
-  //       ShortestDist = Dist;
-  //       Closest = NeckCandidate;
-  //     }
-  //   }
-  // }
+  // FIXME (this is not particularly efficient)
+  for (auto *NeckCandidate : NeckCandidates) {
+    size_t Dist = 0;
+    auto *Main = M.getFunction("main");
+    assert(Main && !Main->isDeclaration() &&
+           "Expected to find a 'main' function!");
+    // FIXME update once we have an inter-procedural search
+    if (isReachable(&Main->getEntryBlock(), NeckCandidate, Dist, false)) {
+      if (Dist < ShortestDist) {
+        ShortestDist = Dist;
+        Closest = NeckCandidate;
+      }
+    }
+  }
   return Closest;
 }
 
@@ -223,7 +234,8 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
     auto Blocks = Loop->getBlocks();
     for (auto *Block : Blocks) {
       size_t Dist = 0;
-      if (isReachable(Block, BB, Dist)) {
+      // FIXME update once we have an inter-procedural search
+      if (isReachable(Block, BB, Dist, false)) {
         return true;
       }
     }
@@ -259,11 +271,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     }
   }
   // remove all basic blocks that are part of a loop (also removes loop exits)
-  eraseIf(NeckCandidates, [this](auto *BB) {
-    llvm::outs() << "is in loop structure '" << BB->getName()
-                 << "': " << isInLoopStructue(BB) << '\n';
-    return isInLoopStructue(BB);
-  });
+  eraseIf(NeckCandidates, [this](auto *BB) { return isInLoopStructue(BB); });
   // add the loops' respective exit blocks
   NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
   if (Debug) {
@@ -303,6 +311,15 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
   }
   // compute the neck
   Neck = closestNeckCandidateReachableFromEntry();
+  if (Debug) {
+    llvm::outs() << "Closed neck candidate from entry point of 'main': ";
+    if (!Neck) {
+      llvm::outs() << "no neck found!\n";
+    } else {
+      Neck->print(llvm::outs());
+      llvm::outs() << '\n';
+    }
+  }
 }
 
 llvm::Module &neckid::NeckAnalysis::getModule() { return M; }

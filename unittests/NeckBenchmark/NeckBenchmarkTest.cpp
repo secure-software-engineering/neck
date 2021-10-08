@@ -98,8 +98,8 @@ TEST_F(NeckBenchmarkTest, HandleNeckSameLevel) {
   // Setup and check results
   const std::string File = neckid::unittest::PathToLLTestFiles +
                            "neck-level/neck-same-level_c_dbg.ll";
-  auto *Neck = identifyNeck(File, true);
-  checkResult(Neck, true);
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
 }
 
 // main function for the test case
