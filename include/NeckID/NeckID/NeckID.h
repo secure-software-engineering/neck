@@ -53,11 +53,27 @@ namespace neckid {
 class NeckAnalysis {
 private:
   llvm::Module &M;
-  llvm::DominatorTree DT;
-  llvm::LoopInfo LI;
+  // Dominator trees and loop infos are constructed lazily. Use
+  // getDominatorTree() and getLoopInfo() to access them.
+  std::unordered_map<llvm::Function *, llvm::DominatorTree> DTs;
+  std::unordered_map<llvm::Function *, llvm::LoopInfo> LIs;
   std::unordered_set<llvm::BasicBlock *> NeckCandidates;
   llvm::BasicBlock *Neck;
   [[maybe_unused]] bool Debug;
+
+  /// Get cached dominator tree for the specified function.
+  llvm::DominatorTree &getDominatorTree(llvm::Function *F);
+  /// Get cached dominator tree for the specified basic block's function.
+  inline llvm::DominatorTree &getDominatorTree(llvm::BasicBlock *BB) {
+    return getDominatorTree(BB->getParent());
+  }
+
+  /// Get cached loop info for the specified function.
+  llvm::LoopInfo &getLoopInfo(llvm::Function *F);
+  /// Get cached loop info for the specified basic block's function.
+  inline llvm::LoopInfo &getLoopInfo(llvm::BasicBlock *BB) {
+    return getLoopInfo(BB->getParent());
+  }
 
   /// Breadth-first search starting from main's entry point.
   bool isReachableFromMain(llvm::BasicBlock *Dst);

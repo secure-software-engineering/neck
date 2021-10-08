@@ -40,7 +40,43 @@
 #include "NeckID/NeckID/DataFlowAnalysis.h"
 #include "NeckID/NeckID/NeckID.h"
 
+namespace {
+
+// let's define some handy helper functions
+void print(std::unordered_set<llvm::BasicBlock *> &BBs) {
+  unsigned Counter = 1;
+  for (auto *BB : BBs) {
+    std::string Msg = "BB " + std::to_string(Counter) + ":\n";
+    llvm::outs() << Msg;
+    llvm::outs() << std::string(Msg.size() - 1, '=') << '\n';
+    BB->print(llvm::outs());
+    llvm::outs() << '\n';
+    ++Counter;
+  }
+}
+
+} // anonymous namespace
+
 namespace neckid {
+
+llvm::DominatorTree &NeckAnalysis::getDominatorTree(llvm::Function *F) {
+  auto Search = DTs.find(F);
+  if (Search != DTs.end()) {
+    return Search->second;
+  }
+  DTs[F] = llvm::DominatorTree(*F);
+  return DTs[F];
+}
+
+llvm::LoopInfo &NeckAnalysis::getLoopInfo(llvm::Function *F) {
+  auto Search = LIs.find(F);
+  if (Search != LIs.end()) {
+    return Search->second;
+  }
+  auto &DT = getDominatorTree(F);
+  LIs[F] = llvm::LoopInfo(DT);
+  return LIs[F];
+}
 
 /// Breadth-first search starting from main's entry point.
 bool NeckAnalysis::isReachableFromMain(llvm::BasicBlock *Dst) {
@@ -104,7 +140,7 @@ bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
 
 std::unordered_set<llvm::BasicBlock *>
 neckid::NeckAnalysis::getLoopExitBlocks(llvm::BasicBlock *BB) {
-  auto *Loop = LI.getLoopFor(BB);
+  auto *Loop = getLoopInfo(BB).getLoopFor(BB);
   if (Loop) {
     llvm::SmallVector<llvm::BasicBlock *, 5> Exits;
     Loop->getUniqueExitBlocks(Exits);
@@ -133,7 +169,7 @@ neckid::NeckAnalysis::closestNeckCandidateReachableFromEntry() { // NOLINT
 }
 
 bool neckid::NeckAnalysis::isInLoopStructue(llvm::BasicBlock *BB) {
-  return LI.getLoopFor(BB) != nullptr;
+  return getLoopInfo(BB).getLoopFor(BB) != nullptr;
 }
 
 // SOURCE: https://llvm.org/doxygen/SanitizerCoverage_8cpp_source.html#l00516
@@ -167,12 +203,12 @@ bool neckid::NeckAnalysis::dominatesSuccessors(llvm::BasicBlock *BB) {
     return false;
   }
   for (auto *BBSucc : llvm::successors(BB)) { // NOLINT
-    if (!DT.dominates(BB, BBSucc)) {
+    if (!getDominatorTree(BB).dominates(BB, BBSucc)) {
       return false;
     }
     // if BB dominates BBSucc
     // make sure no edge from BBSucc to BB
-    if (isBackEdge(BBSucc, BB, &DT)) {
+    if (isBackEdge(BBSucc, BB, &getDominatorTree(BB))) {
       return false;
     }
   }
@@ -183,7 +219,7 @@ bool neckid::NeckAnalysis::dominatesSuccessors(llvm::BasicBlock *BB) {
 }
 
 bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
-  for (auto *Loop : LI) {
+  for (auto *Loop : getLoopInfo(BB)) {
     auto Blocks = Loop->getBlocks();
     for (auto *Block : Blocks) {
       size_t Dist = 0;
@@ -212,15 +248,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     return;
   }
   if (!NeckCandidates.empty() && Debug) {
-    unsigned Counter = 1;
-    for (auto *NeckCandidate : NeckCandidates) {
-      std::string Msg = "Neck candidate " + std::to_string(Counter) + ":\n";
-      llvm::outs() << Msg;
-      llvm::outs() << std::string(Msg.size() - 1, '=') << '\n';
-      NeckCandidate->print(llvm::outs());
-      llvm::outs() << '\n';
-      ++Counter;
-    }
+    print(NeckCandidates);
   }
   // collect all neck candidates that are part of a loop
   std::unordered_set<llvm::BasicBlock *> LoopBBs;
@@ -231,25 +259,48 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     }
   }
   // remove all basic blocks that are part of a loop (also removes loop exits)
-  eraseIf(NeckCandidates, [this](auto *BB) { return isInLoopStructue(BB); });
+  eraseIf(NeckCandidates, [this](auto *BB) {
+    llvm::outs() << "is in loop structure '" << BB->getName()
+                 << "': " << isInLoopStructue(BB) << '\n';
+    return isInLoopStructue(BB);
+  });
   // add the loops' respective exit blocks
   NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
+  if (Debug) {
+    llvm::outs() << "Neck candidates after handling loops:\n";
+    print(NeckCandidates);
+  }
   // remove all basic blocks that do not dominate their successors
   eraseIf(NeckCandidates,
           [this](auto *BB) { return !dominatesSuccessors(BB); });
+  if (Debug) {
+    llvm::outs() << "Neck candidates after handling dominators:\n";
+    print(NeckCandidates);
+  }
   // remove all basic blocks that do not succeed a loop
   eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
-
+  if (Debug) {
+    llvm::outs() << "Neck candidates after handling loop succession:\n";
+    print(NeckCandidates);
+  }
   // remove all basic blocks that are not loop exits (LoopBBs contain all loop
   // exits; take AND of NeckCandidates and LoopBBs)
   eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB); });
-
+  if (Debug) {
+    llvm::outs() << "Neck candidates after handling no-loop exists:\n";
+    print(NeckCandidates);
+  }
   // TODO: remove all basic blocks that are Loop latches which have a
   // direct/indirect backedge to the loop header
 
   // remove all basic blocks that are not reachable from main
   eraseIf(NeckCandidates,
           [this](auto *BB) { return !isReachableFromMain(BB); });
+  if (Debug) {
+    llvm::outs()
+        << "Neck candidates after handling reachability from 'main':\n";
+    print(NeckCandidates);
+  }
   // compute the neck
   Neck = closestNeckCandidateReachableFromEntry();
 }

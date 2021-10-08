@@ -1,4 +1,4 @@
-#include "neck-annotation.h"
+#include "../neck-annotation.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     default:
       abort();
     }
-
+  _neck_identification_mark_as_neck_();
   klee_dump_memory();
 
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);

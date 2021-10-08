@@ -1,8 +1,6 @@
-#include <iostream>
+#include "../neck-annotation.h"
 
-static inline void
-_neck_identification_mark_as_neck_(void) {
-}
+#include <iostream>
 
 int main(int Argc, char **Argv) {
   if (Argc <= 1) {

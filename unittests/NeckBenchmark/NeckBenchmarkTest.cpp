@@ -48,7 +48,8 @@ protected:
     return NA.getNeck();
   }
 
-  void checkResult(llvm::BasicBlock *IdentifiedNeck) {
+  void checkResult(llvm::BasicBlock *IdentifiedNeck,
+                   [[maybe_unused]] bool Debug = false) {
     // Get ground truth and compare with the computed result
     auto *NeckID = M->getFunction(NeckIDFunctionName);
     if (!NeckID) {
@@ -68,18 +69,37 @@ protected:
            "Expected to find a call to the neck-id function!");
     // get the callsites respective basic block
     const llvm::BasicBlock *GroundTruth = NeckIDCallSite->getParent();
+    if (Debug) {
+      if (GroundTruth->hasName() && GroundTruth->getParent()->hasName()) {
+        llvm::outs() << "Ground truth: basic block with label '"
+                     << GroundTruth->getName() << "' in function '"
+                     << GroundTruth->getParent()->getName() << "'\n";
+      } else {
+        llvm::outs() << "Ground truth:\n";
+        GroundTruth->print(llvm::outs());
+        llvm::outs() << '\n';
+      }
+    }
     // Unit test
     EXPECT_EQ(IdentifiedNeck, GroundTruth); // NOLINT
   }
 
 }; // Test Fixture
 
-TEST_F(NeckBenchmarkTest, HandleBasic_01) {
+// TEST_F(NeckBenchmarkTest, HandleBasic_01) {
+//   // Setup and check results
+//   const std::string File =
+//       neckid::unittest::PathToLLTestFiles + "basic/example_01_cpp_dbg.ll";
+//   auto *Neck = identifyNeck(File);
+//   checkResult(Neck);
+// }
+
+TEST_F(NeckBenchmarkTest, HandleNeckSameLevel) {
   // Setup and check results
-  const std::string File =
-      neckid::unittest::PathToLLTestFiles + "basic/example_01_cpp_dbg.ll";
-  auto *Neck = identifyNeck(File);
-  checkResult(Neck);
+  const std::string File = neckid::unittest::PathToLLTestFiles +
+                           "neck-level/neck-same-level_c_dbg.ll";
+  auto *Neck = identifyNeck(File, true);
+  checkResult(Neck, true);
 }
 
 // main function for the test case
