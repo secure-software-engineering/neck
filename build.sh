@@ -39,5 +39,5 @@ sudo apt-get install -y sqlite3 libsqlite3-dev
 
 mkdir -p build
 cd build
-CC=clang CXX=clang++ cmake ..
+CC=clang-${LLVM_VERSION} CXX=clang++-${LLVM_VERSION} cmake ..
 make -j $(nproc)

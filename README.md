@@ -49,6 +49,8 @@ $ mkdir build
 $ cd build/
 $ CC=clang CXX=clang++ cmake ..
 $ make
+or 
+$ cmake --build ./build --config Debug --target neck -j $nproc --
 ```
 
 Delete the auto-generated files by deleting the `build` directory: `$ rm -rf build/`.
