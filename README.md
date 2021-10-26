@@ -9,16 +9,7 @@ Automated neck detection for LLVM's intermediate representation (LLVM IR).
 Please perform the one-time check out of Git submodules before building the project:
 
 ```
-$ git submodule init
-$ git submodule update
-```
-
-The custom coreutils also need to be checked out correctly:
-
-```
-$ cd external/custom-coreutils/
-$ git submodule init
-$ git submodule update
+$ git submodule update --init --recursive
 ```
 
 On any non *nix env, use the VM's Vagrantfile provided as follows 
