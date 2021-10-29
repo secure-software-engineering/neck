@@ -32,7 +32,12 @@ namespace neckid {
 
 TaintAnalysis::TaintAnalysis(llvm::Module &M,
                              const std::string &TaintConfigPath)
-    : IR(std::vector<llvm::Module *>({&M}), psr::IRDBOptions::WPA),
+    : IR([&]() {
+        psr::initializeLogger(false);
+        llvm::outs() << "Built project IR database ...\n";
+        return psr::ProjectIRDB(std::vector<llvm::Module *>({&M}),
+                                psr::IRDBOptions::WPA);
+      }()),
       Config([&]() {
         try {
           return psr::TaintConfig(IR, psr::parseTaintConfig(TaintConfigPath));
@@ -44,12 +49,19 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
           return psr::TaintConfig(IR);
         }
       }()),
-      T(IR), P(IR), I(IR, psr::CallGraphAnalysisType::CHA, {"main"}, &T, &P) {
-  psr::initializeLogger(false);
-  llvm::outs() << "Built project IR database ...\n";
-  llvm::outs() << "Built type hierarchy ...\n";
-  llvm::outs() << "Built points-to sets ...\n";
-  llvm::outs() << "Built inter-procedural control-flow graph ...\n";
+      T([&]() {
+        llvm::outs() << "Built type hierarchy ...\n";
+        return psr::LLVMTypeHierarchy(IR);
+      }()),
+      P([&]() {
+        llvm::outs() << "Built points-to sets ...\n";
+        return psr::LLVMPointsToSet(IR);
+      }()),
+      I([&]() {
+        llvm::outs() << "Built inter-procedural control-flow graph ...\n";
+        return psr::LLVMBasedICFG(IR, psr::CallGraphAnalysisType::CHA, {"main"},
+                                  &T, &P);
+      }()) {
   // Print the taint configuration
   std::stringstream Ss;
   Ss << Config;
