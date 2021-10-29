@@ -35,6 +35,8 @@
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/raw_ostream.h"
 
+#include "NeckID/NeckID/DataFlowAnalysis.h"
+
 template <typename MapT, typename Predicate>
 std::size_t eraseIf(MapT &C, Predicate Pred) {
   auto OldSize = C.size();
@@ -53,6 +55,7 @@ namespace neckid {
 class NeckAnalysis {
 private:
   llvm::Module &M;
+  TaintAnalysis TA;
   // Dominator trees and loop infos are constructed lazily. Use
   // getDominatorTree() and getLoopInfo() to access them.
   std::unordered_map<llvm::Function *, llvm::DominatorTree> DTs;
@@ -76,7 +79,12 @@ private:
   }
 
   /// Breadth-first search starting from main's entry point.
-  bool isReachableFromMain(llvm::BasicBlock *Dst);
+  bool isReachableFromFunctionsEntry(llvm::BasicBlock *Dst,
+                                     llvm::StringRef FunName);
+
+  /// Breadth-first search starting from main's entry point.
+  bool isReachableFromFunctionsEntry(llvm::BasicBlock *Dst,
+                                     llvm::Function *Fun);
 
   /// Breadth-first search.
   static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,

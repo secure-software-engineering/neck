@@ -18,6 +18,7 @@
 #include "llvm/ADT/GraphTraits.h"
 #include "llvm/ADT/SetVector.h"
 #include "llvm/ADT/SmallVector.h"
+#include "llvm/ADT/StringRef.h"
 #include "llvm/Analysis/CFG.h"
 #include "llvm/Analysis/CFGPrinter.h"
 #include "llvm/Analysis/LoopInfo.h"
@@ -78,13 +79,23 @@ llvm::LoopInfo &NeckAnalysis::getLoopInfo(llvm::Function *F) {
   return LIs[F];
 }
 
-/// Breadth-first search starting from main's entry point.
-bool NeckAnalysis::isReachableFromMain(llvm::BasicBlock *Dst) {
-  auto *Main = M.getFunction("main");
-  assert(Main && !Main->isDeclaration() &&
-         "Expected to find a 'main' function!");
-  // FIXME update once we have an inter-procedural search.
-  return isReachable(&Main->front(), Dst, false);
+/// Breadth-first search starting from a function's entry point.
+bool NeckAnalysis::isReachableFromFunctionsEntry(llvm::BasicBlock *Dst,
+                                                 llvm::StringRef FunName) {
+  auto *Fun = M.getFunction(FunName);
+  return isReachableFromFunctionsEntry(Dst, Fun);
+}
+
+/// Breadth-first search starting from a function's entry point.
+bool NeckAnalysis::isReachableFromFunctionsEntry(llvm::BasicBlock *Dst,
+                                                 llvm::Function *Fun) {
+  assert(Fun && !Fun->isDeclaration() &&
+         "Expected a valid function definition!");
+  // Check if we can get away with a simple intra-procedural reachability check.
+  // if (Fun->front().getFunction() == Dst->getParent()) {
+    return isReachable(&Fun->front(), Dst, false);
+  // }
+  // Need an inter-procedural reachability check.
 }
 
 /// Breadth-first search.
@@ -247,10 +258,11 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
 neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
                                    const std::string &TaintConfigPath,
                                    bool Debug)
-    : M(M), Neck(nullptr), Debug(Debug) {
-  // Compute potential neck candidates using data-flow analysis
+    : M(M), TA(M, TaintConfigPath), Neck(nullptr), Debug(Debug) {
+  // start with a list of potential neck candidates
   std::vector<llvm::Instruction *> InterestingInstructions =
-      analyzeTaintFlows(M, TaintConfigPath);
+      TA.getNeckCandidates();
+
   // initialize with potential neck candidates
   for (auto *InterestingInstruction : InterestingInstructions) {
     NeckCandidates.insert(InterestingInstruction->getParent());
@@ -302,8 +314,9 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
   // direct/indirect backedge to the loop header
 
   // remove all basic blocks that are not reachable from main
-  eraseIf(NeckCandidates,
-          [this](auto *BB) { return !isReachableFromMain(BB); });
+  eraseIf(NeckCandidates, [this](auto *BB) {
+    return !isReachableFromFunctionsEntry(BB, "main");
+  });
   if (Debug) {
     llvm::outs()
         << "Neck candidates after handling reachability from 'main':\n";

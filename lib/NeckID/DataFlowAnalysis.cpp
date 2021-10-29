@@ -7,12 +7,12 @@
  *     Philipp Schubert and others
  *****************************************************************************/
 
-#include <llvm/IR/Instructions.h>
 #include <sstream>
 #include <string>
 #include <vector>
 
 #include "llvm/IR/Instruction.h"
+#include "llvm/IR/Instructions.h"
 #include "llvm/IR/Module.h"
 #include "llvm/Support/raw_ostream.h"
 
@@ -30,32 +30,27 @@
 
 namespace neckid {
 
-std::vector<llvm::Instruction *>
-analyzeTaintFlows(llvm::Module &M, const std::string &TaintConfigPath) {
-  // Set up and solve the data-flow analysis
-  std::vector<llvm::Module *> Modules;
-  Modules.push_back(&M);
+TaintAnalysis::TaintAnalysis(llvm::Module &M,
+                             const std::string &TaintConfigPath)
+    : IR(std::vector<llvm::Module *>({&M}), psr::IRDBOptions::WPA),
+      Config([&]() {
+        try {
+          return psr::TaintConfig(IR, psr::parseTaintConfig(TaintConfigPath));
+        } catch (std::ios_base::failure &IOFailure) {
+          llvm::errs() << "Could not parse taint configuration '"
+                       << TaintConfigPath
+                       << "'!\nContinuing by trying to parse the config from "
+                          "the (hopefully) annotated LLVM IR.\n";
+          return psr::TaintConfig(IR);
+        }
+      }()),
+      T(IR), P(IR), I(IR, psr::CallGraphAnalysisType::CHA, {"main"}, &T, &P) {
   psr::initializeLogger(false);
-  llvm::outs() << "Building project IR database ...\n";
-  psr::ProjectIRDB IR(Modules, psr::IRDBOptions::WPA);
-  llvm::outs() << "Building type hierarchy ...\n";
-  psr::LLVMTypeHierarchy T(IR);
-  llvm::outs() << "Building points-to sets ...\n";
-  psr::LLVMPointsToSet P(IR);
-  llvm::outs() << "Building inter-procedural control-flow graph ...\n";
-  psr::LLVMBasedICFG I(IR, psr::CallGraphAnalysisType::CHA, {"main"}, &T, &P);
-  // Parse the taint configuration
-  llvm::outs() << "Conducting data-flow analysis ...\n";
-  psr::TaintConfig Config([&]() {
-    try {
-      return psr::TaintConfig(IR, psr::parseTaintConfig(TaintConfigPath));
-    } catch (std::ios_base::failure &IOFailure) {
-      llvm::errs() << "Could not parse taint configuration '" << TaintConfigPath
-                   << "'!\nContinuing by trying to parse the config from "
-                      "the (hopefully) annotated LLVM IR.\n";
-      return psr::TaintConfig(IR);
-    }
-  }());
+  llvm::outs() << "Built project IR database ...\n";
+  llvm::outs() << "Built type hierarchy ...\n";
+  llvm::outs() << "Built points-to sets ...\n";
+  llvm::outs() << "Built inter-procedural control-flow graph ...\n";
+  // Print the taint configuration
   std::stringstream Ss;
   Ss << Config;
   llvm::outs() << Ss.str() << '\n';
@@ -74,7 +69,6 @@ analyzeTaintFlows(llvm::Module &M, const std::string &TaintConfigPath) {
   auto AllResEntries = SolverRes.getAllResultEntries();
   // Container to store potential neck candidates that have been identified by
   // the taint analysis.
-  std::vector<llvm::Instruction *> NeckCandidates;
   // Iterate all instructions and check if any of those
   // instructions uses a tainted value. These tainted instruction operands are
   // neck candidates.
@@ -97,7 +91,12 @@ analyzeTaintFlows(llvm::Module &M, const std::string &TaintConfigPath) {
       }
     }
   }
+}
+
+std::vector<llvm::Instruction *> TaintAnalysis::getNeckCandidates() {
   return NeckCandidates;
 }
+
+psr::LLVMBasedICFG &TaintAnalysis::getLLVMBasedICFG() { return I; }
 
 } // namespace neckid

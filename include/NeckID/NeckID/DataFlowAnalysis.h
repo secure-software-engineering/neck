@@ -15,10 +15,30 @@
 
 #include "llvm/IR/Module.h"
 
+#include "phasar/DB/ProjectIRDB.h"
+#include "phasar/PhasarLLVM/ControlFlow/LLVMBasedICFG.h"
+#include "phasar/PhasarLLVM/Pointer/LLVMPointsToSet.h"
+#include "phasar/PhasarLLVM/TaintConfig/TaintConfig.h"
+#include "phasar/PhasarLLVM/TypeHierarchy/LLVMTypeHierarchy.h"
+
 namespace neckid {
 
-std::vector<llvm::Instruction *>
-analyzeTaintFlows(llvm::Module &M, const std::string &TaintConfigPath);
+class TaintAnalysis {
+public:
+  TaintAnalysis(llvm::Module &M, const std::string &TaintConfigPath);
+
+  std::vector<llvm::Instruction *> getNeckCandidates();
+
+  psr::LLVMBasedICFG &getLLVMBasedICFG();
+
+private:
+  psr::ProjectIRDB IR;
+  psr::TaintConfig Config;
+  psr::LLVMTypeHierarchy T;
+  psr::LLVMPointsToSet P;
+  psr::LLVMBasedICFG I;
+  std::vector<llvm::Instruction *> NeckCandidates;
+};
 
 } // namespace neckid
 
