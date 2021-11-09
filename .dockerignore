@@ -1,0 +1,12 @@
+Dockerfile
+**/build
+
+.git/
+.gitignore
+.gitmodules
+
+README.md
+Vagrantfile
+LICENCE
+
+llvm-project

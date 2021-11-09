@@ -1,43 +1,38 @@
 #!/bin/bash
+set -ex
 
 LLVM_VERSION=12
 
-sudo apt-get update
+ROOTDIR=$(pwd)
 
-sudo apt-get install -y build-essential gpg wget
+# make a venv
+python3 -m venv neckid-venv
 
-# CMake
-wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+source $ROOTDIR/neckid-venv/bin/activate
 
-echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null
-sudo apt-get update
+echo "Installing WLLVM"  \
+    pip3 install -U wllvm
 
-sudo rm /usr/share/keyrings/kitware-archive-keyring.gpg
-sudo apt-get install -y cmake
 
-# LLVM
-wget https://apt.llvm.org/llvm.sh
-chmod +x llvm.sh
-sudo ./llvm.sh ${LLVM_VERSION}
+git clone https://github.com/llvm/llvm-project.git 
+cd llvm-project/
+git checkout llvmorg-12.0.1
+mkdir build
+cd build/
+cmake -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;libcxx;libcxxabi;libunwind;lld;compiler-rt;debuginfo-tests' -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_EH=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_ENABLE_DUMP=ON -DLLVM_BUILD_EXAMPLES=Off -DLLVM_INCLUDE_EXAMPLES=Off -DLLVM_BUILD_TESTS=Off -DLLVM_INCLUDE_TESTS=Off -DPYTHON_EXECUTABLE="$(which python3)" -DCMAKE_INSTALL_PREFIX=$ROOTDIR/neckid-venv ../llvm
+make -j $(nproc)
+make install
 
-sudo apt-get -y install clang-format clang-tidy clang-tools clang clangd libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 liblldb-dev libllvm-ocaml-dev libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm python-clang libboost-all-dev gdb libclang-cpp${LLVM_VERSION}-dev
+cd $ROOTDIR
 
-# for LLVM CFGs
-sudo apt-get -y install graphviz
-
-# for wllvm
-sudo apt-get install -y python3-pip
-pip install wllvm
-
-echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
-echo "export LLVM_COMPILER=clang" >> ~/.bashrc
-
-source ~/.bashrc
-
-# for phasar
-sudo apt-get install -y sqlite3 libsqlite3-dev
+ulimit -s 1677721
 
 mkdir -p build
-cd build
-CC=clang-${LLVM_VERSION} CXX=clang++-${LLVM_VERSION} cmake ..
+pushd build
+CC=$ROOTDIR/neckid-venv/bin/clang-${LLVM_VERSION} \
+CXX=$ROOTDIR/neckid-venv/bin/clang++-${LLVM_VERSION} \
+    cmake ..
 make -j $(nproc)
+popd
+
+deactivate
