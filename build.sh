@@ -14,6 +14,10 @@ echo "Installing WLLVM"  \
     pip3 install -U wllvm
 
 
+# TODO: replace this with a call to `external/phasar/utils/install-llvm.sh`
+# ALTHOUGH, no sudo should be required if a custom dest_dir is provided
+# in our case, dest_dir== $ROOTDIR/neckid-venv/bin/
+
 git clone https://github.com/llvm/llvm-project.git 
 cd llvm-project/
 git checkout llvmorg-12.0.1

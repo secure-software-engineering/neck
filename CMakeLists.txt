@@ -98,6 +98,7 @@ include_directories(external/googletest/googlemock/include)
 # LLVM
 find_package(LLVM 12 REQUIRED CONFIG)
 set(USE_LLVM_FAT_LIB ON)
+# message(FATAL_ERROR "${LLVM_INCLUDE_DIRS}")
 include_directories(${LLVM_INCLUDE_DIRS})
 link_directories(${LLVM_LIB_PATH} ${LLVM_LIBRARY_DIRS})
 add_definitions(${LLVM_DEFINITIONS})
