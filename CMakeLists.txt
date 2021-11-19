@@ -98,39 +98,40 @@ include_directories(external/googletest/googlemock/include)
 # LLVM
 find_package(LLVM 12 REQUIRED CONFIG)
 set(USE_LLVM_FAT_LIB ON)
-include_directories(${LLVM_INCLUDE_DIRS})
-link_directories(${LLVM_LIB_PATH} ${LLVM_LIBRARY_DIRS})
-add_definitions(${LLVM_DEFINITIONS})
-set(LLVM_LINK_COMPONENTS
-  coverage
-  coroutines
-  demangle
-  libdriver
-  lto
-  support
-  analysis
-  bitwriter
-  core
-  ipo
-  irreader
-  instcombine
-  instrumentation
-  linker
-  objcarcopts
-  scalaropts
-  transformutils
-  codegen
-  vectorize
-)
-llvm_map_components_to_libnames(llvm_libs
-  ${LLVM_LINK_COMPONENTS}
-)
+# include_directories(${LLVM_INCLUDE_DIRS})
+# link_directories(${LLVM_LIB_PATH} ${LLVM_LIBRARY_DIRS})
+# message(FATAL_ERROR "${LLVM_LIBRARY_DIRS}")
+# add_definitions(${LLVM_DEFINITIONS})
+# set(LLVM_LINK_COMPONENTS
+#   coverage
+#   coroutines
+#   demangle
+#   libdriver
+#   lto
+#   support
+#   analysis
+#   bitwriter
+#   core
+#   ipo
+#   irreader
+#   instcombine
+#   instrumentation
+#   linker
+#   objcarcopts
+#   scalaropts
+#   transformutils
+#   codegen
+#   vectorize
+# )
+# llvm_map_components_to_libnames(llvm_libs
+#   ${LLVM_LINK_COMPONENTS}
+# )
 
-find_library(LLVM_LIBRARY NAMES LLVM PATHS ${LLVM_LIBRARY_DIRS} NO_DEFAULT_PATH)
-if(NOT ${LLVM_LIBRARY} STREQUAL "LLVM_LIBRARY-NOTFOUND")
-  message(STATUS "Found consolidated shared LLVM lib " ${LLVM_LIBRARY} " that will be linked against.")
-  set(USE_LLVM_FAT_LIB on)
-endif()
+# find_library(LLVM_LIBRARY NAMES LLVM PATHS ${LLVM_LIBRARY_DIRS} NO_DEFAULT_PATH)
+# if(NOT ${LLVM_LIBRARY} STREQUAL "LLVM_LIBRARY-NOTFOUND")
+#   message(STATUS "Found consolidated shared LLVM lib " ${LLVM_LIBRARY} " that will be linked against.")
+#   set(USE_LLVM_FAT_LIB ON)
+# endif()
 
 # Set up clang-tidy to be applied during compilation to indicate code smells
 set(CMAKE_CXX_CLANG_TIDY
