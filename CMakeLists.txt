@@ -38,6 +38,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${NECKID_SRC_DIR}/cmake")
 
 include("neckid_macros")
 
+option(NECKID_RUN_CLANGTIDY_IN_BUILD "Run clang-tidy during the build (may be expensive on small machines, default is OFF)" OFF)
+
 option(NECKID_BUILD_UNITTESTS "Build all tests (default is ON)" ON)
 
 option(NECKID_BUILD_IR "Build IR test code (default is ON)" ON)
@@ -98,47 +100,16 @@ include_directories(external/googletest/googlemock/include)
 # LLVM
 find_package(LLVM 12 REQUIRED CONFIG)
 set(USE_LLVM_FAT_LIB ON)
-# message(FATAL_ERROR "${LLVM_INCLUDE_DIRS}")
-include_directories(${LLVM_INCLUDE_DIRS})
-link_directories(${LLVM_LIB_PATH} ${LLVM_LIBRARY_DIRS})
-add_definitions(${LLVM_DEFINITIONS})
-set(LLVM_LINK_COMPONENTS
-  coverage
-  coroutines
-  demangle
-  libdriver
-  lto
-  support
-  analysis
-  bitwriter
-  core
-  ipo
-  irreader
-  instcombine
-  instrumentation
-  linker
-  objcarcopts
-  scalaropts
-  transformutils
-  codegen
-  vectorize
-)
-llvm_map_components_to_libnames(llvm_libs
-  ${LLVM_LINK_COMPONENTS}
-)
-
-find_library(LLVM_LIBRARY NAMES LLVM PATHS ${LLVM_LIBRARY_DIRS} NO_DEFAULT_PATH)
-if(NOT ${LLVM_LIBRARY} STREQUAL "LLVM_LIBRARY-NOTFOUND")
-  message(STATUS "Found consolidated shared LLVM lib " ${LLVM_LIBRARY} " that will be linked against.")
-  set(USE_LLVM_FAT_LIB on)
-endif()
+# the remaining LLVM related setup is performed by PhASAR
 
 # Set up clang-tidy to be applied during compilation to indicate code smells
-set(CMAKE_CXX_CLANG_TIDY
-  clang-tidy;
-  -header-filter=NeckID.*;
-  # -warnings-as-errors=*;
-)
+if (NECKID_RUN_CLANGTIDY_IN_BUILD)
+  set(CMAKE_CXX_CLANG_TIDY
+      clang-tidy;
+      -header-filter=NeckID.*;
+    # -warnings-as-errors=*;
+  )
+endif()
 
 # Add the Neck-ID subdirectories
 add_subdirectory(config)
