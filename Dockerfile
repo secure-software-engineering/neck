@@ -15,4 +15,5 @@ RUN bash ./install.sh
 USER root
 WORKDIR /neck-identification
 COPY . .
+RUN bash /neck-identification/build-llvm.sh
 RUN bash /neck-identification/build.sh

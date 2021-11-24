@@ -17,9 +17,9 @@ sudo apt-get update
 sudo apt-get install -y cmake ninja-build
 
 # Update GCC compiler for an up-to-date libstdc++ implementation
-add-apt-repository -y ppa:ubuntu-toolchain-r/test
-apt-get update
-apt-get install -y gcc-11 g++-11
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install -y gcc-11 g++-11
 
 # Enable dot processing and LLVM CFGs
 sudo apt-get -y install graphviz

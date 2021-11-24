@@ -45,3 +45,5 @@ build/
 compile_commands.json
 # .vscode/
 .vagrant/
+
+neckid-venv
