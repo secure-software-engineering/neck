@@ -5,4 +5,4 @@ set -ex
 mkdir -p build
 cd build
 CC=clang CXX=clang++ cmake -G "Ninja" ..
-ninja
+ninja -j $(nproc)
