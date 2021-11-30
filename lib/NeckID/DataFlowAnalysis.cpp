@@ -68,7 +68,8 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
   llvm::outs() << Ss.str() << '\n';
   // Set up analysis and solver
   llvm::outs() << "Setting up data-flow analysis ...\n";
-  psr::IDEExtendedTaintAnalysis TaintAnalysis(&IR, &T, &I, &P, Config);
+  psr::IDEExtendedTaintAnalysis<2, false> TaintAnalysis(&IR, &T, &I, &P,
+                                                        Config);
   psr::IDESolver Solver(TaintAnalysis);
   llvm::outs() << "Solving data-flow analysis ...\n";
   Solver.solve();
