@@ -127,7 +127,7 @@ public:
 
   /// Inserts a special function call to '' to denote the basic block that has
   /// been identified as the neck.
-  void markIdentifiedNeck(const std::string &FunName = "_klee_dump_memory_");
+  void markIdentifiedNeck(const std::string &FunName = "klee_dump_memory");
 
   /// Dumps the underlying module to the output stream.
   void dumpModule(llvm::raw_ostream &OS = llvm::outs());

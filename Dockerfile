@@ -1,4 +1,3 @@
-
 # Pull base image.
 FROM buildpack-deps:bionic
 
@@ -14,6 +13,7 @@ RUN bash ./install.sh
 
 USER root
 WORKDIR /neck-identification
-COPY . .
+COPY build-llvm.sh .
 RUN bash /neck-identification/build-llvm.sh
+COPY . .
 RUN bash /neck-identification/build.sh
