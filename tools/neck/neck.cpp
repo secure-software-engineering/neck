@@ -11,6 +11,8 @@
 #include "llvm/Support/raw_ostream.h"
 
 #include "boost/program_options.hpp"
+#include "boost/filesystem.hpp"
+
 
 #include "NeckID/NeckID/NeckID.h"
 
@@ -122,7 +124,11 @@ int main(int Argc, char **Argv) {
     NA.markIdentifiedNeck();
   }
   if (Vars.count("annotate")) {
-    NA.dumpModule();
+    std::filesystem::path p(Vars["module"].as<std::string>());
+    std::string fileName(p.stem());     
+    std::error_code EC;
+    llvm::raw_fd_ostream OF(fileName+".ll", EC);
+    NA.dumpModule(OF);
   }
   return 0;
 }
