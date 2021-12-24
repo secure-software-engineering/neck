@@ -11,7 +11,6 @@
 #include "llvm/Support/raw_ostream.h"
 
 #include "boost/program_options.hpp"
-#include "boost/filesystem.hpp"
 
 
 #include "NeckID/NeckID/NeckID.h"
