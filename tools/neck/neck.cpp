@@ -126,7 +126,7 @@ int main(int Argc, char **Argv) {
     std::filesystem::path p(Vars["module"].as<std::string>());
     std::string fileName(p.stem());     
     std::error_code EC;
-    llvm::raw_fd_ostream OF(fileName+".ll", EC);
+    llvm::raw_fd_ostream OF(fileName+"_neck.ll", EC);
     NA.dumpModule(OF);
   }
   return 0;
