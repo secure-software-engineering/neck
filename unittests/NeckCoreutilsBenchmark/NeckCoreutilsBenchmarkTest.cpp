@@ -70,9 +70,9 @@ protected:
     // get the callsites respective basic block
     const llvm::BasicBlock *GroundTruth = NeckIDCallSite->getParent();
     // Unit test
-    llvm::outs() << "identified neck:\n"
-                 << *IdentifiedNeck << "\n------------------ ground truth:\n"
-                 << *GroundTruth;
+    llvm::outs() << "\n===> identified neck:\n"
+                 << *IdentifiedNeck << "\n===> ground truth:\n"
+                 << *GroundTruth << '\n';
     EXPECT_EQ(IdentifiedNeck, GroundTruth); // NOLINT
   }
 
@@ -180,11 +180,6 @@ TEST_F(CoreutilsTest, HandleWcProgram) { // NOLINT
   // Setup and check results
   const std::string File = "wc.ll";
   auto *Neck = identifyNeck(File);
-  if (!Neck) {
-    llvm::outs() << "Neck is null!\n";
-  } else {
-    llvm::outs() << *Neck;
-  }
   checkResult(Neck);
 }
 
