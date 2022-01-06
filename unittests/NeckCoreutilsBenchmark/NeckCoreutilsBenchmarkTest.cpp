@@ -70,10 +70,9 @@ protected:
     // get the callsites respective basic block
     const llvm::BasicBlock *GroundTruth = NeckIDCallSite->getParent();
     // Unit test
-    llvm::outs() << "identified neck:\n";
-    IdentifiedNeck->print(llvm::outs());
-    llvm::outs() << "\n------------------ ground truth:\n";
-    GroundTruth->print(llvm::outs());
+    llvm::outs() << "identified neck:\n"
+                 << *IdentifiedNeck << "\n------------------ ground truth:\n"
+                 << *GroundTruth;
     EXPECT_EQ(IdentifiedNeck, GroundTruth); // NOLINT
   }
 
@@ -184,7 +183,7 @@ TEST_F(CoreutilsTest, HandleWcProgram) { // NOLINT
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
   } else {
-    Neck->print(llvm::outs());
+    llvm::outs() << *Neck;
   }
   checkResult(Neck);
 }

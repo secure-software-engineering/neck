@@ -50,8 +50,7 @@ void print(std::unordered_set<llvm::BasicBlock *> &BBs) {
     std::string Msg = "BB " + std::to_string(Counter) + ":\n";
     llvm::outs() << Msg;
     llvm::outs() << std::string(Msg.size() - 1, '=');
-    BB->print(llvm::outs());
-    llvm::outs() << '\n';
+    llvm::outs() << *BB << '\n';
     ++Counter;
   }
 }
@@ -93,7 +92,7 @@ bool NeckAnalysis::isReachableFromFunctionsEntry(llvm::BasicBlock *Dst,
          "Expected a valid function definition!");
   // Check if we can get away with a simple intra-procedural reachability check.
   // if (Fun->front().getFunction() == Dst->getParent()) {
-    return isReachable(&Fun->front(), Dst, false);
+  return isReachable(&Fun->front(), Dst, false);
   // }
   // Need an inter-procedural reachability check.
 }
@@ -329,8 +328,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     if (!Neck) {
       llvm::outs() << "no neck found!\n";
     } else {
-      Neck->print(llvm::outs());
-      llvm::outs() << '\n';
+      llvm::outs() << *Neck << '\n';
     }
   }
 }

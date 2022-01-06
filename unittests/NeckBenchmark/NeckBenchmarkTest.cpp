@@ -75,9 +75,7 @@ protected:
                      << GroundTruth->getName() << "' in function '"
                      << GroundTruth->getParent()->getName() << "'\n";
       } else {
-        llvm::outs() << "Ground truth:\n";
-        GroundTruth->print(llvm::outs());
-        llvm::outs() << '\n';
+        llvm::outs() << "Ground truth:\n" << *GroundTruth << '\n';
       }
     }
     // Unit test
