@@ -160,6 +160,8 @@ neckid::NeckAnalysis::getLoopExitBlocks(llvm::BasicBlock *BB) {
   auto *Loop = getLoopInfo(BB).getLoopFor(BB);
   if (Loop) {
     llvm::SmallVector<llvm::BasicBlock *, 5> Exits;
+    // Return all unique successor blocks of this loop.
+    // These are the blocks outside of the current loop which are branched to.
     Loop->getUniqueExitBlocks(Exits);
     std::unordered_set<llvm::BasicBlock *> Result;
     Result.insert(Exits.begin(), Exits.end());
@@ -210,7 +212,8 @@ bool neckid::NeckAnalysis::isBackEdge(llvm::BasicBlock *From,
                                       const llvm::DominatorTree *DT) {
   // check if any successor of From dominates To
   // in case of basename, there is a backedge from From to To
-  // essentially, DT->dominates(To, To) which will return True
+  // thus, To will be a successor of From
+  // which means, DT->dominates(To, To) which will return True
   for (auto *Succ : llvm::successors(From)) { // NOLINT
     if (DT->dominates(Succ, To)) {
       return true;
@@ -232,6 +235,11 @@ bool neckid::NeckAnalysis::dominatesSuccessors(llvm::BasicBlock *BB) {
     if (isBackEdge(BBSucc, BB, &getDominatorTree(BB))) {
       return false;
     }
+
+    // TODO: check if there is an eventual cycle / closed path from succ to BB 
+    // isCyclic()
+    // TODO: remove all basic blocks that are Loop latches which have a
+    // direct/indirect backedge to the loop header
   }
 
   // or use this function directly.
@@ -274,6 +282,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     print(NeckCandidates);
   }
   // collect all neck candidates that are part of a loop
+  // add Loop Exits to LoopBBs
   std::unordered_set<llvm::BasicBlock *> LoopBBs;
   for (auto *NeckCandidate : NeckCandidates) {
     if (isInLoopStructue(NeckCandidate)) {
@@ -289,6 +298,8 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     llvm::outs() << "Neck candidates after handling loops:\n";
     print(NeckCandidates);
   }
+  // now, all loop blocks that aren't loop exits are removed
+
   // remove all basic blocks that do not dominate their successors
   eraseIf(NeckCandidates,
           [this](auto *BB) { return !dominatesSuccessors(BB); });
@@ -296,12 +307,16 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     llvm::outs() << "Neck candidates after handling dominators:\n";
     print(NeckCandidates);
   }
+
+  // Naman: Redundant. Blocks that do not succeed a loop are blocks that are not loop exits.
+
   // remove all basic blocks that do not succeed a loop
-  eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
-  if (Debug) {
-    llvm::outs() << "Neck candidates after handling loop succession:\n";
-    print(NeckCandidates);
-  }
+  // eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
+  // if (Debug) {
+  //   llvm::outs() << "Neck candidates after handling loop succession:\n";
+  //   print(NeckCandidates);
+  // }
+
   // remove all basic blocks that are not loop exits (LoopBBs contain all loop
   // exits; take AND of NeckCandidates and LoopBBs)
   eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB); });
@@ -309,10 +324,9 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     llvm::outs() << "Neck candidates after handling no-loop exists:\n";
     print(NeckCandidates);
   }
-  // TODO: remove all basic blocks that are Loop latches which have a
-  // direct/indirect backedge to the loop header
 
   // remove all basic blocks that are not reachable from main
+  // FIXME update once we have an inter-procedural search
   eraseIf(NeckCandidates, [this](auto *BB) {
     return !isReachableFromFunctionsEntry(BB, "main");
   });
