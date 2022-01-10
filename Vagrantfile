@@ -57,6 +57,7 @@ Vagrant.configure("2") do |config|
     vb.name = "LMCAS"
     # Customize the amount of memory on the VM:
     vb.memory = "4096"
+    vb.cpus = "4"
   end
   #
   # View the documentation for the provider you are using for more
@@ -66,7 +67,8 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    chmod +x /vagrant/build.sh
-    /vagrant/build.sh
+    bash /vagrant/install.sh
+    bash /vagrant/build-llvm.sh
+    bash /vagrant/build.sh
   SHELL
 end
