@@ -114,7 +114,7 @@ private:
 public:
   /// Computes neck candidates and the definitive neck.
   NeckAnalysis(llvm::Module &M, const std::string &TaintConfigPath,
-               bool Debug = false);
+               bool Debug = false, bool FunctionLocalPTAwoGlobals = false);
 
   /// Returns the analyzed module.
   [[nodiscard]] llvm::Module &getModule();

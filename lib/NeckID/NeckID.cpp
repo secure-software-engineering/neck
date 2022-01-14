@@ -236,7 +236,7 @@ bool neckid::NeckAnalysis::dominatesSuccessors(llvm::BasicBlock *BB) {
       return false;
     }
 
-    // TODO: check if there is an eventual cycle / closed path from succ to BB 
+    // TODO: check if there is an eventual cycle / closed path from succ to BB
     // isCyclic()
     // TODO: remove all basic blocks that are Loop latches which have a
     // direct/indirect backedge to the loop header
@@ -264,8 +264,9 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
 /// Computes neck candidates and the definitive neck.
 neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
                                    const std::string &TaintConfigPath,
-                                   bool Debug)
-    : M(M), TA(M, TaintConfigPath), Neck(nullptr), Debug(Debug) {
+                                   bool Debug, bool FunctionLocalPTAwoGlobals)
+    : M(M), TA(M, TaintConfigPath, FunctionLocalPTAwoGlobals), Neck(nullptr),
+      Debug(Debug) {
   // start with a list of potential neck candidates
   std::vector<llvm::Instruction *> InterestingInstructions =
       TA.getNeckCandidates();
@@ -308,7 +309,8 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     print(NeckCandidates);
   }
 
-  // Naman: Redundant. Blocks that do not succeed a loop are blocks that are not loop exits.
+  // Naman: Redundant. Blocks that do not succeed a loop are blocks that are not
+  // loop exits.
 
   // remove all basic blocks that do not succeed a loop
   // eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });

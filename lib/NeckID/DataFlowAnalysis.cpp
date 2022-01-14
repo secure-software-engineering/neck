@@ -31,7 +31,8 @@
 namespace neckid {
 
 TaintAnalysis::TaintAnalysis(llvm::Module &M,
-                             const std::string &TaintConfigPath)
+                             const std::string &TaintConfigPath,
+                             bool FunctionLocalPTAwoGlobals)
     : IR([&]() {
         psr::initializeLogger(false);
         llvm::outs() << "Built project IR database ...\n";
@@ -55,7 +56,9 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
       }()),
       P([&]() {
         llvm::outs() << "Built points-to sets ...\n";
-        return psr::LLVMPointsToSet(IR);
+        return psr::LLVMPointsToSet(IR, true /* lazy eval */,
+                                    psr::PointerAnalysisType::CFLAnders,
+                                    FunctionLocalPTAwoGlobals);
       }()),
       I([&]() {
         llvm::outs() << "Built inter-procedural control-flow graph ...\n";

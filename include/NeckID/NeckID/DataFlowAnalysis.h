@@ -25,7 +25,8 @@ namespace neckid {
 
 class TaintAnalysis {
 public:
-  TaintAnalysis(llvm::Module &M, const std::string &TaintConfigPath);
+  TaintAnalysis(llvm::Module &M, const std::string &TaintConfigPath,
+                bool FunctionLocalPTAwoGlobals = false);
 
   std::vector<llvm::Instruction *> getNeckCandidates();
 

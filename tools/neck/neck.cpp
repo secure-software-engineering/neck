@@ -12,7 +12,6 @@
 
 #include "boost/program_options.hpp"
 
-
 #include "NeckID/NeckID/NeckID.h"
 
 namespace {
@@ -59,6 +58,7 @@ int main(int Argc, char **Argv) {
   Config.add_options()
     ("module,m", boost::program_options::value<std::string>()->multitoken()->zero_tokens()->composing()->notifier(&validateParamModule), "Path to the module under analysis")
     ("taint-config,c", boost::program_options::value<std::string>()->multitoken()->zero_tokens()->composing()->notifier(&validateParamConfig), "Path to the taint configuration")
+    ("function-local-points-to-info-wo-globals", "Uses only function-local points to information (ignores points-to relations through global variables, too)")
     ("verbose,v", "Print output to the command line (=default is false)")
     ("annotate", "Dump neck-annotated LLVM IR to the commandline (=default is false)");
   // clang-format on
@@ -109,8 +109,9 @@ int main(int Argc, char **Argv) {
   if (BrokenDbgInfo) {
     llvm::errs() << "caution: debug info is broken!\n";
   }
-  neckid::NeckAnalysis NA(*M, Vars["taint-config"].as<std::string>(),
-                          Vars.count("verbose"));
+  neckid::NeckAnalysis NA(
+      *M, Vars["taint-config"].as<std::string>(), Vars.count("verbose"),
+      Vars.count("function-local-points-to-info-wo-globals"));
   if (!NA.getNeck()) {
     llvm::outs() << "No neck found!\n";
   }
@@ -124,9 +125,9 @@ int main(int Argc, char **Argv) {
   }
   if (Vars.count("annotate")) {
     std::filesystem::path p(Vars["module"].as<std::string>());
-    std::string fileName(p.stem());     
+    std::string fileName(p.stem());
     std::error_code EC;
-    llvm::raw_fd_ostream OF(fileName+"_neck.ll", EC);
+    llvm::raw_fd_ostream OF(fileName + "_neck.ll", EC);
     NA.dumpModule(OF);
   }
   return 0;
