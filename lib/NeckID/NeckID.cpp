@@ -280,6 +280,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     return;
   }
   if (!NeckCandidates.empty() && Debug) {
+    llvm::outs() << "Neck candidates identified by the data-flow analysis:\n";
     print(NeckCandidates);
   }
   // collect all neck candidates that are part of a loop
@@ -340,7 +341,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
   // compute the neck
   Neck = closestNeckCandidateReachableFromEntry();
   if (Debug) {
-    llvm::outs() << "Closed neck candidate from entry point of 'main': ";
+    llvm::outs() << "Closest neck candidate from entry point of 'main': ";
     if (!Neck) {
       llvm::outs() << "no neck found!\n";
     } else {
