@@ -48,6 +48,12 @@ protected:
     }
     // Neck identification
     neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile);
+    if (Debug) {
+      auto *Main = M->getFunction("main");
+      assert(Main && "Expected to find a 'main' function!");
+      neckid::NeckAnalysisCFG G(NA, *Main);
+      G.viewCFG();
+    }
     return NA.getNeck();
   }
 
@@ -103,6 +109,7 @@ TEST_F(CoreutilsTest, HandleDateProgram) { // NOLINT
   // Setup and check results
   const std::string File = "date.ll";
   auto *Neck = identifyNeck(File);
+  // FIXME: test fails due to exploded points-to set
   checkResult(Neck);
 }
 
