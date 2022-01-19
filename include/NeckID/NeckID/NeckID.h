@@ -64,6 +64,7 @@ private:
   llvm::BasicBlock *Neck;
   [[maybe_unused]] bool Debug;
 
+public:
   /// Get cached dominator tree for the specified function.
   llvm::DominatorTree &getDominatorTree(llvm::Function *F);
   /// Get cached dominator tree for the specified basic block's function.
@@ -87,12 +88,16 @@ private:
                                      llvm::Function *Fun);
 
   /// Breadth-first search.
-  static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
-                          bool InterProcSearch);
+  bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
+                   bool InterProcSearch);
 
   /// Breadth-first search that computes distance.
-  static bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
-                          size_t &Dist, bool InterProcSearch);
+  bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst, size_t &Dist,
+                   bool InterProcSearch);
+
+  // Retrieves all reachable callsites within a basic block.
+  std::unordered_set<llvm::Instruction *>
+  getReachableCallSites(llvm::BasicBlock *Src);
 
   std::unordered_set<llvm::BasicBlock *>
   getLoopExitBlocks(llvm::BasicBlock *BB);
@@ -111,7 +116,6 @@ private:
 
   bool succeedsLoop(llvm::BasicBlock *BB);
 
-public:
   /// Computes neck candidates and the definitive neck.
   NeckAnalysis(llvm::Module &M, const std::string &TaintConfigPath,
                bool Debug = false, bool FunctionLocalPTAwoGlobals = false);

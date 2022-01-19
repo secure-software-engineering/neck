@@ -10,10 +10,12 @@
 #include <algorithm>
 #include <deque>
 #include <limits>
+#include <llvm/IR/InstrTypes.h>
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 #include "llvm/ADT/GraphTraits.h"
 #include "llvm/ADT/SetVector.h"
@@ -29,6 +31,7 @@
 #include "llvm/IR/Dominators.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/InstrTypes.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Verifier.h"
@@ -113,46 +116,102 @@ bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
 bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
                                        llvm::BasicBlock *Dst, size_t &Dist,
                                        [[maybe_unused]] bool InterProcSearch) {
-  if (Src->getParent() != Dst->getParent()) {
-    return false;
-  }
+  // Early exit if possible
   if (Src == Dst) {
     return true;
   }
-  // Mark all the vertices as not visited
-  std::unordered_map<llvm::BasicBlock *, bool> Visited;
-  for (auto &BB : *Src->getParent()) {
-    Visited[&BB] = false;
+  // Check if an intraprocedural reachability check is sufficient
+  if (Src->getParent() == Dst->getParent()) {
+    InterProcSearch = false;
   }
-  Dist = 0;
-  // Create a queue for BFS
-  std::deque<llvm::BasicBlock *> Queue;
-  // Mark the current node as visited and enqueue it
-  Visited[Src] = true;
-  Queue.push_back(Src);
-  while (!Queue.empty()) {
-    ++Dist;
-    // Dequeue a vertex from queue
-    Src = Queue.front();
-    Queue.pop_front();
-    // Get all adjacent vertices of the dequeued vertex Src
-    // If a adjacent has not been visited, then mark it visited
-    // and enqueue it
-    for (auto *Succ : llvm::successors(Src)) {
-      // If this adjacent node is the destination node, then
-      // return true
-      if (Succ == Dst) {
+  // Intraprocedural search
+  if (!InterProcSearch) {
+    // Mark all the vertices as not visited
+    std::unordered_map<llvm::BasicBlock *, bool> Visited;
+    for (auto &BB : *Src->getParent()) {
+      Visited[&BB] = false;
+    }
+    Dist = 0;
+    // Create a queue for BFS
+    std::deque<llvm::BasicBlock *> Queue;
+    // Mark the current node as visited and enqueue it
+    Visited[Src] = true;
+    Queue.push_back(Src);
+    while (!Queue.empty()) {
+      ++Dist;
+      // Dequeue a vertex from queue
+      Src = Queue.front();
+      Queue.pop_front();
+      // Get all adjacent vertices of the dequeued vertex Src
+      // If a adjacent has not been visited, then mark it visited
+      // and enqueue it
+      for (auto *Succ : llvm::successors(Src)) {
+        // If this adjacent node is the destination node, then
+        // return true
+        if (Succ == Dst) {
+          return true;
+        }
+        // Else, continue to do BFS
+        if (!Visited[Succ]) {
+          Visited[Succ] = true;
+          Queue.push_back(Succ);
+        }
+      }
+    }
+    // If BFS is complete without visiting Dst
+    return false;
+  }
+  // Interprocedural search
+  // Find all reachable call sites
+  auto CallSites = getReachableCallSites(Src);
+  // Keep track of callsites that we already visited
+  std::unordered_set<const llvm::Instruction *> VisitedCallSites;
+  // Use a worklist to find call chains that lead to Dst
+  for (auto *CallSite : CallSites) {
+    auto Callees = TA.getLLVMBasedICFG().getCalleesOfCallAt(CallSite);
+    if (VisitedCallSites.find(CallSite) != VisitedCallSites.end()) {
+      continue;
+    }
+    VisitedCallSites.insert(CallSite);
+    std::vector<const llvm::Function *> WorkList(Callees.begin(),
+                                                 Callees.end());
+    while (!WorkList.empty()) {
+      auto *Callee = WorkList.back();
+      WorkList.pop_back();
+      if (Callee == Dst->getParent()) {
+        std::cout << "Found call chain!\n";
         return true;
       }
-      // Else, continue to do BFS
-      if (!Visited[Succ]) {
-        Visited[Succ] = true;
-        Queue.push_back(Succ);
+      auto Callers = TA.getLLVMBasedICFG().getCallsFromWithin(Callee);
+      for (auto *Caller : Callers) {
+        auto Callees = TA.getLLVMBasedICFG().getCalleesOfCallAt(Caller);
+        std::copy(Callees.begin(), Callees.end(), std::back_inserter(WorkList));
       }
     }
   }
-  // If BFS is complete without visiting Dst
+  std::cout << "Did not find call chain!\n";
   return false;
+}
+
+std::unordered_set<llvm::Instruction *>
+NeckAnalysis::getReachableCallSites(llvm::BasicBlock *Src) {
+  // Collect all basic blocks that call a function
+  std::unordered_set<llvm::Instruction *> CallSiteBBs;
+  for (auto &FunBB : *Src->getParent()) {
+    for (auto &I : FunBB) {
+      if (llvm::isa<llvm::CallBase>(&I)) {
+        CallSiteBBs.insert(&I);
+      }
+    }
+  }
+  // Check which basic blocks are reachable from Src
+  std::unordered_set<llvm::Instruction *> ReachableCallSiteBBs;
+  for (auto *CallSiteBB : CallSiteBBs) {
+    if (isReachable(Src, CallSiteBB->getParent(), false)) {
+      ReachableCallSiteBBs.insert(CallSiteBB);
+    }
+  }
+  return ReachableCallSiteBBs;
 }
 
 std::unordered_set<llvm::BasicBlock *>
