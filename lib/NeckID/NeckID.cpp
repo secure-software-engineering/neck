@@ -50,7 +50,11 @@ namespace {
 void print(std::unordered_set<llvm::BasicBlock *> &BBs) {
   unsigned Counter = 1;
   for (auto *BB : BBs) {
-    std::string Msg = "BB " + std::to_string(Counter) + ":\n";
+    std::string Msg =
+        "BB " + std::to_string(Counter) + " in function '" +
+        ((BB->getParent()->hasName()) ? BB->getParent()->getName().str()
+                                      : "<unnamed function>") +
+        "':\n";
     llvm::outs() << Msg;
     llvm::outs() << std::string(Msg.size() - 1, '=');
     llvm::outs() << *BB << '\n';
@@ -93,11 +97,8 @@ bool NeckAnalysis::isReachableFromFunctionsEntry(llvm::BasicBlock *Dst,
                                                  llvm::Function *Fun) {
   assert(Fun && !Fun->isDeclaration() &&
          "Expected a valid function definition!");
-  // Check if we can get away with a simple intra-procedural reachability check.
-  // if (Fun->front().getFunction() == Dst->getParent()) {
-  return isReachable(&Fun->front(), Dst, false);
-  // }
-  // Need an inter-procedural reachability check.
+  return isReachable(&Fun->front(), Dst,
+                     true /* check inter-procedural reachability */);
 }
 
 /// Breadth-first search.
@@ -386,7 +387,6 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
   }
 
   // remove all basic blocks that are not reachable from main
-  // FIXME update once we have an inter-procedural search
   eraseIf(NeckCandidates, [this](auto *BB) {
     return !isReachableFromFunctionsEntry(BB, "main");
   });
