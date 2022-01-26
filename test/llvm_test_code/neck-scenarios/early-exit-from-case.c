@@ -17,7 +17,9 @@ int main(int argc, char **argv) {
   while ((c = getopt(argc, argv, "abc:")) != -1)
     switch (c) {
     case 'a':
-      aflag = 1;
+      goto neck;
+      aflag = argc;
+
       break;
     case 'b':
       bflag = 1;
@@ -36,8 +38,16 @@ int main(int argc, char **argv) {
     default:
       abort();
     }
+
+neck:
+  // Case 1: neck could be here
   _neck_identification_mark_as_neck_();
   klee_dump_memory();
+
+  // CASE 2: the neck could be here
+
+  // _neck_identification_mark_as_neck_();
+  // klee_dump_memory();
 
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 

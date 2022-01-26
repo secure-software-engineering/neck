@@ -27,5 +27,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/TestUtils)
 
 add_subdirectory(NeckBenchmark)
 add_subdirectory(NeckCoreutilsBenchmark)
+add_subdirectory(NeckCustomScenariosBenchmark)
 add_subdirectory(NeckDataset2Benchmark)
 add_subdirectory(NeckID)
