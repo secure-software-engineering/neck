@@ -9,7 +9,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/build/tools/neck/neck",
-        "args": ["-m","${workspaceFolder}/external/custom-coreutils/src/wc.ll", "-c", "${workspaceFolder}/config/cmd-tool-config.json"],
+        "args": ["-m","${workspaceFolder}/external/custom-coreutils/src/wc.ll", "-c", "${workspaceFolder}/config/cmd-tool-config.json","--function-local-points-to-info-wo-globals"],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
         "environment": [],

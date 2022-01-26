@@ -16,16 +16,17 @@
 #include "NeckID/NeckID/NeckID.h"
 
 namespace {
-const std::string PathToDataset2 =
-    neckid::NeckIDConfig::neckidDirectory() + "external/custom-Dataset2/";
+const std::string PathToCustomScenarios =
+    neckid::NeckIDConfig::neckidDirectory() +
+    "build/test/llvm_test_code/neck-scenarios/";
 const std::string PathToCmdToolConfigFile = "config/cmd-tool-config.json";
 const std::string NeckIDFunctionName = "klee_dump_memory";
 } // anonymous namespace
 
 // ============== TEST FIXTURE ============== //
-class Dataset2Test : public ::testing::Test {
+class CustomScenariosTest : public ::testing::Test {
 protected:
-  const std::string PathToLlFiles = PathToDataset2;
+  const std::string PathToLlFiles = PathToCustomScenarios;
   llvm::SMDiagnostic Diag;
   llvm::LLVMContext CTX;
   std::unique_ptr<llvm::Module> M;
@@ -47,7 +48,7 @@ protected:
       llvm::errs() << "caution: debug info is broken\n";
     }
     // Neck identification
-    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile, Debug, true);
+    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile);
     return NA.getNeck();
   }
 
@@ -79,9 +80,9 @@ protected:
 
 }; // Test Fixture
 
-TEST_F(Dataset2Test, HandleObjdumpProgram) { // NOLINT
+TEST_F(CustomScenariosTest, HandleNotInMainProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "objdump.ll";
+  const std::string File = "not-in-main_c_dbg.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
@@ -91,9 +92,9 @@ TEST_F(Dataset2Test, HandleObjdumpProgram) { // NOLINT
   checkResult(Neck);
 }
 
-TEST_F(Dataset2Test, HandleReadelfProgram) { // NOLINT
+TEST_F(CustomScenariosTest, HandleCycleFromNecksSuccessorsProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "readelf.ll";
+  const std::string File = "cycle-from-neck-succ_c_dbg.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
@@ -103,9 +104,9 @@ TEST_F(Dataset2Test, HandleReadelfProgram) { // NOLINT
   checkResult(Neck);
 }
 
-TEST_F(Dataset2Test, HandleTcpdumpProgram) { // NOLINT
+TEST_F(CustomScenariosTest, HandleNestedLoopProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "tcpdump.ll";
+  const std::string File = "nested-loop_c_dbg.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
@@ -115,9 +116,9 @@ TEST_F(Dataset2Test, HandleTcpdumpProgram) { // NOLINT
   checkResult(Neck);
 }
 
-TEST_F(Dataset2Test, HandleDnsproxyProgram) { // NOLINT
+TEST_F(CustomScenariosTest, HandleEarlyExitFromCaseProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "dnsproxy.ll";
+  const std::string File = "early-exit-from-case_c_dbg.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";

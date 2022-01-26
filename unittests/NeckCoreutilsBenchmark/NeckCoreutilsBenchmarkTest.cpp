@@ -47,7 +47,7 @@ protected:
       llvm::errs() << "caution: debug info is broken\n";
     }
     // Neck identification
-    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile);
+    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile, Debug, true);
     if (Debug) {
       auto *Main = M->getFunction("main");
       assert(Main && "Expected to find a 'main' function!");
