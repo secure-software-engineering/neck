@@ -144,7 +144,7 @@ TEST_F(NeckIDTest, Call_05_Program) { // NOLINT
   EXPECT_EQ(checkReachability(Src, Dst, /* InterProcSearch */ true), true);
 
   Src = &M->getFunction("_Z3bazi")->front();
-  Dst = &M->getFunction("_Z3bari")->front();
+  Dst = &M->getFunction("_Z3barii")->front();
   EXPECT_EQ(checkReachability(Src, Dst, /* InterProcSearch */ true), false);
 }
 

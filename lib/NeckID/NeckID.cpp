@@ -101,8 +101,6 @@ bool NeckAnalysis::isReachableFromFunctionsEntry(llvm::BasicBlock *Dst,
 }
 
 /// Breadth-first search.
-/// FIXME add an option (and implementation) that allows for inter-procedural
-/// checks using PhASAR's callgraph algorithm.
 bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
                                        llvm::BasicBlock *Dst,
                                        bool InterProcSearch) {
@@ -111,8 +109,7 @@ bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
 }
 
 /// Breadth-first search that computes distance.
-/// FIXME add an option (and implementation) that allows for inter-procedural
-/// checks using PhASAR's callgraph algorithm.
+/// Note: Dist captures only intra-procedural distances.
 bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
                                        llvm::BasicBlock *Dst, size_t &Dist,
                                        [[maybe_unused]] bool InterProcSearch) {
@@ -169,27 +166,28 @@ bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
   // Use a worklist to find call chains that lead to Dst
   for (auto *CallSite : CallSites) {
     auto Callees = TA.getLLVMBasedICFG().getCalleesOfCallAt(CallSite);
-    if (VisitedCallSites.find(CallSite) != VisitedCallSites.end()) {
-      continue;
-    }
-    VisitedCallSites.insert(CallSite);
     std::vector<const llvm::Function *> WorkList(Callees.begin(),
                                                  Callees.end());
     while (!WorkList.empty()) {
       auto *Callee = WorkList.back();
       WorkList.pop_back();
       if (Callee == Dst->getParent()) {
-        std::cout << "Found call chain!\n";
         return true;
       }
       auto Callers = TA.getLLVMBasedICFG().getCallsFromWithin(Callee);
       for (auto *Caller : Callers) {
         auto Callees = TA.getLLVMBasedICFG().getCalleesOfCallAt(Caller);
-        std::copy(Callees.begin(), Callees.end(), std::back_inserter(WorkList));
+        // Only add to worklist if we did not analyze a callsite already
+        if (VisitedCallSites.find(Caller) == VisitedCallSites.end()) {
+          // WorkList.push_back(Caller);
+          std::copy(Callees.begin(), Callees.end(),
+                    std::back_inserter(WorkList));
+        }
+        VisitedCallSites.insert(Caller);
       }
     }
+    VisitedCallSites.clear();
   }
-  std::cout << "Did not find call chain!\n";
   return false;
 }
 
