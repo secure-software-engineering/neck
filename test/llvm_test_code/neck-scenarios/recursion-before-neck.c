@@ -5,13 +5,24 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+int iterative_factorial(int N) {
+  if (N <= 1) {
+    return 1;
+  }
+  int fact = 1;
+  for (int i = 1; i <= N; i++) {
+
+    fact = fact * i;
+  }
+  return fact;
+}
+
 int factorial(int N) {
   if (N <= 1) {
     return 1;
   }
   return N * factorial(N - 1);
 }
-
 
 int main(int argc, char **argv) {
   int aflag = 0;
@@ -56,8 +67,8 @@ int main(int argc, char **argv) {
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 
   // Case 3: neck could be here
-  factorial(10);
-  _neck_identification_mark_as_neck_();
+  factorial(10); // factorial function mimics a loop?
+  // _neck_identification_mark_as_neck_();
   klee_dump_memory();
 
   for (index = optind; index < argc; index++)

@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 
 neck:
   // Case 1: neck could be here
-  _neck_identification_mark_as_neck_();
+  // _neck_identification_mark_as_neck_();
   klee_dump_memory();
 
   goto neck;

@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
   while ((c = getopt(argc, argv, "abc:")) != -1)
     switch (c) {
     case 'a':
-      goto neck;
+      goto neck_early_exit;
       aflag = argc;
 
       break;
@@ -39,11 +39,11 @@ int main(int argc, char **argv) {
       abort();
     }
 
-neck:
   // Case 1: neck could be here
-  _neck_identification_mark_as_neck_();
+  // _neck_identification_mark_as_neck_();
   klee_dump_memory();
 
+neck_early_exit:
   // CASE 2: the neck could be here
 
   // _neck_identification_mark_as_neck_();

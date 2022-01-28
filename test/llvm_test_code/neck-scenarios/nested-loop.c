@@ -24,8 +24,9 @@ int main(int argc, char **argv) {
       }
 
       // Case 1: neck could be here
-      _neck_identification_mark_as_neck_();
-      klee_dump_memory();
+      // in loop instruction for outer loop, not a neck
+      // _neck_identification_mark_as_neck_();
+      // klee_dump_memory();
       printf("outer loop %d \n", argc);
 
       break;
@@ -48,6 +49,9 @@ int main(int argc, char **argv) {
     }
 
   // Case 2: neck could be here
+  // _neck_identification_mark_as_neck_();
+  klee_dump_memory();
+
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 
   for (index = optind; index < argc; index++)
