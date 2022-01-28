@@ -5,13 +5,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void doSomething(int flag) {
-  for (int index = flag; index > 0; index--)
-    printf("Non-option argument\n");
-
-  // CASE 1: the neck could be here
-  // klee_dump_memory();
+int factorial(int N) {
+  if (N <= 1) {
+    return 1;
+  }
+  return N * factorial(N - 1);
 }
+
 
 int main(int argc, char **argv) {
   int aflag = 0;
@@ -25,8 +25,11 @@ int main(int argc, char **argv) {
   while ((c = getopt(argc, argv, "abc:")) != -1)
     switch (c) {
     case 'a':
-      aflag = argc;
-      doSomething(aflag);
+      aflag = 1;
+
+      // factorial(10);
+      // Case 1: neck could be here
+
       break;
     case 'b':
       bflag = 1;
@@ -46,10 +49,16 @@ int main(int argc, char **argv) {
       abort();
     }
 
-  // CASE 2: the neck could be here
-  klee_dump_memory();
+  // Case 2: neck could be here
+  // _neck_identification_mark_as_neck_();
+  // klee_dump_memory();
 
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
+
+  // Case 3: neck could be here
+  factorial(10);
+  _neck_identification_mark_as_neck_();
+  klee_dump_memory();
 
   for (index = optind; index < argc; index++)
     printf("Non-option argument %s\n", argv[index]);

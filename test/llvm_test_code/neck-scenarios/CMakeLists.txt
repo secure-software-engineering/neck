@@ -3,6 +3,7 @@ set(NECK_SCENARIOS
   nested-loop.c
   cycle-from-neck-succ.c
   early-exit-from-case.c
+  recursion-before-neck.c
 )
 
 foreach(EG ${NECK_SCENARIOS})
