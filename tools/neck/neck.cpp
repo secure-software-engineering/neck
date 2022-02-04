@@ -124,10 +124,10 @@ int main(int Argc, char **Argv) {
     NA.markIdentifiedNeck();
   }
   if (Vars.count("annotate")) {
-    std::filesystem::path p(Vars["module"].as<std::string>());
-    std::string fileName(p.stem());
+    std::filesystem::path Path(Vars["module"].as<std::string>());
+    std::string FileName(Path.stem());
     std::error_code EC;
-    llvm::raw_fd_ostream OF(fileName + "_neck.ll", EC);
+    llvm::raw_fd_ostream OF(FileName + "_neck.ll", EC);
     NA.dumpModule(OF);
   }
   return 0;

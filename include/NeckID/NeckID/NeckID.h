@@ -95,6 +95,11 @@ public:
   bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst, size_t &Dist,
                    bool InterProcSearch);
 
+  /// Breadth-first search that computes distance.
+  bool isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst, size_t &Dist,
+                   bool InterProcSearch,
+                   llvm::BasicBlock **CallSiteBB = nullptr);
+
   // Retrieves all reachable callsites within a basic block.
   std::unordered_set<llvm::Instruction *>
   getReachableCallSites(llvm::BasicBlock *Src);

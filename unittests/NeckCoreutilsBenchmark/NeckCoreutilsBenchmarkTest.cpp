@@ -47,7 +47,8 @@ protected:
       llvm::errs() << "caution: debug info is broken\n";
     }
     // Neck identification
-    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile, Debug, true);
+    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile, Debug,
+                            true /* use function-local points-to infor */);
     if (Debug) {
       auto *Main = M->getFunction("main");
       assert(Main && "Expected to find a 'main' function!");
@@ -171,9 +172,12 @@ TEST_F(CoreutilsTest, HandleRealpathProgram) { // NOLINT
 
 TEST_F(CoreutilsTest, HandleSortProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "sort.ll";
-  auto *Neck = identifyNeck(File);
-  checkResult(Neck);
+  // FIXME
+  // FIX bug in data-flow analysis
+  // const std::string File = "sort.ll";
+  // auto *Neck = identifyNeck(File);
+  // checkResult(Neck);
+  EXPECT_TRUE(false) << "FIXME: data-flow analysis requires fix for 'sort'";
 }
 
 TEST_F(CoreutilsTest, HandleUniqProgram) { // NOLINT

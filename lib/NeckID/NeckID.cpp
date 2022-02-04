@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <deque>
 #include <limits>
-#include <llvm/IR/InstrTypes.h>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -33,6 +32,7 @@
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/InstrTypes.h"
 #include "llvm/IR/Instruction.h"
+#include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/IRReader/IRReader.h"
@@ -102,18 +102,28 @@ bool NeckAnalysis::isReachableFromFunctionsEntry(llvm::BasicBlock *Dst,
 }
 
 /// Breadth-first search.
-bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
-                                       llvm::BasicBlock *Dst,
-                                       bool InterProcSearch) {
+bool NeckAnalysis::isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
+                               bool InterProcSearch) {
   size_t Dummy = 0;
-  return isReachable(Src, Dst, Dummy, InterProcSearch);
+  return isReachable(Src, Dst, Dummy, InterProcSearch, nullptr);
 }
 
 /// Breadth-first search that computes distance.
 /// Note: Dist captures only intra-procedural distances.
-bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
-                                       llvm::BasicBlock *Dst, size_t &Dist,
-                                       [[maybe_unused]] bool InterProcSearch) {
+bool NeckAnalysis::isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
+                               size_t &Dist, bool InterProcSearch) {
+  return isReachable(Src, Dst, Dist, InterProcSearch, nullptr);
+}
+
+/// Breadth-first search that computes distance.
+/// Note: Dist captures only intra-procedural distances.
+/// If Dst is inter-procedurally reachable from Src, the callsite within Src's
+/// function for which reachability has been shown is written to the
+/// CallSiteBB parameter.
+bool NeckAnalysis::isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
+                               size_t &Dist,
+                               [[maybe_unused]] bool InterProcSearch,
+                               llvm::BasicBlock **CallSiteBB) {
   // Early exit if possible
   if (Src == Dst) {
     return true;
@@ -173,6 +183,9 @@ bool neckid::NeckAnalysis::isReachable(llvm::BasicBlock *Src,
       auto *Callee = WorkList.back();
       WorkList.pop_back();
       if (Callee == Dst->getParent()) {
+        if (CallSiteBB) {
+          *CallSiteBB = CallSite->getParent();
+        }
         return true;
       }
       auto Callers = TA.getLLVMBasedICFG().getCallsFromWithin(Callee);
@@ -239,7 +252,8 @@ neckid::NeckAnalysis::closestNeckCandidateReachableFromEntry() { // NOLINT
     assert(Main && !Main->isDeclaration() &&
            "Expected to find a 'main' function!");
     // FIXME update once we have an inter-procedural search
-    if (isReachable(&Main->getEntryBlock(), NeckCandidate, Dist, false)) {
+    if (isReachable(&Main->getEntryBlock(), NeckCandidate, Dist, false,
+                    nullptr)) {
       if (Dist < ShortestDist) {
         ShortestDist = Dist;
         Closest = NeckCandidate;
@@ -311,7 +325,7 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
     for (auto *Block : Blocks) {
       size_t Dist = 0;
       // FIXME update once we have an inter-procedural search
-      if (isReachable(Block, BB, Dist, false)) {
+      if (isReachable(Block, BB, Dist, false, nullptr)) {
         return true;
       }
     }
@@ -325,11 +339,13 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
                                    bool Debug, bool FunctionLocalPTAwoGlobals)
     : M(M), TA(M, TaintConfigPath, FunctionLocalPTAwoGlobals), Neck(nullptr),
       Debug(Debug) {
-  // start with a list of potential neck candidates
+  // Helper sets for easy erase and insert
+  std::unordered_set<llvm::BasicBlock *> ToErase;
+  std::unordered_set<llvm::BasicBlock *> ToInsert;
+  // Start with a list of potential neck candidates
   std::vector<llvm::Instruction *> InterestingInstructions =
       TA.getNeckCandidates();
-
-  // initialize with potential neck candidates
+  // Initialize with potential neck candidates
   for (auto *InterestingInstruction : InterestingInstructions) {
     NeckCandidates.insert(InterestingInstruction->getParent());
   }
@@ -341,8 +357,38 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     llvm::outs() << "Neck candidates identified by the data-flow analysis:\n";
     print(NeckCandidates);
   }
-  // collect all neck candidates that are part of a loop
-  // add Loop Exits to LoopBBs
+  // Remove all neck candidates that are inter-procedurally (transitively)
+  // reachable from main and instead add their origin in main, i.e., the basic
+  // block that kicks off the call chain that leads to a neck candidate.
+  for (auto *NeckCandidate : NeckCandidates) {
+    auto *Main = M.getFunction("main");
+    assert(Main && "Expected to find 'main' function!");
+    // Basic blocks within the program's entry point function are fine
+    if (NeckCandidate->getParent() == Main) {
+      continue;
+    }
+    // Replace inter-procedurally reachable neck candidates with their
+    // respective call-site basic block in the program's entry point function
+    llvm::BasicBlock *CallSiteBB = nullptr;
+    size_t Dummy;
+    if (isReachable(&Main->front(), NeckCandidate, Dummy, true, &CallSiteBB)) {
+      ToErase.insert(NeckCandidate);
+      ToInsert.insert(CallSiteBB);
+    }
+  }
+  for (auto Erase : ToErase) {
+    NeckCandidates.erase(Erase);
+  }
+  NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
+  ToErase.clear();
+  ToInsert.clear();
+  if (Debug) {
+    llvm::outs()
+        << "Neck candidates after intra-procedural 'main' reduction:\n";
+    print(NeckCandidates);
+  }
+  // Collect all neck candidates that are part of a loop add Loop Exits to
+  // LoopBBs
   std::unordered_set<llvm::BasicBlock *> LoopBBs;
   for (auto *NeckCandidate : NeckCandidates) {
     if (isInLoopStructue(NeckCandidate)) {
@@ -350,43 +396,62 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
       LoopBBs.insert(ExitBlocks.begin(), ExitBlocks.end());
     }
   }
-  // remove all basic blocks that are part of a loop (also removes loop exits)
+  // Remove all basic blocks that are part of a loop (also removes loop exits)
   eraseIf(NeckCandidates, [this](auto *BB) { return isInLoopStructue(BB); });
-  // add the loops' respective exit blocks
+  // Add the loops' respective exit blocks instead
   NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
   if (Debug) {
     llvm::outs() << "Neck candidates after handling loops:\n";
     print(NeckCandidates);
   }
-  // now, all loop blocks that aren't loop exits are removed
-
-  // remove all basic blocks that do not dominate their successors
+  // Now, all loop blocks that aren't loop exits are removed
+  // Next, compensate for poor LLVM IR generation in case we have
+  // single-instruction basic blocks that comprises an unconditional jump to the
+  // next basic block.
+  for (auto *NeckCandidate : NeckCandidates) {
+    if (NeckCandidate->size() == 1) {
+      for (auto &Inst : *NeckCandidate) {
+        if (auto *Br = llvm::dyn_cast<llvm::BranchInst>(&Inst)) {
+          if (!Br->isConditional()) {
+            ToInsert.insert(Br->getSuccessor(0));
+            ToErase.insert(NeckCandidate);
+          }
+        }
+      }
+    }
+  }
+  for (auto Erase : ToErase) {
+    NeckCandidates.erase(Erase);
+  }
+  NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
+  ToErase.clear();
+  ToInsert.clear();
+  if (Debug) {
+    llvm::outs() << "Neck candidates after IR cleanup:\n";
+    print(NeckCandidates);
+  }
+  // Remove all basic blocks that do not dominate their successors
   eraseIf(NeckCandidates,
           [this](auto *BB) { return !dominatesSuccessors(BB); });
   if (Debug) {
     llvm::outs() << "Neck candidates after handling dominators:\n";
     print(NeckCandidates);
   }
-
-  // Naman: Redundant. Blocks that do not succeed a loop are blocks that are not
-  // loop exits.
-
-  // remove all basic blocks that do not succeed a loop
-  // eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
-  // if (Debug) {
-  //   llvm::outs() << "Neck candidates after handling loop succession:\n";
-  //   print(NeckCandidates);
-  // }
-
-  // remove all basic blocks that are not loop exits (LoopBBs contain all loop
-  // exits; take AND of NeckCandidates and LoopBBs)
-  eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB); });
+  // Remove all basic blocks that do not succeed a loop
+  eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
   if (Debug) {
-    llvm::outs() << "Neck candidates after handling no-loop exists:\n";
+    llvm::outs() << "Neck candidates after handling loop succession:\n";
     print(NeckCandidates);
   }
-
-  // remove all basic blocks that are not reachable from main
+  // // remove all basic blocks that are not loop exits (LoopBBs contain all
+  // loop
+  // // exits; take AND of NeckCandidates and LoopBBs)
+  // eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB);
+  // }); if (Debug) {
+  //   llvm::outs() << "Neck candidates after handling no-loop exits:\n";
+  //   print(NeckCandidates);
+  // }
+  // Remove all basic blocks that are not reachable from main
   eraseIf(NeckCandidates, [this](auto *BB) {
     return !isReachableFromFunctionsEntry(BB, "main");
   });
@@ -395,12 +460,13 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
         << "Neck candidates after handling reachability from 'main':\n";
     print(NeckCandidates);
   }
-  // compute the neck
+  // Compute the neck candidate that is closed to the program's entry point
   Neck = closestNeckCandidateReachableFromEntry();
   if (Debug) {
-    llvm::outs() << "Closest neck candidate from entry point of 'main': ";
+    llvm::outs()
+        << "Closest neck candidate from entry point of 'main'/the neck: ";
     if (!Neck) {
-      llvm::outs() << "no neck found!\n";
+      llvm::outs() << "No neck candidate found!\n";
     } else {
       llvm::outs() << *Neck << '\n';
     }
