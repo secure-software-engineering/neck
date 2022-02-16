@@ -443,11 +443,10 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     llvm::outs() << "Neck candidates after handling loop succession:\n";
     print(NeckCandidates);
   }
-  // // remove all basic blocks that are not loop exits (LoopBBs contain all
-  // loop
-  // // exits; take AND of NeckCandidates and LoopBBs)
-  // eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB);
-  // }); if (Debug) {
+  // // Remove all basic blocks that are not loop exits (LoopBBs contains all loop
+  // // exits)
+  // eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB); });
+  // if (Debug) {
   //   llvm::outs() << "Neck candidates after handling no-loop exits:\n";
   //   print(NeckCandidates);
   // }

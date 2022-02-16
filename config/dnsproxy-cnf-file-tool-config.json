@@ -1,12 +1,12 @@
 {
-    "name": "cmd-tool-config",
+    "name": "dnsproxy-cnf-file-tool-config",
     "version": 1.0,
     "functions": [
         {
-            "name": "main",
+            "name": "fgets",
             "params": {
                 "source": [
-                    1
+                    0
                 ]
             }
         }

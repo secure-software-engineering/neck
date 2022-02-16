@@ -56,7 +56,7 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
       }()),
       P([&]() {
         llvm::outs() << "Built points-to sets ...\n";
-        return psr::LLVMPointsToSet(IR, true /* lazy eval */,
+        return psr::LLVMPointsToSet(IR, false /* lazy eval off */,
                                     psr::PointerAnalysisType::CFLAnders,
                                     FunctionLocalPTAwoGlobals);
       }()),
@@ -71,7 +71,7 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
   llvm::outs() << Ss.str() << '\n';
   // Set up analysis and solver
   llvm::outs() << "Setting up data-flow analysis ...\n";
-  psr::IDEExtendedTaintAnalysis<2, false> TaintAnalysis(&IR, &T, &I, &P,
+  psr::IDEExtendedTaintAnalysis<1, false> TaintAnalysis(&IR, &T, &I, &P,
                                                         Config);
   psr::IDESolver Solver(TaintAnalysis);
   llvm::outs() << "Solving data-flow analysis ...\n";

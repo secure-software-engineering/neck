@@ -19,6 +19,8 @@ namespace {
 const std::string PathToDataset2 =
     neckid::NeckIDConfig::neckidDirectory() + "external/custom-Dataset2/";
 const std::string PathToCmdToolConfigFile = "config/cmd-tool-config.json";
+const std::string PathToDnsproxyCnfFileConfigFile =
+    "config/dnsproxy-cnf-file-tool-config.json";
 const std::string NeckIDFunctionName = "klee_dump_memory";
 } // anonymous namespace
 
@@ -35,6 +37,7 @@ protected:
   void TearDown() override {}
 
   llvm::BasicBlock *identifyNeck(const std::string &LlvmFilePath,
+                                 const std::string &TaintAnalysisConfigPath,
                                  [[maybe_unused]] bool Debug = false) {
     // Parsing
     bool BrokenDbgInfo = false;
@@ -47,7 +50,14 @@ protected:
       llvm::errs() << "caution: debug info is broken\n";
     }
     // Neck identification
-    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile, Debug, true);
+    neckid::NeckAnalysis NA(*M, TaintAnalysisConfigPath, Debug,
+                            true /* use function-local points-to infor */);
+    if (Debug) {
+      auto *Main = M->getFunction("main");
+      assert(Main && "Expected to find a 'main' function!");
+      neckid::NeckAnalysisCFG G(NA, *Main);
+      G.viewCFG();
+    }
     return NA.getNeck();
   }
 
@@ -70,19 +80,30 @@ protected:
     // get the callsites respective basic block
     const llvm::BasicBlock *GroundTruth = NeckIDCallSite->getParent();
     // Unit test
-    llvm::outs() << "identified neck:\n";
-    IdentifiedNeck->print(llvm::outs());
-    llvm::outs() << "\n------------------ ground truth:\n";
-    GroundTruth->print(llvm::outs());
+    llvm::outs() << "\n===> identified neck:\n"
+                 << *IdentifiedNeck << "\n===> ground truth:\n"
+                 << *GroundTruth << '\n';
     EXPECT_EQ(IdentifiedNeck, GroundTruth); // NOLINT
   }
 
 }; // Test Fixture
 
+TEST_F(Dataset2Test, HandleDnsproxyProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "dnsproxy.ll";
+  auto *Neck = identifyNeck(File, PathToDnsproxyCnfFileConfigFile, true);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
+}
+
 TEST_F(Dataset2Test, HandleObjdumpProgram) { // NOLINT
   // Setup and check results
   const std::string File = "objdump.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, PathToCmdToolConfigFile);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
   } else {
@@ -94,7 +115,7 @@ TEST_F(Dataset2Test, HandleObjdumpProgram) { // NOLINT
 TEST_F(Dataset2Test, HandleReadelfProgram) { // NOLINT
   // Setup and check results
   const std::string File = "readelf.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, PathToCmdToolConfigFile);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
   } else {
@@ -106,19 +127,7 @@ TEST_F(Dataset2Test, HandleReadelfProgram) { // NOLINT
 TEST_F(Dataset2Test, HandleTcpdumpProgram) { // NOLINT
   // Setup and check results
   const std::string File = "tcpdump.ll";
-  auto *Neck = identifyNeck(File);
-  if (!Neck) {
-    llvm::outs() << "Neck is null!\n";
-  } else {
-    Neck->print(llvm::outs());
-  }
-  checkResult(Neck);
-}
-
-TEST_F(Dataset2Test, HandleDnsproxyProgram) { // NOLINT
-  // Setup and check results
-  const std::string File = "dnsproxy.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, PathToCmdToolConfigFile);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
   } else {

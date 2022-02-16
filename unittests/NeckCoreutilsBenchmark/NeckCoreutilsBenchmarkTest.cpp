@@ -172,12 +172,9 @@ TEST_F(CoreutilsTest, HandleRealpathProgram) { // NOLINT
 
 TEST_F(CoreutilsTest, HandleSortProgram) { // NOLINT
   // Setup and check results
-  // FIXME
-  // FIX bug in data-flow analysis
-  // const std::string File = "sort.ll";
-  // auto *Neck = identifyNeck(File);
-  // checkResult(Neck);
-  EXPECT_TRUE(false) << "FIXME: data-flow analysis requires fix for 'sort'";
+  const std::string File = "sort.ll";
+  auto *Neck = identifyNeck(File);
+  checkResult(Neck);
 }
 
 TEST_F(CoreutilsTest, HandleUniqProgram) { // NOLINT
