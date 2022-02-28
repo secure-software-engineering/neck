@@ -1,5 +1,5 @@
 # The build directory
-build/
+build*/
 
 # LLVM IR
 *.ll

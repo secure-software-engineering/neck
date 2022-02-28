@@ -18,6 +18,7 @@
 
 #include "phasar/DB/ProjectIRDB.h"
 #include "phasar/PhasarLLVM/ControlFlow/LLVMBasedICFG.h"
+#include "phasar/PhasarLLVM/DataFlowSolver/IfdsIde/IFDSIDESolverConfig.h"
 #include "phasar/PhasarLLVM/DataFlowSolver/IfdsIde/Problems/IDEExtendedTaintAnalysis.h"
 #include "phasar/PhasarLLVM/DataFlowSolver/IfdsIde/Solver/IDESolver.h"
 #include "phasar/PhasarLLVM/DataFlowSolver/IfdsIde/Solver/SolverResults.h"
@@ -56,7 +57,7 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
       }()),
       P([&]() {
         llvm::outs() << "Built points-to sets ...\n";
-        return psr::LLVMPointsToSet(IR, false /* lazy eval off */,
+        return psr::LLVMPointsToSet(IR, true /* lazy eval on */,
                                     psr::PointerAnalysisType::CFLAnders,
                                     FunctionLocalPTAwoGlobals);
       }()),
@@ -71,8 +72,16 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
   llvm::outs() << Ss.str() << '\n';
   // Set up analysis and solver
   llvm::outs() << "Setting up data-flow analysis ...\n";
+  psr::IFDSIDESolverConfig SolverConfig(
+      psr::SolverConfigOptions::ComputeValues |
+      psr::SolverConfigOptions::FollowReturnsPastSeeds);
   psr::IDEExtendedTaintAnalysis<1, false> TaintAnalysis(&IR, &T, &I, &P,
                                                         Config);
+  TaintAnalysis.setIFDSIDESolverConfig(SolverConfig);
+  std::stringstream SolverConfigStr;
+  SolverConfigStr << "Using solver config: "
+                  << TaintAnalysis.getIFDSIDESolverConfig() << '\n';
+  llvm::outs() << SolverConfigStr.str();
   psr::IDESolver Solver(TaintAnalysis);
   llvm::outs() << "Solving data-flow analysis ...\n";
   Solver.solve();
