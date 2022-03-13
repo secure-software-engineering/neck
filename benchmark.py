@@ -1,17 +1,11 @@
 #!/usr/bin/python
-from subprocess import PIPE, Popen
+from subprocess import PIPE, DEVNULL, Popen
 import re
 import sys
 
-T_STRING = "wall"
-M_STRING = "resident"
-
-MAX_ITERATIONS = 100
-
 
 def execute_err(cmd):
-    # print('Running:\t', cmd)
-    with Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True) as process:
+    with Popen(cmd, stdout=DEVNULL, stderr=PIPE, shell=True) as process:
         output = process.communicate()[1].decode("utf-8")
     return output
 
@@ -37,21 +31,18 @@ def get_mem(s):
 
 
 def cal_average(num):
-    sum_num = 0
-    for t in num:
-        sum_num = sum_num + t
-
-    avg = sum_num / len(num)
+    avg = sum(num) / len(num)
     return avg
 
 
-def measure(PROGRAM):
+def measure(PROGRAM, N):
 
     times_og = []
     mems_og = []
 
-    for n in range(MAX_ITERATIONS):
+    for n in range(N):
         out_original = original_err(PROGRAM)
+        print("Iteration #: ", n+1)
         for i in range(len(out_original)):
             out_og = out_original[i].split('\n')
             # breakpoint()
@@ -60,7 +51,7 @@ def measure(PROGRAM):
             og_mem = get_mem(out_og)
             mems_og.append(og_mem)
 
-    print("\nTotal iterations ", MAX_ITERATIONS)
+    print("\nTotal iterations ", N)
 
     # average
     avg_time_og = cal_average(times_og)
@@ -85,7 +76,7 @@ def usage():
 
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         usage()
 
     TIME = "/usr/bin/time -v "
@@ -95,7 +86,8 @@ def main():
 
     PROGRAM = TIME + NECK + BIN + CONFIG
 
-    measure(PROGRAM)
+    N = int(sys.argv[2])
+    measure(PROGRAM, N)
 
 
 if __name__ == '__main__':
