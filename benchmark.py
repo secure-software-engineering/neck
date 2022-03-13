@@ -42,7 +42,7 @@ def measure(PROGRAM, N):
 
     for n in range(N):
         out_original = original_err(PROGRAM)
-        print("Iteration #: ", n+1)
+        # print("Iteration #: ", n+1)
         for i in range(len(out_original)):
             out_og = out_original[i].split('\n')
             # breakpoint()
@@ -71,7 +71,7 @@ def original_err(BIN):
 
 
 def usage():
-    print('python benchmark.py </path/to/program.ll>\n')
+    print('python benchmark.py </path/to/program.ll> <#ITERATIONS>\n')
     sys.exit(1)
 
 
