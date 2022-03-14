@@ -2,17 +2,25 @@
 from subprocess import PIPE, DEVNULL, Popen
 import re
 import sys
+import csv
 
+OUTFILE = 'benchmark.csv'
 
-def execute_err(cmd):
+def write_csv(PROGRAM, time, memory):
+    # breakpoint()
+
+    program = PROGRAM.split('.ll')[0].split('/')[-1]
+
+    with open(OUTFILE, 'a') as csvfile:
+        fieldnames = ['Program', 'Time', 'Memory', 'LOC']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        # writer.writeheader()
+        writer.writerow({'Program': program, 'Time': time, 'Memory': memory, 'LOC':0})
+
+def execute(cmd):
     with Popen(cmd, stdout=DEVNULL, stderr=PIPE, shell=True) as process:
         output = process.communicate()[1].decode("utf-8")
     return output
-
-
-def original_run_err(BIN):
-    cmd = BIN
-    return execute_err(cmd)
 
 
 def to_seconds(timestr):
@@ -23,11 +31,12 @@ def to_seconds(timestr):
 
 
 def get_time(s):
-    return to_seconds(s[7].split("):")[1].strip().replace(".", ":"))
+    # breakpoint()
+    return to_seconds(s[3].split("):")[1].strip().replace(".", ":"))
 
 
 def get_mem(s):
-    return int(s[12].split("):")[1].strip())
+    return int(s[8].split("):")[1].strip())
 
 
 def cal_average(num):
@@ -41,15 +50,13 @@ def measure(PROGRAM, N):
     mems_og = []
 
     for n in range(N):
-        out_original = original_err(PROGRAM)
-        # print("Iteration #: ", n+1)
-        for i in range(len(out_original)):
-            out_og = out_original[i].split('\n')
-            # breakpoint()
-            og_time = get_time(out_og)
-            times_og.append(og_time)
-            og_mem = get_mem(out_og)
-            mems_og.append(og_mem)
+        out_original = execute(PROGRAM)
+        out_og = out_original.split('\n')[-23:]
+        # breakpoint()
+        og_time = get_time(out_og)
+        times_og.append(og_time)
+        og_mem = get_mem(out_og)
+        mems_og.append(og_mem)
 
     print("\nTotal iterations ", N)
 
@@ -60,14 +67,8 @@ def measure(PROGRAM, N):
     avg_mem_og = cal_average(mems_og)
     print("Average Memory OG (in kbytes) = ", avg_mem_og)
 
+    write_csv(PROGRAM, avg_time_og, avg_mem_og)
     return 0
-
-
-def original_err(BIN):
-    out_original = []
-    t = original_run_err(BIN)
-    out_original.append(t)
-    return out_original
 
 
 def usage():
