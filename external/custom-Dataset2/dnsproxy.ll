@@ -110,6 +110,7 @@ target triple = "x86_64-unknown-linux-gnu"
 @.str.2.67 = private unnamed_addr constant [45 x i8] c"ActiveQr AuthorQr RecursQr AllQuery Answered\00", align 1
 @.str.3.68 = private unnamed_addr constant [25 x i8] c"%8ld %8ld %8ld %8ld %8ld\00", align 1
 @.str.4.69 = private unnamed_addr constant [45 x i8] c"TimeoutQ DroppedQ DroppedA LateAnsw HashColl\00", align 1
+@.str.9001 = private unnamed_addr constant [11 x i8] c"psr.source\00", section "llvm.metadata"
 
 ; Function Attrs: noinline nounwind optnone uwtable
 define dso_local void @signal_handler(i32 %0, i16 signext %1, i8* %2) #0 !dbg !410 {
@@ -1525,6 +1526,8 @@ define dso_local i32 @parse(i8* %0) #0 !dbg !1265 {
   call void @llvm.dbg.declare(metadata i8** %6, metadata !1328, metadata !DIExpression()), !dbg !1329
   call void @llvm.dbg.declare(metadata i8** %7, metadata !1330, metadata !DIExpression()), !dbg !1331
   call void @llvm.dbg.declare(metadata i8** %8, metadata !1332, metadata !DIExpression()), !dbg !1333
+  %Data1 = bitcast [1024 x i8]* %5 to i8*
+  call void @llvm.var.annotation(i8* %Data1, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.9001, i32 0, i32 0), i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.9001, i32 11, i8* null)
   %9 = load i8*, i8** %3, align 8, !dbg !1334
   %10 = call %struct._IO_FILE* @fopen(i8* %9, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.46, i64 0, i64 0)), !dbg !1336
   store %struct._IO_FILE* %10, %struct._IO_FILE** %4, align 8, !dbg !1337
