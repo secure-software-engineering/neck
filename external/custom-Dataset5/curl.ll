@@ -15450,6 +15450,11 @@ define dso_local void @helpf(%struct._IO_FILE* %0, i8* %1, ...) #0 {
 declare dso_local i32 @curl_mvfprintf(%struct._IO_FILE*, i8*, %struct.__va_list_tag*) #1
 
 ; Function Attrs: noinline nounwind uwtable
+define dso_local void @klee_dump_memory() #0 {
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @operate(%struct.GlobalConfig* %0, i32 %1, i8** %2) #0 {
   %4 = alloca %struct.GlobalConfig*, align 8
   %5 = alloca i32, align 4
@@ -15598,6 +15603,7 @@ define dso_local i32 @operate(%struct.GlobalConfig* %0, i32 %1, i8** %2) #0 {
   br label %83
 
 83:                                               ; preds = %81, %76
+  call void @klee_dump_memory()
   %84 = load i32, i32* %7, align 4
   %85 = icmp ne i32 %84, 0
   br i1 %85, label %144, label %86
