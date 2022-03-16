@@ -104,6 +104,30 @@ TEST_F(Dataset5Test, HandleCurlProgram) { // NOLINT
   checkResult(Neck);
 }
 
+TEST_F(Dataset5Test, HandleDiffProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "diff.ll";
+  auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
+}
+
+TEST_F(Dataset5Test, HandleGzipProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "gzip.ll";
+  auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
+}
+
 TEST_F(Dataset5Test, HandleKnockdProgram) { // NOLINT
   // Setup and check results
   const std::string File = "knockd.ll";
@@ -116,9 +140,45 @@ TEST_F(Dataset5Test, HandleKnockdProgram) { // NOLINT
   checkResult(Neck);
 }
 
+TEST_F(Dataset5Test, HandleKnockProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "knock.ll";
+  auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
+}
+
 TEST_F(Dataset5Test, HandleMiniHTTPDProgram) { // NOLINT
   // Setup and check results
   const std::string File = "mini-httpd.ll";
+  auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
+}
+
+TEST_F(Dataset5Test, HandleNginxProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "nginx.ll";
+  auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
+}
+
+TEST_F(Dataset5Test, HandleBind9Program) { // NOLINT
+  // Setup and check results
+  const std::string File = "named.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
