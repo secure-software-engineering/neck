@@ -337,7 +337,7 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
 neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
                                    const std::string &TaintConfigPath,
                                    bool Debug, bool FunctionLocalPTAwoGlobals)
-    : M(M), TA(M, TaintConfigPath, FunctionLocalPTAwoGlobals), Neck(nullptr),
+    : M(M), TA(M, TaintConfigPath, FunctionLocalPTAwoGlobals, Debug), Neck(nullptr),
       Debug(Debug) {
   // Helper sets for easy erase and insert
   std::unordered_set<llvm::BasicBlock *> ToErase;

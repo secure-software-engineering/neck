@@ -1,0 +1,14 @@
+{
+    "name": "mini_httpd-cnf-file-tool-config",
+    "version": 1.0,
+    "functions": [
+        {
+            "name": "fgets",
+            "params": {
+                "source": [
+                    0
+                ]
+            }
+        }
+    ]
+}

@@ -33,7 +33,7 @@ namespace neckid {
 
 TaintAnalysis::TaintAnalysis(llvm::Module &M,
                              const std::string &TaintConfigPath,
-                             bool FunctionLocalPTAwoGlobals)
+                             bool FunctionLocalPTAwoGlobals, bool Debug)
     : IR([&]() {
         psr::initializeLogger(false);
         llvm::outs() << "Built project IR database ...\n";
@@ -86,7 +86,12 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
   llvm::outs() << "Solving data-flow analysis ...\n";
   Solver.solve();
   llvm::outs() << "Data-flow analysis has been solved.\n";
-  // Solver.dumpResults();
+  if (Debug) {
+    llvm::outs() << "Raw data-flow results:\n";
+    std::stringstream RawSolverOut;
+    Solver.dumpResults(RawSolverOut);
+    llvm::outs() << RawSolverOut.str() << '\n';
+  }
   // Retrieve all usages of data that is depending on the initial seeds. In case
   // of command-line tools, these are data-flow facts that are transitively
   // reachable from the argc and argv parameters of the main function.
