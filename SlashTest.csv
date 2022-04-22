@@ -1,0 +1,24 @@
+program,analyzable,identifies neck,identifies neck correctly
+curl.ll,tbd,tbd,tbd
+date.ll,tbd,tbd,tbd
+diff.ll,tbd,tbd,tbd
+dnsproxy.ll,tbd,tbd,tbd
+du.ll,tbd,tbd,tbd
+echo.ll,tbd,tbd,tbd
+gzip.ll,tbd,tbd,tbd
+httpd.ll,tbd,tbd,tbd
+id.ll,tbd,tbd,tbd
+kill.ll,tbd,tbd,tbd
+knockd.ll,tbd,tbd,tbd
+knock.ll,tbd,tbd,tbd
+lighttpd.ll,tbd,tbd,tbd
+mini_httpd.ll,tbd,tbd,tbd
+named.ll,tbd,tbd,tbd
+nginx.ll,tbd,tbd,tbd
+objdump.ll,tbd,tbd,tbd
+readelf.ll,tbd,tbd,tbd
+sort.ll,tbd,tbd,tbd
+tcpdump.ll,tbd,tbd,tbd
+uniq.ll,tbd,tbd,tbd
+wc.ll,yes,yes,yes
+wget.ll,tbd,tbd,tbd
