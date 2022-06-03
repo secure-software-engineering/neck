@@ -25,10 +25,6 @@ int main(int argc, char **argv) {
     switch (c) {
     case 'a':
       aflag = 1;
-
-      // factorial(10);
-      // Case 1: neck could be here
-
       break;
     case 'b':
       bflag = 1;
@@ -48,12 +44,8 @@ int main(int argc, char **argv) {
       abort();
     }
 
-
-  printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
-
-  factorial(10);
-  
   klee_dump_memory();
+  factorial(aflag);
 
   if (argc < optind + 1) {
     return -1;
