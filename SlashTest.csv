@@ -1,24 +1,25 @@
-program,analyzable,identifies neck,identifies neck correctly
-curl.ll,tbd,tbd,tbd
-date.ll,tbd,tbd,tbd
-diff.ll,tbd,tbd,tbd
-dnsproxy.ll,tbd,tbd,tbd
-du.ll,tbd,tbd,tbd
-echo.ll,tbd,tbd,tbd
-gzip.ll,tbd,tbd,tbd
-httpd.ll,tbd,tbd,tbd
-id.ll,tbd,tbd,tbd
-kill.ll,tbd,tbd,tbd
-knockd.ll,tbd,tbd,tbd
-knock.ll,tbd,tbd,tbd
-lighttpd.ll,tbd,tbd,tbd
-mini_httpd.ll,tbd,tbd,tbd
-named.ll,tbd,tbd,tbd
-nginx.ll,tbd,tbd,tbd
-objdump.ll,tbd,tbd,tbd
-readelf.ll,tbd,tbd,tbd
-sort.ll,tbd,tbd,tbd
-tcpdump.ll,tbd,tbd,tbd
-uniq.ll,tbd,tbd,tbd
-wc.ll,yes,yes,yes
-wget.ll,tbd,tbd,tbd
+program,analyzable,identifies neck,identifies neck correctly,notes
+curl.ll,yes,no,no,main looks very different
+date.ll,yes,yes,yes,
+diff.ll,yes,yes,to be checked but looks legit,
+dnsproxy.ll,yes,yes,yes if it would be placed after call to parse(),
+du.ll,yes,yes,yes,
+echo.ll,yes,yes,yes it's the klee marker's single direct successor,
+gzip.ll,yes,yes,yes,
+httpd.ll,yes,no,no but it should be,
+id.ll,yes,yes,yes,
+kill.ll,yes,yes,no,
+knock.ll,yes,yes,yes,
+knockd.ll,yes,yes,yes,
+lighttpd.ll,yes,no,no,
+mini_httpd.ll,yes,yes,yes,
+named.ll,timed out (~30 min) with simplified dfa,tbd,tbd,
+nginx.ll,yes with simplified dfa,no,no,main looks very different
+objdump.ll,yes with simplified dfa,yes with simplified dfa,yes with simplified dfa,
+psql.ll,yes,yes,to be checked but looks legit,
+readelf.ll,yes with simplified dfa,yes with simplified dfa,yes with simplified dfa,
+sort.ll,yes,yes,no there is another tiny loop before extraction,
+tcpdump.ll,yes with simplified dfa,yes with simplified dfa,yes with simplified dfa,
+uniq.ll,yes,yes,yes,
+wc.ll,yes,yes,yes,
+wget.ll,yes with simplified dfa,yes,no there is another tiny loop before extraction,

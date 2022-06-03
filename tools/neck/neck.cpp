@@ -59,6 +59,7 @@ int main(int Argc, char **Argv) {
     ("module,m", boost::program_options::value<std::string>()->multitoken()->zero_tokens()->composing()->notifier(&validateParamModule), "Path to the module under analysis")
     ("taint-config,c", boost::program_options::value<std::string>()->multitoken()->zero_tokens()->composing()->notifier(&validateParamConfig), "Path to the taint configuration")
     ("function-local-points-to-info-wo-globals", "Uses only function-local points to information (ignores points-to relations through global variables, too)")
+    ("use-simplified-dfa", "Uses a simpler, less expensive data-flow analysis that may be less precise")
     ("verbose,v", "Print output to the command line (=default is false)")
     ("annotate", "Dump neck-annotated LLVM IR to the commandline (=default is false)");
   // clang-format on
@@ -110,15 +111,16 @@ int main(int Argc, char **Argv) {
     llvm::errs() << "caution: debug info is broken!\n";
   }
   neckid::NeckAnalysis NA(
-      *M, Vars["taint-config"].as<std::string>(), Vars.count("verbose"),
-      Vars.count("function-local-points-to-info-wo-globals"));
+      *M, Vars["taint-config"].as<std::string>(),
+      Vars.count("function-local-points-to-info-wo-globals"),
+      Vars.count("use-simplified-dfa"), Vars.count("verbose"));
   if (!NA.getNeck()) {
     llvm::outs() << "No neck found!\n";
   }
   llvm::outs() << "Display identified neck and neck candidates within 'main'\n";
   auto *Main = M->getFunction("main");
   assert(Main && "Expected to find a 'main' function!");
-  neckid::NeckAnalysisCFG G(NA, *Main);
+  neckid::NeckAnalysisCFG G(NA, *Main, Vars["module"].as<std::string>());
   G.viewCFG();
   if (NA.getNeck()) {
     NA.markIdentifiedNeck();

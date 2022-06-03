@@ -336,9 +336,11 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
 /// Computes neck candidates and the definitive neck.
 neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
                                    const std::string &TaintConfigPath,
-                                   bool Debug, bool FunctionLocalPTAwoGlobals)
-    : M(M), TA(M, TaintConfigPath, FunctionLocalPTAwoGlobals, Debug), Neck(nullptr),
-      Debug(Debug) {
+                                   bool FunctionLocalPTAwoGlobals,
+                                   bool UseSimplifiedDFA, bool Debug)
+    : M(M), TA(M, TaintConfigPath, FunctionLocalPTAwoGlobals, UseSimplifiedDFA,
+               Debug),
+      Neck(nullptr), Debug(Debug) {
   // Helper sets for easy erase and insert
   std::unordered_set<llvm::BasicBlock *> ToErase;
   std::unordered_set<llvm::BasicBlock *> ToInsert;
@@ -443,10 +445,11 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     llvm::outs() << "Neck candidates after handling loop succession:\n";
     print(NeckCandidates);
   }
-  // // Remove all basic blocks that are not loop exits (LoopBBs contains all loop
+  // // Remove all basic blocks that are not loop exits (LoopBBs contains all
+  // loop
   // // exits)
-  // eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB); });
-  // if (Debug) {
+  // eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB);
+  // }); if (Debug) {
   //   llvm::outs() << "Neck candidates after handling no-loop exits:\n";
   //   print(NeckCandidates);
   // }
@@ -505,8 +508,10 @@ void neckid::NeckAnalysis::markIdentifiedNeck(const std::string &FunName) {
 
 void neckid::NeckAnalysis::dumpModule(llvm::raw_ostream &OS) { OS << M; }
 
-neckid::NeckAnalysisCFG::NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F)
-    : DisplayFunction(F), Neck(NA.getNeck()), NeckBBs(NA.getNeckCandidates()) {}
+neckid::NeckAnalysisCFG::NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F,
+                                         const std::string &ProgramName)
+    : DisplayFunction(F), Neck(NA.getNeck()), NeckBBs(NA.getNeckCandidates()),
+      ProgramName(ProgramName) {}
 
 void neckid::NeckAnalysisCFG::viewCFG() const {
   ViewGraph(this, "Neck-Analysis-CFG:" + DisplayFunction.getName());

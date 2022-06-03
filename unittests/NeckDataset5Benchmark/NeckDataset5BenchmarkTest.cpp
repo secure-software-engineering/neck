@@ -48,7 +48,7 @@ protected:
     }
     // Neck identification
     neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile, Debug,
-                            true /* use function-local points-to infor */);
+                            true /* use function-local points-to info */);
     return NA.getNeck();
   }
 
