@@ -21,9 +21,11 @@ int main(int argc, char **argv) {
 
       for (size_t i = 0; i < argc; i++) {
         printf("inner loop %zu \n", i);
-        klee_dump_memory();
+        // should not be here
+        // klee_dump_memory();
       }
-
+      // should not be here
+      // klee_dump_memory();
       printf("outer loop %d \n", argc);
 
       break;
@@ -44,6 +46,9 @@ int main(int argc, char **argv) {
     default:
       abort();
     }
+
+// should be here
+klee_dump_memory();
 
   if (argc < optind + 1) {
     return -1;

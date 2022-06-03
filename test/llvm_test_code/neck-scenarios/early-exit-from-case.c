@@ -19,7 +19,6 @@ int main(int argc, char **argv) {
     case 'a':
       goto neck_early_exit;
       aflag = argc;
-
       break;
     case 'b':
       bflag = 1;
@@ -39,10 +38,15 @@ int main(int argc, char **argv) {
       abort();
     }
 
+// should be here
+klee_dump_memory();
+
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 
 neck_early_exit:
-  klee_dump_memory();
+  // should not be here
+  // klee_dump_memory();
+  printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 
   if (argc < optind + 1) {
     return -1;

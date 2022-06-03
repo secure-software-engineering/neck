@@ -105,7 +105,7 @@ TEST_F(CustomScenariosTest, HandleCycleFromNecksSuccessorsProgram) { // NOLINT
   checkResult(Neck);
 }
 
-TEST_F(CustomScenariosTest, HandleNestedInnerLoopProgram) { // NOLINT
+TEST_F(CustomScenariosTest, HandleNestedLoopProgram) { // NOLINT
   // Setup and check results
   const std::string File = "nested-inner-loop_c.ll";
   auto *Neck = identifyNeck(File);
@@ -116,18 +116,6 @@ TEST_F(CustomScenariosTest, HandleNestedInnerLoopProgram) { // NOLINT
   }
   checkResult(Neck);
 }
-
-
-TEST_F(CustomScenariosTest, HandleNestedOuterLoopProgram) { // NOLINT
-  // Setup and check results
-  const std::string File = "nested-outer-loop_c.ll";
-  auto *Neck = identifyNeck(File);
-  if (!Neck) {
-    llvm::outs() << "Neck is null!\n";
-  } else {
-    Neck->print(llvm::outs());
-  }
-  checkResult(Neck);
 
 TEST_F(CustomScenariosTest, HandleEarlyExitFromCaseProgram) { // NOLINT
   // Setup and check results

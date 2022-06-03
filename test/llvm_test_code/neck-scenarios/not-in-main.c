@@ -9,7 +9,8 @@ void doSomething(int flag) {
   for (int index = flag; index > 0; index--)
     printf("Non-option argument\n");
 
-  klee_dump_memory();
+  // not here
+  // klee_dump_memory();
 }
 
 int main(int argc, char **argv) {
@@ -44,6 +45,9 @@ int main(int argc, char **argv) {
     default:
       abort();
     }
+  
+  // should be here
+  klee_dump_memory();
 
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 

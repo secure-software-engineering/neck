@@ -37,8 +37,12 @@ int main(int argc, char **argv) {
       abort();
     }
 
-neck:
+  // should be here
   klee_dump_memory();
+
+neck:
+  // not here
+  // klee_dump_memory();
 
   // backedge to neck
   goto neck;
