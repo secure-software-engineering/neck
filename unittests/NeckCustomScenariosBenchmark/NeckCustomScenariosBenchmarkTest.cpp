@@ -107,7 +107,7 @@ TEST_F(CustomScenariosTest, HandleCycleFromNecksSuccessorsProgram) { // NOLINT
 
 TEST_F(CustomScenariosTest, HandleNestedLoopProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "nested-inner-loop_c.ll";
+  const std::string File = "nested-loop_c.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
