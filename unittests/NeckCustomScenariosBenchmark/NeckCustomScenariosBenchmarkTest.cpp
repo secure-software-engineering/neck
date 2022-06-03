@@ -48,8 +48,8 @@ protected:
       llvm::errs() << "caution: debug info is broken\n";
     }
     // Neck identification
-    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile, Debug,
-                            true /* use function-local points-to infor */);
+    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile,
+                            true /* use function-local points-to info */);
     return NA.getNeck();
   }
 

@@ -36,7 +36,8 @@ protected:
   void TearDown() override {}
 
   llvm::BasicBlock *identifyNeck(const std::string &LlvmFilePath,
-                                 [[maybe_unused]] bool Debug = false) {
+                                 bool FunctionLocalPTAwoGlobals,
+                                 bool UseSimplifiedDFA, bool Debug = false) {
     // Parsing
     bool BrokenDbgInfo = false;
     M = llvm::parseIRFile(PathToLlFiles + LlvmFilePath, Diag, CTX);
@@ -48,8 +49,8 @@ protected:
       llvm::errs() << "caution: debug info is broken\n";
     }
     // Neck identification
-    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile, Debug,
-                            true /* use function-local points-to info */);
+    neckid::NeckAnalysis NA(*M, PathToCmdToolConfigFile,
+                            FunctionLocalPTAwoGlobals, UseSimplifiedDFA, Debug);
     if (Debug) {
       auto *Main = M->getFunction("main");
       assert(Main && "Expected to find a 'main' function!");
@@ -100,28 +101,32 @@ protected:
 TEST_F(SlashTest, HandleCurlProgram) { // NOLINT
   // Setup and check results
   const std::string File = "curl.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleDateProgram) { // NOLINT
   // Setup and check results
   const std::string File = "date.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleDiffProgram) { // NOLINT
   // Setup and check results
   const std::string File = "diff.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleDnsproxyProgram) { // NOLINT
   // Setup and check results
   const std::string File = "dnsproxy.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   // FIXME: test fails due to exploded points-to set
   checkResult(Neck);
 }
@@ -129,133 +134,160 @@ TEST_F(SlashTest, HandleDnsproxyProgram) { // NOLINT
 TEST_F(SlashTest, HandleDuProgram) { // NOLINT
   // Setup and check results
   const std::string File = "du.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleEchoProgram) { // NOLINT
   // Setup and check results
   const std::string File = "echo.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleGzipProgram) { // NOLINT
   // Setup and check results
   const std::string File = "gzip.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleHttpdProgram) { // NOLINT
   // Setup and check results
   const std::string File = "httpd.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleIdProgram) { // NOLINT
   // Setup and check results
   const std::string File = "id.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleKillProgram) { // NOLINT
   // Setup and check results
   const std::string File = "kill.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleKnockProgram) { // NOLINT
   // Setup and check results
   const std::string File = "knock.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleKnockdProgram) { // NOLINT
   // Setup and check results
   const std::string File = "knockd.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleLighttpdProgram) { // NOLINT
   // Setup and check results
   const std::string File = "lighttpd.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleMinihttpdProgram) { // NOLINT
   // Setup and check results
   const std::string File = "mini_httpd.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleNamedProgram) { // NOLINT
   // Setup and check results
   const std::string File = "named.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleNginxProgram) { // NOLINT
   // Setup and check results
   const std::string File = "nginx.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            true /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleObjdumpProgram) { // NOLINT
   // Setup and check results
   const std::string File = "objdump.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            true /* simplified dfa */);
+  checkResult(Neck);
+}
+
+TEST_F(SlashTest, HandlePsqlProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "psql.ll";
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleReadelfProgram) { // NOLINT
   // Setup and check results
   const std::string File = "readelf.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            true /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleSortProgram) { // NOLINT
   // Setup and check results
   const std::string File = "sort.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleTcpdumpProgram) { // NOLINT
   // Setup and check results
   const std::string File = "tcpdump.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            true /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleUniqProgram) { // NOLINT
   // Setup and check results
   const std::string File = "uniq.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleWcProgram) { // NOLINT
   // Setup and check results
   const std::string File = "wc.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            false /* simplified dfa */);
   checkResult(Neck);
 }
 
 TEST_F(SlashTest, HandleWgetProgram) { // NOLINT
   // Setup and check results
   const std::string File = "wget.ll";
-  auto *Neck = identifyNeck(File);
+  auto *Neck = identifyNeck(File, true /* function-local pts */,
+                            true /* simplified dfa */);
   checkResult(Neck);
 }
 

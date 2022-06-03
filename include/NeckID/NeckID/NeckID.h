@@ -14,6 +14,7 @@
 #include <deque>
 #include <limits>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -67,6 +68,7 @@ private:
 public:
   /// Get cached dominator tree for the specified function.
   llvm::DominatorTree &getDominatorTree(llvm::Function *F);
+
   /// Get cached dominator tree for the specified basic block's function.
   inline llvm::DominatorTree &getDominatorTree(llvm::BasicBlock *BB) {
     return getDominatorTree(BB->getParent());
@@ -74,6 +76,7 @@ public:
 
   /// Get cached loop info for the specified function.
   llvm::LoopInfo &getLoopInfo(llvm::Function *F);
+
   /// Get cached loop info for the specified basic block's function.
   inline llvm::LoopInfo &getLoopInfo(llvm::BasicBlock *BB) {
     return getLoopInfo(BB->getParent());
@@ -123,7 +126,8 @@ public:
 
   /// Computes neck candidates and the definitive neck.
   NeckAnalysis(llvm::Module &M, const std::string &TaintConfigPath,
-               bool Debug = false, bool FunctionLocalPTAwoGlobals = false);
+               bool FunctionLocalPTAwoGlobals = false,
+               bool UseSimplifiedDFA = false, bool Debug = false);
 
   /// Returns the analyzed module.
   [[nodiscard]] llvm::Module &getModule();
@@ -146,13 +150,15 @@ struct NeckAnalysisCFG {
   // Displays the basic blocks for the specified function. Neck candidates and
   // the identified neck a highlighted (if they are located in the chosen
   // function).
-  NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F);
+  NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F,
+                  const std::string &ProgramName = "");
 
   void viewCFG() const;
 
   llvm::Function &DisplayFunction;
   llvm::BasicBlock *Neck;
   std::unordered_set<llvm::BasicBlock *> NeckBBs;
+  std::string ProgramName;
 };
 
 } // namespace neckid
@@ -192,8 +198,12 @@ struct DOTGraphTraits<const neckid::NeckAnalysisCFG *> : DefaultDOTGraphTraits {
 
   static std::string getGraphName(const neckid::NeckAnalysisCFG *NACFG) {
     llvm::outs() << "called getGraphName()!\n";
-    return "Neck Analysis for '" + NACFG->DisplayFunction.getName().str() +
-           "' Function";
+    return !(NACFG->ProgramName.empty())
+               ? "Neck Analysis for '" +
+                     NACFG->DisplayFunction.getName().str() +
+                     "' Function in '" + NACFG->ProgramName + "'"
+               : "Neck Analysis for '" +
+                     NACFG->DisplayFunction.getName().str() + "'";
   }
 
   std::string getNodeLabel(const BasicBlock *Node,
