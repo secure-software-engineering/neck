@@ -39,20 +39,10 @@ int main(int argc, char **argv) {
       abort();
     }
 
-  // Case 1: neck could be here
-  // _neck_identification_mark_as_neck_();
-  klee_dump_memory();
-
-neck_early_exit:
-  // CASE 2: the neck could be here
-
-  // _neck_identification_mark_as_neck_();
-  // klee_dump_memory();
-
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 
-  for (index = optind; index < argc; index++)
-    printf("Non-option argument %s\n", argv[index]);
+neck_early_exit:
+  klee_dump_memory();
 
   if (argc < optind + 1) {
     return -1;
