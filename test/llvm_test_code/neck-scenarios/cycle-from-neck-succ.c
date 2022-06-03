@@ -38,20 +38,10 @@ int main(int argc, char **argv) {
     }
 
 neck:
-  // Case 1: neck could be here
-  // _neck_identification_mark_as_neck_();
   klee_dump_memory();
 
+  // backedge to neck
   goto neck;
-
-  printf("outer loop %d \n", argc);
-
-  goto neck;
-
-  printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
-
-  for (index = optind; index < argc; index++)
-    printf("Non-option argument %s\n", argv[index]);
 
   if (argc < optind + 1) {
     return -1;

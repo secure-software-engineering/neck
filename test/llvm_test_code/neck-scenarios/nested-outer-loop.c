@@ -5,13 +5,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void doSomething(int flag) {
-  for (int index = flag; index > 0; index--)
-    printf("Non-option argument\n");
-
-  klee_dump_memory();
-}
-
 int main(int argc, char **argv) {
   int aflag = 0;
   int bflag = 0;
@@ -24,8 +17,15 @@ int main(int argc, char **argv) {
   while ((c = getopt(argc, argv, "abc:")) != -1)
     switch (c) {
     case 'a':
-      aflag = argc;
-      doSomething(aflag);
+      aflag = 1;
+
+      for (size_t i = 0; i < argc; i++) {
+        printf("inner loop %zu \n", i);
+      }
+      
+      klee_dump_memory();
+      printf("outer loop %d \n", argc);
+
       break;
     case 'b':
       bflag = 1;
@@ -44,8 +44,6 @@ int main(int argc, char **argv) {
     default:
       abort();
     }
-
-  printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 
   if (argc < optind + 1) {
     return -1;

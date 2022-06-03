@@ -5,25 +5,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int iterative_factorial(int N) {
-  if (N <= 1) {
-    return 1;
-  }
-  int fact = 1;
-  for (int i = 1; i <= N; i++) {
-
-    fact = fact * i;
-  }
-  return fact;
-}
-
-int factorial(int N) {
-  if (N <= 1) {
-    return 1;
-  }
-  return N * factorial(N - 1);
-}
-
 int main(int argc, char **argv) {
   int aflag = 0;
   int bflag = 0;
@@ -38,8 +19,12 @@ int main(int argc, char **argv) {
     case 'a':
       aflag = 1;
 
-      // factorial(10);
-      // Case 1: neck could be here
+      for (size_t i = 0; i < argc; i++) {
+        printf("inner loop %zu \n", i);
+        klee_dump_memory();
+      }
+
+      printf("outer loop %d \n", argc);
 
       break;
     case 'b':
@@ -59,20 +44,6 @@ int main(int argc, char **argv) {
     default:
       abort();
     }
-
-  // Case 2: neck could be here
-  // _neck_identification_mark_as_neck_();
-  // klee_dump_memory();
-
-  printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
-
-  // Case 3: neck could be here
-  factorial(10); // factorial function mimics a loop?
-  // _neck_identification_mark_as_neck_();
-  klee_dump_memory();
-
-  for (index = optind; index < argc; index++)
-    printf("Non-option argument %s\n", argv[index]);
 
   if (argc < optind + 1) {
     return -1;

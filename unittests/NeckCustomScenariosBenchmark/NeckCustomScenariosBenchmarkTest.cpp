@@ -83,7 +83,7 @@ protected:
 
 TEST_F(CustomScenariosTest, HandleNotInMainProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "not-in-main_c_dbg.ll";
+  const std::string File = "not-in-main_c.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
@@ -95,7 +95,7 @@ TEST_F(CustomScenariosTest, HandleNotInMainProgram) { // NOLINT
 
 TEST_F(CustomScenariosTest, HandleCycleFromNecksSuccessorsProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "cycle-from-neck-succ_c_dbg.ll";
+  const std::string File = "cycle-from-neck-succ_c.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
@@ -105,9 +105,9 @@ TEST_F(CustomScenariosTest, HandleCycleFromNecksSuccessorsProgram) { // NOLINT
   checkResult(Neck);
 }
 
-TEST_F(CustomScenariosTest, HandleNestedLoopProgram) { // NOLINT
+TEST_F(CustomScenariosTest, HandleNestedInnerLoopProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "nested-loop_c_dbg.ll";
+  const std::string File = "nested-inner-loop_c.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
@@ -116,10 +116,22 @@ TEST_F(CustomScenariosTest, HandleNestedLoopProgram) { // NOLINT
   }
   checkResult(Neck);
 }
+
+
+TEST_F(CustomScenariosTest, HandleNestedOuterLoopProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "nested-outer-loop_c.ll";
+  auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
 
 TEST_F(CustomScenariosTest, HandleEarlyExitFromCaseProgram) { // NOLINT
   // Setup and check results
-  const std::string File = "early-exit-from-case_c_dbg.ll";
+  const std::string File = "early-exit-from-case_c.ll";
   auto *Neck = identifyNeck(File);
   if (!Neck) {
     llvm::outs() << "Neck is null!\n";
@@ -128,6 +140,31 @@ TEST_F(CustomScenariosTest, HandleEarlyExitFromCaseProgram) { // NOLINT
   }
   checkResult(Neck);
 }
+
+TEST_F(CustomScenariosTest, HandleIterativeCaseProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "iterative-func-before-neck_c.ll";
+  auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
+}
+
+TEST_F(CustomScenariosTest, HandleRecursiveCaseProgram) { // NOLINT
+  // Setup and check results
+  const std::string File = "recursive-func-before-neck_c.ll";
+  auto *Neck = identifyNeck(File);
+  if (!Neck) {
+    llvm::outs() << "Neck is null!\n";
+  } else {
+    Neck->print(llvm::outs());
+  }
+  checkResult(Neck);
+}
+
 
 // main function for the test case
 int main(int Argc, char **Argv) {

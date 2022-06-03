@@ -5,12 +5,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void doSomething(int flag) {
-  for (int index = flag; index > 0; index--)
-    printf("Non-option argument\n");
+int iterative_factorial(int N) {
+  if (N <= 1) {
+    return 1;
+  }
+  int fact = 1;
+  for (int i = 1; i <= N; i++) {
 
-  klee_dump_memory();
+    fact = fact * i;
+  }
+  return fact;
 }
+
 
 int main(int argc, char **argv) {
   int aflag = 0;
@@ -24,8 +30,11 @@ int main(int argc, char **argv) {
   while ((c = getopt(argc, argv, "abc:")) != -1)
     switch (c) {
     case 'a':
-      aflag = argc;
-      doSomething(aflag);
+      aflag = 1;
+
+      // factorial(10);
+      // Case 1: neck could be here
+
       break;
     case 'b':
       bflag = 1;
@@ -45,7 +54,12 @@ int main(int argc, char **argv) {
       abort();
     }
 
+
   printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
+
+  iterative_factorial(10);
+  
+  klee_dump_memory();
 
   if (argc < optind + 1) {
     return -1;
