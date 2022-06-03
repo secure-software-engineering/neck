@@ -255,7 +255,7 @@ TEST_F(SlashTest, HandleSortProgram) { // NOLINT
   // Setup and check results
   const std::string File = "sort.ll";
   auto *Neck = identifyNeck(File, true /* function-local pts */,
-                            false /* simplified dfa */);
+                            true /* simplified dfa */);
   checkResult(Neck);
 }
 
