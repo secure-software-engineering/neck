@@ -13,6 +13,11 @@ int main(int argc, char **argv) {
   int c;
 
   opterr = 0;
+  
+  neck:
+    // not here
+    // klee_dump_memory();
+    printf("not here!");
 
   while ((c = getopt(argc, argv, "abc:")) != -1)
     switch (c) {
@@ -39,10 +44,6 @@ int main(int argc, char **argv) {
 
   // should be here
   klee_dump_memory();
-
-neck:
-  // not here
-  // klee_dump_memory();
 
   // backedge to neck
   goto neck;
