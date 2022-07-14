@@ -9,8 +9,11 @@
 
 #include <sstream>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
+#include "llvm/IR/BasicBlock.h"
+#include "llvm/IR/InstrTypes.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Module.h"
@@ -29,7 +32,7 @@
 #include "phasar/PhasarLLVM/TypeHierarchy/LLVMTypeHierarchy.h"
 #include "phasar/Utils/Logger.h"
 
-#include "NeckID/NeckID/DataFlowAnalysis.h"
+#include "NeckID/NeckID/TaintAnalysis.h"
 
 namespace neckid {
 
@@ -165,6 +168,12 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
           if (Op == Fact) {
             NeckCandidates.push_back(
                 const_cast<llvm::Instruction *>(Inst)); // NOLINT ;-)
+            if (llvm::isa<llvm::CmpInst>(Inst) ||
+                llvm::isa<llvm::BranchInst>(Inst) ||
+                llvm::isa<llvm::PHINode>(Inst)) {
+              UserBranchAndCompInstructions.insert(
+                  const_cast<llvm::BasicBlock *>(Inst->getParent())); // NOLINT
+            }
           }
         }
       }
@@ -174,6 +183,11 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
 
 std::vector<llvm::Instruction *> TaintAnalysis::getNeckCandidates() {
   return NeckCandidates;
+}
+
+std::unordered_set<llvm::BasicBlock *>
+TaintAnalysis::getUserBranchAndCompInstructions() {
+  return UserBranchAndCompInstructions;
 }
 
 psr::LLVMBasedICFG &TaintAnalysis::getLLVMBasedICFG() { return I; }

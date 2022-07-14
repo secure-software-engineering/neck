@@ -12,7 +12,8 @@
 
 #include "boost/program_options.hpp"
 
-#include "NeckID/NeckID/NeckID.h"
+#include "NeckID/NeckID/NeckAnalysis.h"
+#include "NeckID/NeckID/NeckAnalysisCFG.h"
 
 namespace {
 

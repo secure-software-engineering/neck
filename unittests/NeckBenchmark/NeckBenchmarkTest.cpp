@@ -12,7 +12,8 @@
 
 #include "TestConfig.h"
 
-#include "NeckID/NeckID/NeckID.h"
+#include "NeckID/NeckID/NeckAnalysis.h"
+#include "NeckID/NeckID/NeckAnalysisCFG.h"
 
 namespace {
 const std::string NeckIDFunctionName = "_neck_identification_mark_as_neck_";
