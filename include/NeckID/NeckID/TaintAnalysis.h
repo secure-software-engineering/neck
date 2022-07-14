@@ -1,5 +1,5 @@
-#ifndef NECKID_NECKID_DATAFLOWANALYSIS_H
-#define NECKID_NECKID_DATAFLOWANALYSIS_H
+#ifndef NECKID_NECKID_TAINTANALYSIS_H
+#define NECKID_NECKID_TAINTANALYSIS_H
 
 /******************************************************************************
  * Copyright (c) 2021 Philipp Schubert.
@@ -11,9 +11,11 @@
  *****************************************************************************/
 
 #include <string>
+#include <unordered_set>
 #include <vector>
 
-#include "llvm/IR/Module.h"
+#include "llvm/IR/BasicBlock.h"
+#include "llvm/IR/Instruction.h"
 
 #include "phasar/DB/ProjectIRDB.h"
 #include "phasar/PhasarLLVM/ControlFlow/LLVMBasedICFG.h"
@@ -31,6 +33,8 @@ public:
 
   std::vector<llvm::Instruction *> getNeckCandidates();
 
+  std::unordered_set<llvm::BasicBlock *> getUserBranchAndCompInstructions();
+
   psr::LLVMBasedICFG &getLLVMBasedICFG();
 
 private:
@@ -40,6 +44,7 @@ private:
   psr::LLVMPointsToSet P;
   psr::LLVMBasedICFG I;
   std::vector<llvm::Instruction *> NeckCandidates;
+  std::unordered_set<llvm::BasicBlock *> UserBranchAndCompInstructions;
 };
 
 } // namespace neckid

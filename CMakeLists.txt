@@ -59,7 +59,7 @@ endif (NECKID_ENABLE_PIC)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 include_directories(
-  ${NECKID_SRC_DIR}/include
+  ${NECKID_SRC_DIR}/include/
 )
 
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")

@@ -1,5 +1,5 @@
 set(NeckIDTestSources
-  NeckIDTest.cpp
+  NeckAnalysisTest.cpp
 )
 
 foreach(TEST_SRC ${NeckIDTestSources})

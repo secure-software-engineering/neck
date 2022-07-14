@@ -41,8 +41,8 @@
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/raw_ostream.h"
 
-#include "NeckID/NeckID/DataFlowAnalysis.h"
-#include "NeckID/NeckID/NeckID.h"
+#include "NeckID/NeckID/NeckAnalysis.h"
+#include "NeckID/NeckID/TaintAnalysis.h"
 
 namespace {
 
@@ -319,6 +319,18 @@ bool neckid::NeckAnalysis::dominatesSuccessors(llvm::BasicBlock *BB) {
   return true;
 }
 
+bool neckid::NeckAnalysis::hasSingleSuccessorThatDominatesSucessors(
+    llvm::BasicBlock *BB) {
+  if (BB->getTerminator()->getNumSuccessors() > 1) {
+    return false;
+  }
+  // get the one successor
+  for (auto *BBSucc : llvm::successors(BB)) { // NOLINT
+    return dominatesSuccessors(BBSucc);
+  }
+  return false;
+}
+
 bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
   for (auto *Loop : getLoopInfo(BB)) {
     auto Blocks = Loop->getBlocks();
@@ -347,6 +359,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
   // Start with a list of potential neck candidates
   std::vector<llvm::Instruction *> InterestingInstructions =
       TA.getNeckCandidates();
+  UserBranchAndCompInstructions = TA.getUserBranchAndCompInstructions();
   // Initialize with potential neck candidates
   for (auto *InterestingInstruction : InterestingInstructions) {
     NeckCandidates.insert(InterestingInstruction->getParent());
@@ -433,8 +446,24 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     print(NeckCandidates);
   }
   // Remove all basic blocks that do not dominate their successors
+  // Due to some funny LLVM IR construct (cf. kill), we can have a case in which
+  // a BB does not dominate its single successor, but its single success does.
+  // In that case, we add this single success that dominates its successor to
+  // the set of potential neck candidates.
+  std::unordered_set<llvm::BasicBlock *> TransitiveDominators;
+  for (auto *BB : NeckCandidates) {
+    if (!dominatesSuccessors(BB) &&
+        hasSingleSuccessorThatDominatesSucessors(BB)) {
+      // add single successor
+      for (auto *BBSucc : llvm::successors(BB)) {
+        TransitiveDominators.insert(BBSucc);
+      }
+    }
+  }
   eraseIf(NeckCandidates,
           [this](auto *BB) { return !dominatesSuccessors(BB); });
+  NeckCandidates.insert(TransitiveDominators.begin(),
+                        TransitiveDominators.end());
   if (Debug) {
     llvm::outs() << "Neck candidates after handling dominators:\n";
     print(NeckCandidates);
@@ -483,6 +512,11 @@ neckid::NeckAnalysis::getNeckCandidates() {
   return NeckCandidates;
 }
 
+std::unordered_set<llvm::BasicBlock *>
+neckid::NeckAnalysis::getUserBranchAndCompInstructions() {
+  return UserBranchAndCompInstructions;
+}
+
 /// Returns the definite neck or nullptr, if no neck could be found.
 llvm::BasicBlock *neckid::NeckAnalysis::getNeck() { return Neck; }
 
@@ -507,14 +541,5 @@ void neckid::NeckAnalysis::markIdentifiedNeck(const std::string &FunName) {
 }
 
 void neckid::NeckAnalysis::dumpModule(llvm::raw_ostream &OS) { OS << M; }
-
-neckid::NeckAnalysisCFG::NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F,
-                                         const std::string &ProgramName)
-    : DisplayFunction(F), Neck(NA.getNeck()), NeckBBs(NA.getNeckCandidates()),
-      ProgramName(ProgramName) {}
-
-void neckid::NeckAnalysisCFG::viewCFG() const {
-  ViewGraph(this, "Neck-Analysis-CFG:" + DisplayFunction.getName());
-}
 
 } // namespace neckid
