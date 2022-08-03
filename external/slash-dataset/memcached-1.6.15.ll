@@ -6,29 +6,29 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct.stats = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, %struct.timeval, i64, i64 }
 %struct.timeval = type { i64, i64 }
 %struct.settings = type { i64, i32, i32, i32, i8*, i32, i32, i64, i32, i8*, i8*, i32, double, i32, i32, i32, i8, i32, i32, i8, i32, i32, i32, i32, i32, i32, i8, i8, i8, i8, i8, i8, i32, double, i32, i32, i8, i32, i8, i8, i8*, i32, i32, i32, i32, double, double, i32, i8, i32, i32, i32, i32, i32, i8, i8, i8, i8, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, double, double, i8, [64 x i32], i32, i8* }
-%struct.conn = type { i8**, i32, i8, i8, i8, i8, i8, i8, i8, i32, i32, i32, %struct.event, i16, i16, i8*, i8*, i32, i32, %struct._mc_resp*, %struct._mc_resp*, i8*, i32, i8*, i32, i32, [3 x %struct.io_queue_s], i32, i32, i32, i32, i32, %struct.sockaddr_in6, i32, i8, %struct.anon.12, %union.protocol_binary_request_header, i64, i16, i32, i32, %struct.conn*, %struct.LIBEVENT_THREAD*, i32 (%struct.conn*)*, i64 (%struct.conn*, i8*, i64)*, i64 (%struct.conn*, %struct.msghdr*, i32)*, i64 (%struct.conn*, i8*, i64)* }
-%struct.event = type { %struct.event_callback, %union.anon.1, i32, %struct.event_base*, %union.anon.3, i16, i16, %struct.timeval }
-%struct.event_callback = type { %struct.anon.0, i16, i8, i8, %union.anon, i8* }
-%struct.anon.0 = type { %struct.event_callback*, %struct.event_callback** }
-%union.anon = type { void (i32, i16, i8*)* }
-%union.anon.1 = type { %struct.anon.2 }
-%struct.anon.2 = type { %struct.event*, %struct.event** }
+%struct.conn = type { i8**, i32, i8, i8, i8, i8, i8, i8, i8, i32, i32, i32, %struct.event, i16, i16, i8*, i8*, i32, i32, %struct._mc_resp*, %struct._mc_resp*, i8*, i32, i8*, i32, i32, [3 x %struct.io_queue_s], i32, i32, i32, i32, i32, %struct.sockaddr_in6, i32, i8, %struct.anon.15, %union.protocol_binary_request_header, i64, i16, i32, i32, %struct.conn*, %struct.LIBEVENT_THREAD*, i32 (%struct.conn*)*, i64 (%struct.conn*, i8*, i64)*, i64 (%struct.conn*, %struct.msghdr*, i32)*, i64 (%struct.conn*, i8*, i64)* }
+%struct.event = type { %struct.event_callback, %union.anon.4, i32, %struct.event_base*, %union.anon.6, i16, i16, %struct.timeval }
+%struct.event_callback = type { %struct.anon.2, i16, i8, i8, %union.anon.3, i8* }
+%struct.anon.2 = type { %struct.event_callback*, %struct.event_callback** }
+%union.anon.3 = type { void (i32, i16, i8*)* }
+%union.anon.4 = type { %struct.anon.5 }
+%struct.anon.5 = type { %struct.event*, %struct.event** }
 %struct.event_base = type opaque
-%union.anon.3 = type { %struct.anon.4 }
-%struct.anon.4 = type { %struct.anon.2, %struct.timeval }
+%union.anon.6 = type { %struct.anon.7 }
+%struct.anon.7 = type { %struct.anon.5, %struct.timeval }
 %struct._mc_resp = type { %struct._mc_resp_bundle*, %struct._mc_resp*, i32, i32, i8*, %struct._io_pending_t*, %struct._stritem*, [4 x %struct.iovec], i32, i8, i8, i8, i8, i16, i16, i16, %struct.sockaddr_in6, i32, [1024 x i8] }
 %struct._mc_resp_bundle = type { i8, i8, %struct._mc_resp_bundle*, %struct._mc_resp_bundle*, [0 x %struct._mc_resp] }
 %struct._io_pending_t = type { i32, %struct.LIBEVENT_THREAD*, %struct.conn*, %struct._mc_resp*, [120 x i8] }
-%struct._stritem = type { %struct._stritem*, %struct._stritem*, %struct._stritem*, i32, i32, i32, i16, i16, i8, i8, [0 x %union.anon.10] }
-%union.anon.10 = type { i64 }
+%struct._stritem = type { %struct._stritem*, %struct._stritem*, %struct._stritem*, i32, i32, i32, i16, i16, i8, i8, [0 x %union.anon.13] }
+%union.anon.13 = type { i64 }
 %struct.iovec = type { i8*, i64 }
 %struct.io_queue_s = type { i8*, i8*, i32, i32 }
 %struct.sockaddr_in6 = type { i16, i16, i32, %struct.in6_addr, i32 }
-%struct.in6_addr = type { %union.anon.11 }
-%union.anon.11 = type { [4 x i32] }
-%struct.anon.12 = type { i8*, i64, i64 }
-%union.protocol_binary_request_header = type { %struct.anon.13 }
-%struct.anon.13 = type { i8, i8, i16, i8, i8, i16, i32, i32, i64 }
+%struct.in6_addr = type { %union.anon.14 }
+%union.anon.14 = type { [4 x i32] }
+%struct.anon.15 = type { i8*, i64, i64 }
+%union.protocol_binary_request_header = type { %struct.anon.16 }
+%struct.anon.16 = type { i8, i8, i16, i8, i8, i16, i32, i32, i64 }
 %struct.LIBEVENT_THREAD = type { i64, %struct.event_base*, %struct.event, i32, %struct.thread_stats, [3 x %struct.io_queue_cb_s], %struct.conn_queue*, %struct.cache_t*, %struct._mc_resp_bundle*, %struct.cache_t*, i8*, %struct._logger*, i8*, i32 }
 %struct.thread_stats = type { %union.pthread_mutex_t, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, [64 x %struct.slab_stats], [256 x i64], i64, i64, i64 }
 %union.pthread_mutex_t = type { %struct.__pthread_mutex_s }
@@ -38,25 +38,27 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct.io_queue_cb_s = type { i8*, void (%struct.io_queue_s*)*, void (%struct.io_queue_s*)*, void (%struct._io_pending_t*)*, void (%struct._io_pending_t*)*, i32 }
 %struct.conn_queue = type { %struct.conn_ev_head, %union.pthread_mutex_t, %struct.cache_t* }
 %struct.conn_ev_head = type { %struct.conn_queue_item*, %struct.conn_queue_item** }
-%struct.conn_queue_item = type { i32, i32, i32, i32, i32, i32, %struct.conn*, i8*, %struct._io_pending_t*, %struct.anon.11 }
-%struct.anon.11 = type { %struct.conn_queue_item* }
+%struct.conn_queue_item = type { i32, i32, i32, i32, i32, i32, %struct.conn*, i8*, %struct._io_pending_t*, %struct.anon.11.136 }
+%struct.anon.11.136 = type { %struct.conn_queue_item* }
 %struct.cache_t = type { %union.pthread_mutex_t, i8*, %struct.cache_head, i64, i32, i32, i32, i32 }
 %struct.cache_head = type { %struct.cache_free_s*, %struct.cache_free_s** }
-%struct.cache_free_s = type { %struct.anon.8 }
-%struct.anon.8 = type { %struct.cache_free_s* }
+%struct.cache_free_s = type { %struct.anon.11 }
+%struct.anon.11 = type { %struct.cache_free_s* }
 %struct._logger = type { %struct._logger*, %struct._logger*, %union.pthread_mutex_t, i64, i64, i64, i16, i16, i16, %struct.bipbuf_t*, %struct._entry_details* }
 %struct.bipbuf_t = type { i64, i32, i32, i32, i32, [0 x i8] }
 %struct._entry_details = type { i32, i16, void (%struct._logentry*, %struct._entry_details*, i8*, %struct.__va_list_tag*)*, i32 (%struct._logentry*, i8*)*, i8* }
-%struct._logentry = type { i32, i8, i16, i64, %struct.timeval, i32, [0 x %union.anon.9] }
-%union.anon.9 = type { i8 }
+%struct._logentry = type { i32, i8, i16, i64, %struct.timeval, i32, [0 x %union.anon.12] }
+%union.anon.12 = type { i8 }
 %struct.__va_list_tag = type { i32, i32, i8*, i8* }
 %struct.msghdr = type { i8*, i32, %struct.iovec*, i64, i8*, i64, i32 }
 %struct.stats_state = type { i64, i64, i64, i64, i32, i32, i32, i32, i8, i8, i8, i8 }
 %struct.slab_rebalance = type { i8*, i8*, i8*, i32, i32, i32, i32, i32, i32, i32, i32, i32, i8, i8* }
-%union.pthread_cond_t = type { %struct.anon }
-%struct.anon = type { i32, i32, i64, i64, i64, i8*, i32, i32 }
-%struct._IO_FILE = type { i32, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, %struct._IO_marker*, %struct._IO_FILE*, i32, i32, i64, i16, i8, [1 x i8], i8*, i64, i8*, i8*, i8*, i8*, i64, i32, [20 x i8] }
-%struct._IO_marker = type { %struct._IO_marker*, %struct._IO_FILE*, i32 }
+%union.pthread_cond_t = type { %struct.__pthread_cond_s }
+%struct.__pthread_cond_s = type { %union.anon.13, %union.anon.13, [2 x i32], [2 x i32], i32, i32, [2 x i32] }
+%struct._IO_FILE = type { i32, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, %struct._IO_marker*, %struct._IO_FILE*, i32, i32, i64, i16, i8, [1 x i8], i8*, i64, %struct._IO_codecvt*, %struct._IO_wide_data*, %struct._IO_FILE*, i8*, i64, i32, [20 x i8] }
+%struct._IO_marker = type opaque
+%struct._IO_codecvt = type opaque
+%struct._IO_wide_data = type opaque
 %struct.option = type { i8*, i32, i32*, i32 }
 %struct.slabclass_t = type { i32, i32, i8*, i32, i32, i8**, i32 }
 %struct.slab_automove_reg_t = type { i8* (%struct.settings*)*, void (i8*)*, void (i8*, i32*, i32*)* }
@@ -75,20 +77,20 @@ target triple = "x86_64-unknown-linux-gnu"
 %union.__SOCKADDR_ARG = type { %struct.sockaddr* }
 %struct.sockaddr = type { i16, [14 x i8] }
 %struct._strchunk = type { %struct._strchunk*, %struct._strchunk*, %struct._stritem*, i32, i32, i32, i16, i16, i8, i8, [0 x i8] }
-%struct.rusage = type { %struct.timeval, %struct.timeval, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10, %union.anon.10 }
+%struct.rusage = type { %struct.timeval, %struct.timeval, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13, %union.anon.13 }
 %struct.sockaddr_in = type { i16, i16, %struct.in_addr, [8 x i8] }
 %struct.in_addr = type { i32 }
 %struct.sockaddr_un = type { i16, [108 x i8] }
-%struct.timezone = type { i32, i32 }
 %struct.passwd = type { i8*, i8*, i32, i32, i8*, i8*, i8* }
 %struct._mc_meta_data = type { i8*, i64, i8*, i64, i64, i32 }
 %struct.event_config = type opaque
 %union.pthread_attr_t = type { i64, [48 x i8] }
+%struct.linger = type { i32, i32 }
 %struct.stat = type { i64, i64, i64, i32, i32, i32, i32, i64, i64, i64, i64, %struct.timeval, %struct.timeval, %struct.timeval, [3 x i64] }
 %struct.addrinfo = type { i32, i32, i32, i32, i32, %struct.sockaddr*, i8*, %struct.addrinfo* }
-%union.anon.29 = type { %struct.sockaddr_in6 }
+%union.anon.32 = type { %struct.sockaddr_in6 }
 %struct.__loadu_si128 = type { <2 x i64> }
-%union.anon.2 = type { i8* }
+%union.anon = type { i8* }
 %struct.slab_stats_automove = type { i32, i32, i64, i64 }
 %struct.lru_pull_tail_return = type { %struct._stritem*, i32 }
 %struct.item_stats_automove = type { i64, i64, i32 }
@@ -107,10 +109,10 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct._meta_flags = type { i16, i8, i32, i32, i32, i32, i64, i64, i64 }
 %union.protocol_binary_response_get = type { %struct.anon.18 }
 %struct.anon.18 = type { %union.protocol_binary_request_header, %struct.in_addr }
-%union.protocol_binary_request_set = type { %struct.anon.16 }
-%struct.anon.16 = type { %union.protocol_binary_request_header, %struct.timezone }
+%union.protocol_binary_request_set = type { %struct.anon.16.361 }
+%struct.anon.16.361 = type { %union.protocol_binary_request_header, %struct.linger }
 %union.protocol_binary_response_incr = type { %struct.anon.22 }
-%struct.anon.22 = type { %union.protocol_binary_request_header, %union.anon.10 }
+%struct.anon.22 = type { %union.protocol_binary_request_header, %union.anon.13 }
 %union.protocol_binary_request_incr = type { %struct.anon.24 }
 %struct.anon.24 = type { %union.protocol_binary_request_header, %struct.item_stats_automove }
 %struct.extstore_stats = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, %struct.extstore_page_data* }
@@ -128,8 +130,8 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct._io_pending_storage_t = type { i32, %struct.LIBEVENT_THREAD*, %struct.conn*, %struct._mc_resp*, %struct._stritem*, %struct._obj_io, i32, i8, i8, i8, i8 }
 %struct.storage_compact_wrap = type { %struct._obj_io, %union.pthread_mutex_t, i8, i8, i8 }
 %struct.storage_settings = type { %struct.extstore_conf_file*, %struct.extstore_conf }
-%struct.slab_automove.433 = type { %struct.window_data.432*, %struct.timezone*, %struct.settings*, i32, i32, i32, i32, double, double, i8, [64 x i32], [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove], [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove] }
-%struct.window_data.432 = type { i64, i64, i64, i32, i32 }
+%struct.slab_automove.424 = type { %struct.window_data.423*, %struct.linger*, %struct.settings*, i32, i32, i32, i32, double, double, i8, [64 x i32], [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove], [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove] }
+%struct.window_data.423 = type { i64, i64, i64, i32, i32 }
 
 @ext_storage = dso_local global i8* null, align 8
 @process_started = dso_local global i64 0, align 8
@@ -5417,7 +5419,7 @@ define internal i32 @_transmit_pre(%struct.conn* %0, %struct.iovec* %1, i32 %2, 
   %55 = load i8*, i8** %54, align 8
   %56 = bitcast i8* %55 to %struct._stritem*
   %57 = getelementptr inbounds %struct._stritem, %struct._stritem* %56, i32 0, i32 10
-  %58 = bitcast [0 x %union.anon.10]* %57 to i8*
+  %58 = bitcast [0 x %union.anon.13]* %57 to i8*
   %59 = load %struct._mc_resp*, %struct._mc_resp** %9, align 8
   %60 = getelementptr inbounds %struct._mc_resp, %struct._mc_resp* %59, i32 0, i32 7
   %61 = load %struct._mc_resp*, %struct._mc_resp** %9, align 8
@@ -7833,20 +7835,20 @@ define internal zeroext i1 @grow_stats_buf(%struct.conn* %0, i64 %1) #0 {
   store i64 %1, i64* %4, align 8
   %9 = load %struct.conn*, %struct.conn** %3, align 8
   %10 = getelementptr inbounds %struct.conn, %struct.conn* %9, i32 0, i32 35
-  %11 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %10, i32 0, i32 1
+  %11 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %10, i32 0, i32 1
   %12 = load i64, i64* %11, align 8
   store i64 %12, i64* %5, align 8
   %13 = load i64, i64* %5, align 8
   %14 = load %struct.conn*, %struct.conn** %3, align 8
   %15 = getelementptr inbounds %struct.conn, %struct.conn* %14, i32 0, i32 35
-  %16 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %15, i32 0, i32 2
+  %16 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %15, i32 0, i32 2
   %17 = load i64, i64* %16, align 8
   %18 = sub i64 %13, %17
   store i64 %18, i64* %6, align 8
   store i8 1, i8* %7, align 1
   %19 = load %struct.conn*, %struct.conn** %3, align 8
   %20 = getelementptr inbounds %struct.conn, %struct.conn* %19, i32 0, i32 35
-  %21 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %20, i32 0, i32 0
+  %21 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %20, i32 0, i32 0
   %22 = load i8*, i8** %21, align 8
   %23 = icmp eq i8* %22, null
   br i1 %23, label %24, label %31
@@ -7855,11 +7857,11 @@ define internal zeroext i1 @grow_stats_buf(%struct.conn* %0, i64 %1) #0 {
   store i64 1024, i64* %5, align 8
   %25 = load %struct.conn*, %struct.conn** %3, align 8
   %26 = getelementptr inbounds %struct.conn, %struct.conn* %25, i32 0, i32 35
-  %27 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %26, i32 0, i32 2
+  %27 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %26, i32 0, i32 2
   store i64 0, i64* %27, align 8
   %28 = load %struct.conn*, %struct.conn** %3, align 8
   %29 = getelementptr inbounds %struct.conn, %struct.conn* %28, i32 0, i32 35
-  %30 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %29, i32 0, i32 1
+  %30 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %29, i32 0, i32 1
   store i64 0, i64* %30, align 8
   store i64 0, i64* %6, align 8
   br label %31
@@ -7880,7 +7882,7 @@ define internal zeroext i1 @grow_stats_buf(%struct.conn* %0, i64 %1) #0 {
   %39 = load i64, i64* %5, align 8
   %40 = load %struct.conn*, %struct.conn** %3, align 8
   %41 = getelementptr inbounds %struct.conn, %struct.conn* %40, i32 0, i32 35
-  %42 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %41, i32 0, i32 2
+  %42 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %41, i32 0, i32 2
   %43 = load i64, i64* %42, align 8
   %44 = sub i64 %39, %43
   store i64 %44, i64* %6, align 8
@@ -7890,7 +7892,7 @@ define internal zeroext i1 @grow_stats_buf(%struct.conn* %0, i64 %1) #0 {
   %46 = load i64, i64* %5, align 8
   %47 = load %struct.conn*, %struct.conn** %3, align 8
   %48 = getelementptr inbounds %struct.conn, %struct.conn* %47, i32 0, i32 35
-  %49 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %48, i32 0, i32 1
+  %49 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %48, i32 0, i32 1
   %50 = load i64, i64* %49, align 8
   %51 = icmp ne i64 %46, %50
   br i1 %51, label %52, label %74
@@ -7898,7 +7900,7 @@ define internal zeroext i1 @grow_stats_buf(%struct.conn* %0, i64 %1) #0 {
 52:                                               ; preds = %45
   %53 = load %struct.conn*, %struct.conn** %3, align 8
   %54 = getelementptr inbounds %struct.conn, %struct.conn* %53, i32 0, i32 35
-  %55 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %54, i32 0, i32 0
+  %55 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %54, i32 0, i32 0
   %56 = load i8*, i8** %55, align 8
   %57 = load i64, i64* %5, align 8
   %58 = call i8* @realloc(i8* %56, i64 %57) #14
@@ -7911,12 +7913,12 @@ define internal zeroext i1 @grow_stats_buf(%struct.conn* %0, i64 %1) #0 {
   %62 = load i8*, i8** %8, align 8
   %63 = load %struct.conn*, %struct.conn** %3, align 8
   %64 = getelementptr inbounds %struct.conn, %struct.conn* %63, i32 0, i32 35
-  %65 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %64, i32 0, i32 0
+  %65 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %64, i32 0, i32 0
   store i8* %62, i8** %65, align 8
   %66 = load i64, i64* %5, align 8
   %67 = load %struct.conn*, %struct.conn** %3, align 8
   %68 = getelementptr inbounds %struct.conn, %struct.conn* %67, i32 0, i32 35
-  %69 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %68, i32 0, i32 1
+  %69 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %68, i32 0, i32 1
   store i64 %66, i64* %69, align 8
   br label %73
 
@@ -7955,11 +7957,11 @@ define internal void @append_bin_stats(i8* %0, i16 zeroext %1, i8* %2, i32 %3, %
   store %struct.conn* %4, %struct.conn** %10, align 8
   %14 = load %struct.conn*, %struct.conn** %10, align 8
   %15 = getelementptr inbounds %struct.conn, %struct.conn* %14, i32 0, i32 35
-  %16 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %15, i32 0, i32 0
+  %16 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %15, i32 0, i32 0
   %17 = load i8*, i8** %16, align 8
   %18 = load %struct.conn*, %struct.conn** %10, align 8
   %19 = getelementptr inbounds %struct.conn, %struct.conn* %18, i32 0, i32 35
-  %20 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %19, i32 0, i32 2
+  %20 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %19, i32 0, i32 2
   %21 = load i64, i64* %20, align 8
   %22 = getelementptr inbounds i8, i8* %17, i64 %21
   store i8* %22, i8** %11, align 8
@@ -7968,31 +7970,31 @@ define internal void @append_bin_stats(i8* %0, i16 zeroext %1, i8* %2, i32 %3, %
   %25 = load i32, i32* %9, align 4
   %26 = add i32 %24, %25
   store i32 %26, i32* %12, align 4
-  %27 = bitcast %union.protocol_binary_request_header* %13 to %struct.anon.13*
-  %28 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 0
+  %27 = bitcast %union.protocol_binary_request_header* %13 to %struct.anon.16*
+  %28 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 0
   store i8 -127, i8* %28, align 8
-  %29 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 1
+  %29 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 1
   store i8 16, i8* %29, align 1
-  %30 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 2
+  %30 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 2
   %31 = load i16, i16* %7, align 2
   %32 = call zeroext i16 @htons(i16 zeroext %31) #15
   store i16 %32, i16* %30, align 2
-  %33 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 3
+  %33 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 3
   store i8 0, i8* %33, align 4
-  %34 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 4
+  %34 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 4
   store i8 0, i8* %34, align 1
-  %35 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 5
+  %35 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 5
   store i16 0, i16* %35, align 2
-  %36 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 6
+  %36 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 6
   %37 = load i32, i32* %12, align 4
   %38 = call i32 @htonl(i32 %37) #15
   store i32 %38, i32* %36, align 8
-  %39 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 7
+  %39 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 7
   %40 = load %struct.conn*, %struct.conn** %10, align 8
   %41 = getelementptr inbounds %struct.conn, %struct.conn* %40, i32 0, i32 39
   %42 = load i32, i32* %41, align 4
   store i32 %42, i32* %39, align 4
-  %43 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 8
+  %43 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 8
   store i64 0, i64* %43, align 8
   %44 = load i8*, i8** %11, align 8
   %45 = bitcast %union.protocol_binary_request_header* %13 to [24 x i8]*
@@ -8039,7 +8041,7 @@ define internal void @append_bin_stats(i8* %0, i16 zeroext %1, i8* %2, i32 %3, %
   %73 = add i64 24, %72
   %74 = load %struct.conn*, %struct.conn** %10, align 8
   %75 = getelementptr inbounds %struct.conn, %struct.conn* %74, i32 0, i32 35
-  %76 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %75, i32 0, i32 2
+  %76 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %75, i32 0, i32 2
   %77 = load i64, i64* %76, align 8
   %78 = add i64 %77, %73
   store i64 %78, i64* %76, align 8
@@ -8064,22 +8066,22 @@ define internal void @append_ascii_stats(i8* %0, i16 zeroext %1, i8* %2, i32 %3,
   store %struct.conn* %4, %struct.conn** %10, align 8
   %15 = load %struct.conn*, %struct.conn** %10, align 8
   %16 = getelementptr inbounds %struct.conn, %struct.conn* %15, i32 0, i32 35
-  %17 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %16, i32 0, i32 0
+  %17 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %16, i32 0, i32 0
   %18 = load i8*, i8** %17, align 8
   %19 = load %struct.conn*, %struct.conn** %10, align 8
   %20 = getelementptr inbounds %struct.conn, %struct.conn* %19, i32 0, i32 35
-  %21 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %20, i32 0, i32 2
+  %21 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %20, i32 0, i32 2
   %22 = load i64, i64* %21, align 8
   %23 = getelementptr inbounds i8, i8* %18, i64 %22
   store i8* %23, i8** %11, align 8
   store i32 0, i32* %12, align 4
   %24 = load %struct.conn*, %struct.conn** %10, align 8
   %25 = getelementptr inbounds %struct.conn, %struct.conn* %24, i32 0, i32 35
-  %26 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %25, i32 0, i32 1
+  %26 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %25, i32 0, i32 1
   %27 = load i64, i64* %26, align 8
   %28 = load %struct.conn*, %struct.conn** %10, align 8
   %29 = getelementptr inbounds %struct.conn, %struct.conn* %28, i32 0, i32 35
-  %30 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %29, i32 0, i32 2
+  %30 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %29, i32 0, i32 2
   %31 = load i64, i64* %30, align 8
   %32 = sub i64 %27, %31
   %33 = trunc i64 %32 to i32
@@ -8137,7 +8139,7 @@ define internal void @append_ascii_stats(i8* %0, i16 zeroext %1, i8* %2, i32 %3,
   %66 = zext i32 %65 to i64
   %67 = load %struct.conn*, %struct.conn** %10, align 8
   %68 = getelementptr inbounds %struct.conn, %struct.conn* %67, i32 0, i32 35
-  %69 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %68, i32 0, i32 2
+  %69 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %68, i32 0, i32 2
   %70 = load i64, i64* %69, align 8
   %71 = add i64 %70, %66
   store i64 %71, i64* %69, align 8
@@ -8175,7 +8177,7 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
   store i32 %3, i32* %8, align 4
   %19 = load %struct._stritem*, %struct._stritem** %5, align 8
   %20 = getelementptr inbounds %struct._stritem, %struct._stritem* %19, i32 0, i32 10
-  %21 = bitcast [0 x %union.anon.10]* %20 to i8*
+  %21 = bitcast [0 x %union.anon.13]* %20 to i8*
   %22 = load %struct._stritem*, %struct._stritem** %5, align 8
   %23 = getelementptr inbounds %struct._stritem, %struct._stritem* %22, i32 0, i32 7
   %24 = load i16, i16* %23, align 2
@@ -8215,8 +8217,8 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
 48:                                               ; preds = %41
   %49 = load %struct._stritem*, %struct._stritem** %5, align 8
   %50 = getelementptr inbounds %struct._stritem, %struct._stritem* %49, i32 0, i32 10
-  %51 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %50, i64 0, i64 0
-  %52 = bitcast %union.anon.10* %51 to i64*
+  %51 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %50, i64 0, i64 0
+  %52 = bitcast %union.anon.13* %51 to i64*
   %53 = load i64, i64* %52, align 8
   br label %55
 
@@ -8237,8 +8239,8 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
 63:                                               ; preds = %55
   %64 = load %struct._stritem*, %struct._stritem** %10, align 8
   %65 = getelementptr inbounds %struct._stritem, %struct._stritem* %64, i32 0, i32 10
-  %66 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %65, i64 0, i64 0
-  %67 = bitcast %union.anon.10* %66 to i64*
+  %66 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %65, i64 0, i64 0
+  %67 = bitcast %union.anon.13* %66 to i64*
   %68 = load i64, i64* %67, align 8
   br label %70
 
@@ -8461,8 +8463,8 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
 222:                                              ; preds = %214
   %223 = load %struct._stritem*, %struct._stritem** %10, align 8
   %224 = getelementptr inbounds %struct._stritem, %struct._stritem* %223, i32 0, i32 10
-  %225 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %224, i64 0, i64 0
-  %226 = bitcast %union.anon.10* %225 to i64*
+  %225 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %224, i64 0, i64 0
+  %226 = bitcast %union.anon.13* %225 to i64*
   %227 = load i64, i64* %226, align 8
   br label %229
 
@@ -8482,8 +8484,8 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
 237:                                              ; preds = %229
   %238 = load %struct._stritem*, %struct._stritem** %5, align 8
   %239 = getelementptr inbounds %struct._stritem, %struct._stritem* %238, i32 0, i32 10
-  %240 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %239, i64 0, i64 0
-  %241 = bitcast %union.anon.10* %240 to i64*
+  %240 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %239, i64 0, i64 0
+  %241 = bitcast %union.anon.13* %240 to i64*
   %242 = load i64, i64* %241, align 8
   br label %244
 
@@ -8543,7 +8545,7 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
 272:                                              ; preds = %265
   %273 = load %struct._stritem*, %struct._stritem** %10, align 8
   %274 = getelementptr inbounds %struct._stritem, %struct._stritem* %273, i32 0, i32 10
-  %275 = bitcast [0 x %union.anon.10]* %274 to i8*
+  %275 = bitcast [0 x %union.anon.13]* %274 to i8*
   %276 = load %struct._stritem*, %struct._stritem** %10, align 8
   %277 = getelementptr inbounds %struct._stritem, %struct._stritem* %276, i32 0, i32 9
   %278 = load i8, i8* %277, align 1
@@ -8674,8 +8676,8 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
 359:                                              ; preds = %352
   %360 = load %struct._stritem*, %struct._stritem** %5, align 8
   %361 = getelementptr inbounds %struct._stritem, %struct._stritem* %360, i32 0, i32 10
-  %362 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %361, i64 0, i64 0
-  %363 = bitcast %union.anon.10* %362 to i64*
+  %362 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %361, i64 0, i64 0
+  %363 = bitcast %union.anon.13* %362 to i64*
   %364 = load i64, i64* %363, align 8
   br label %366
 
@@ -8765,8 +8767,8 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
 412:                                              ; preds = %405
   %413 = load %struct._stritem*, %struct._stritem** %5, align 8
   %414 = getelementptr inbounds %struct._stritem, %struct._stritem* %413, i32 0, i32 10
-  %415 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %414, i64 0, i64 0
-  %416 = bitcast %union.anon.10* %415 to i64*
+  %415 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %414, i64 0, i64 0
+  %416 = bitcast %union.anon.13* %415 to i64*
   %417 = load i64, i64* %416, align 8
   br label %419
 
@@ -8820,7 +8822,7 @@ define dso_local i32 @do_store_item(%struct._stritem* %0, i32 %1, %struct.conn* 
   %450 = load i32, i32* %6, align 4
   %451 = load %struct._stritem*, %struct._stritem** %5, align 8
   %452 = getelementptr inbounds %struct._stritem, %struct._stritem* %451, i32 0, i32 10
-  %453 = bitcast [0 x %union.anon.10]* %452 to i8*
+  %453 = bitcast [0 x %union.anon.13]* %452 to i8*
   %454 = load %struct._stritem*, %struct._stritem** %5, align 8
   %455 = getelementptr inbounds %struct._stritem, %struct._stritem* %454, i32 0, i32 7
   %456 = load i16, i16* %455, align 2
@@ -8914,7 +8916,7 @@ define internal i32 @_store_item_copy_data(i32 %0, %struct._stritem* %1, %struct
 38:                                               ; preds = %12
   %39 = load %struct._stritem*, %struct._stritem** %8, align 8
   %40 = getelementptr inbounds %struct._stritem, %struct._stritem* %39, i32 0, i32 10
-  %41 = bitcast [0 x %union.anon.10]* %40 to i8*
+  %41 = bitcast [0 x %union.anon.13]* %40 to i8*
   %42 = load %struct._stritem*, %struct._stritem** %8, align 8
   %43 = getelementptr inbounds %struct._stritem, %struct._stritem* %42, i32 0, i32 9
   %44 = load i8, i8* %43, align 1
@@ -8942,7 +8944,7 @@ define internal i32 @_store_item_copy_data(i32 %0, %struct._stritem* %1, %struct
   %66 = getelementptr inbounds i8, i8* %57, i64 %65
   %67 = load %struct._stritem*, %struct._stritem** %7, align 8
   %68 = getelementptr inbounds %struct._stritem, %struct._stritem* %67, i32 0, i32 10
-  %69 = bitcast [0 x %union.anon.10]* %68 to i8*
+  %69 = bitcast [0 x %union.anon.13]* %68 to i8*
   %70 = load %struct._stritem*, %struct._stritem** %7, align 8
   %71 = getelementptr inbounds %struct._stritem, %struct._stritem* %70, i32 0, i32 9
   %72 = load i8, i8* %71, align 1
@@ -8975,7 +8977,7 @@ define internal i32 @_store_item_copy_data(i32 %0, %struct._stritem* %1, %struct
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %66, i8* align 1 %94, i64 %98, i1 false)
   %99 = load %struct._stritem*, %struct._stritem** %8, align 8
   %100 = getelementptr inbounds %struct._stritem, %struct._stritem* %99, i32 0, i32 10
-  %101 = bitcast [0 x %union.anon.10]* %100 to i8*
+  %101 = bitcast [0 x %union.anon.13]* %100 to i8*
   %102 = load %struct._stritem*, %struct._stritem** %8, align 8
   %103 = getelementptr inbounds %struct._stritem, %struct._stritem* %102, i32 0, i32 9
   %104 = load i8, i8* %103, align 1
@@ -9009,7 +9011,7 @@ define internal i32 @_store_item_copy_data(i32 %0, %struct._stritem* %1, %struct
   %132 = getelementptr inbounds i8, i8* %131, i64 -2
   %133 = load %struct._stritem*, %struct._stritem** %9, align 8
   %134 = getelementptr inbounds %struct._stritem, %struct._stritem* %133, i32 0, i32 10
-  %135 = bitcast [0 x %union.anon.10]* %134 to i8*
+  %135 = bitcast [0 x %union.anon.13]* %134 to i8*
   %136 = load %struct._stritem*, %struct._stritem** %9, align 8
   %137 = getelementptr inbounds %struct._stritem, %struct._stritem* %136, i32 0, i32 9
   %138 = load i8, i8* %137, align 1
@@ -9085,7 +9087,7 @@ define internal i32 @_store_item_copy_data(i32 %0, %struct._stritem* %1, %struct
 192:                                              ; preds = %166
   %193 = load %struct._stritem*, %struct._stritem** %8, align 8
   %194 = getelementptr inbounds %struct._stritem, %struct._stritem* %193, i32 0, i32 10
-  %195 = bitcast [0 x %union.anon.10]* %194 to i8*
+  %195 = bitcast [0 x %union.anon.13]* %194 to i8*
   %196 = load %struct._stritem*, %struct._stritem** %8, align 8
   %197 = getelementptr inbounds %struct._stritem, %struct._stritem* %196, i32 0, i32 9
   %198 = load i8, i8* %197, align 1
@@ -9113,7 +9115,7 @@ define internal i32 @_store_item_copy_data(i32 %0, %struct._stritem* %1, %struct
   %220 = getelementptr inbounds i8, i8* %211, i64 %219
   %221 = load %struct._stritem*, %struct._stritem** %9, align 8
   %222 = getelementptr inbounds %struct._stritem, %struct._stritem* %221, i32 0, i32 10
-  %223 = bitcast [0 x %union.anon.10]* %222 to i8*
+  %223 = bitcast [0 x %union.anon.13]* %222 to i8*
   %224 = load %struct._stritem*, %struct._stritem** %9, align 8
   %225 = getelementptr inbounds %struct._stritem, %struct._stritem* %224, i32 0, i32 9
   %226 = load i8, i8* %225, align 1
@@ -9146,7 +9148,7 @@ define internal i32 @_store_item_copy_data(i32 %0, %struct._stritem* %1, %struct
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %220, i8* align 1 %248, i64 %252, i1 false)
   %253 = load %struct._stritem*, %struct._stritem** %8, align 8
   %254 = getelementptr inbounds %struct._stritem, %struct._stritem* %253, i32 0, i32 10
-  %255 = bitcast [0 x %union.anon.10]* %254 to i8*
+  %255 = bitcast [0 x %union.anon.13]* %254 to i8*
   %256 = load %struct._stritem*, %struct._stritem** %8, align 8
   %257 = getelementptr inbounds %struct._stritem, %struct._stritem* %256, i32 0, i32 9
   %258 = load i8, i8* %257, align 1
@@ -9180,7 +9182,7 @@ define internal i32 @_store_item_copy_data(i32 %0, %struct._stritem* %1, %struct
   %286 = getelementptr inbounds i8, i8* %285, i64 -2
   %287 = load %struct._stritem*, %struct._stritem** %7, align 8
   %288 = getelementptr inbounds %struct._stritem, %struct._stritem* %287, i32 0, i32 10
-  %289 = bitcast [0 x %union.anon.10]* %288 to i8*
+  %289 = bitcast [0 x %union.anon.13]* %288 to i8*
   %290 = load %struct._stritem*, %struct._stritem** %7, align 8
   %291 = getelementptr inbounds %struct._stritem, %struct._stritem* %290, i32 0, i32 9
   %292 = load i8, i8* %291, align 1
@@ -9245,7 +9247,7 @@ define internal i32 @_store_item_copy_chunks(%struct._stritem* %0, %struct._stri
   store i32 %2, i32* %7, align 4
   %17 = load %struct._stritem*, %struct._stritem** %5, align 8
   %18 = getelementptr inbounds %struct._stritem, %struct._stritem* %17, i32 0, i32 10
-  %19 = bitcast [0 x %union.anon.10]* %18 to i8*
+  %19 = bitcast [0 x %union.anon.13]* %18 to i8*
   %20 = load %struct._stritem*, %struct._stritem** %5, align 8
   %21 = getelementptr inbounds %struct._stritem, %struct._stritem* %20, i32 0, i32 9
   %22 = load i8, i8* %21, align 1
@@ -9319,7 +9321,7 @@ define internal i32 @_store_item_copy_chunks(%struct._stritem* %0, %struct._stri
   store i32 %73, i32* %9, align 4
   %74 = load %struct._stritem*, %struct._stritem** %6, align 8
   %75 = getelementptr inbounds %struct._stritem, %struct._stritem* %74, i32 0, i32 10
-  %76 = bitcast [0 x %union.anon.10]* %75 to i8*
+  %76 = bitcast [0 x %union.anon.13]* %75 to i8*
   %77 = load %struct._stritem*, %struct._stritem** %6, align 8
   %78 = getelementptr inbounds %struct._stritem, %struct._stritem* %77, i32 0, i32 9
   %79 = load i8, i8* %78, align 1
@@ -9563,7 +9565,7 @@ define internal i32 @_store_item_copy_chunks(%struct._stritem* %0, %struct._stri
   %250 = getelementptr inbounds i8, i8* %245, i64 %249
   %251 = load %struct._stritem*, %struct._stritem** %6, align 8
   %252 = getelementptr inbounds %struct._stritem, %struct._stritem* %251, i32 0, i32 10
-  %253 = bitcast [0 x %union.anon.10]* %252 to i8*
+  %253 = bitcast [0 x %union.anon.13]* %252 to i8*
   %254 = load %struct._stritem*, %struct._stritem** %6, align 8
   %255 = getelementptr inbounds %struct._stritem, %struct._stritem* %254, i32 0, i32 9
   %256 = load i8, i8* %255, align 1
@@ -11573,8 +11575,8 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
 63:                                               ; preds = %56
   %64 = load %struct._stritem*, %struct._stritem** %23, align 8
   %65 = getelementptr inbounds %struct._stritem, %struct._stritem* %64, i32 0, i32 10
-  %66 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %65, i64 0, i64 0
-  %67 = bitcast %union.anon.10* %66 to i64*
+  %66 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %65, i64 0, i64 0
+  %67 = bitcast %union.anon.13* %66 to i64*
   %68 = load i64, i64* %67, align 8
   br label %70
 
@@ -11597,7 +11599,7 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
 77:                                               ; preds = %70, %52, %49
   %78 = load %struct._stritem*, %struct._stritem** %23, align 8
   %79 = getelementptr inbounds %struct._stritem, %struct._stritem* %78, i32 0, i32 10
-  %80 = bitcast [0 x %union.anon.10]* %79 to i8*
+  %80 = bitcast [0 x %union.anon.13]* %79 to i8*
   %81 = load %struct._stritem*, %struct._stritem** %23, align 8
   %82 = getelementptr inbounds %struct._stritem, %struct._stritem* %81, i32 0, i32 9
   %83 = load i8, i8* %82, align 1
@@ -11772,8 +11774,8 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
   %208 = phi i64 [ %205, %204 ], [ 0, %206 ]
   %209 = load %struct._stritem*, %struct._stritem** %23, align 8
   %210 = getelementptr inbounds %struct._stritem, %struct._stritem* %209, i32 0, i32 10
-  %211 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %210, i64 0, i64 0
-  %212 = bitcast %union.anon.10* %211 to i64*
+  %211 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %210, i64 0, i64 0
+  %212 = bitcast %union.anon.13* %211 to i64*
   store i64 %208, i64* %212, align 8
   br label %213
 
@@ -11782,7 +11784,7 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
   call void @item_stats_sizes_add(%struct._stritem* %214)
   %215 = load %struct._stritem*, %struct._stritem** %23, align 8
   %216 = getelementptr inbounds %struct._stritem, %struct._stritem* %215, i32 0, i32 10
-  %217 = bitcast [0 x %union.anon.10]* %216 to i8*
+  %217 = bitcast [0 x %union.anon.13]* %216 to i8*
   %218 = load %struct._stritem*, %struct._stritem** %23, align 8
   %219 = getelementptr inbounds %struct._stritem, %struct._stritem* %218, i32 0, i32 9
   %220 = load i8, i8* %219, align 1
@@ -11814,7 +11816,7 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %242, i8* align 1 %243, i64 %245, i1 false)
   %246 = load %struct._stritem*, %struct._stritem** %23, align 8
   %247 = getelementptr inbounds %struct._stritem, %struct._stritem* %246, i32 0, i32 10
-  %248 = bitcast [0 x %union.anon.10]* %247 to i8*
+  %248 = bitcast [0 x %union.anon.13]* %247 to i8*
   %249 = load %struct._stritem*, %struct._stritem** %23, align 8
   %250 = getelementptr inbounds %struct._stritem, %struct._stritem* %249, i32 0, i32 9
   %251 = load i8, i8* %250, align 1
@@ -11875,7 +11877,7 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
 298:                                              ; preds = %291
   %299 = load %struct._stritem*, %struct._stritem** %23, align 8
   %300 = getelementptr inbounds %struct._stritem, %struct._stritem* %299, i32 0, i32 10
-  %301 = bitcast [0 x %union.anon.10]* %300 to i8*
+  %301 = bitcast [0 x %union.anon.13]* %300 to i8*
   %302 = load %struct._stritem*, %struct._stritem** %23, align 8
   %303 = getelementptr inbounds %struct._stritem, %struct._stritem* %302, i32 0, i32 9
   %304 = load i8, i8* %303, align 1
@@ -11904,7 +11906,7 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
 321:                                              ; preds = %320, %298
   %322 = load %struct._stritem*, %struct._stritem** %23, align 8
   %323 = getelementptr inbounds %struct._stritem, %struct._stritem* %322, i32 0, i32 10
-  %324 = bitcast [0 x %union.anon.10]* %323 to i8*
+  %324 = bitcast [0 x %union.anon.13]* %323 to i8*
   %325 = load %struct._stritem*, %struct._stritem** %23, align 8
   %326 = getelementptr inbounds %struct._stritem, %struct._stritem* %325, i32 0, i32 7
   %327 = load i16, i16* %326, align 2
@@ -11939,7 +11941,7 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
 349:                                              ; preds = %321
   %350 = load %struct._stritem*, %struct._stritem** %24, align 8
   %351 = getelementptr inbounds %struct._stritem, %struct._stritem* %350, i32 0, i32 10
-  %352 = bitcast [0 x %union.anon.10]* %351 to i8*
+  %352 = bitcast [0 x %union.anon.13]* %351 to i8*
   %353 = load %struct._stritem*, %struct._stritem** %24, align 8
   %354 = getelementptr inbounds %struct._stritem, %struct._stritem* %353, i32 0, i32 9
   %355 = load i8, i8* %354, align 1
@@ -11971,7 +11973,7 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %377, i8* align 1 %378, i64 %380, i1 false)
   %381 = load %struct._stritem*, %struct._stritem** %24, align 8
   %382 = getelementptr inbounds %struct._stritem, %struct._stritem* %381, i32 0, i32 10
-  %383 = bitcast [0 x %union.anon.10]* %382 to i8*
+  %383 = bitcast [0 x %union.anon.13]* %382 to i8*
   %384 = load %struct._stritem*, %struct._stritem** %24, align 8
   %385 = getelementptr inbounds %struct._stritem, %struct._stritem* %384, i32 0, i32 9
   %386 = load i8, i8* %385, align 1
@@ -12030,8 +12032,8 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
 432:                                              ; preds = %425
   %433 = load %struct._stritem*, %struct._stritem** %24, align 8
   %434 = getelementptr inbounds %struct._stritem, %struct._stritem* %433, i32 0, i32 10
-  %435 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %434, i64 0, i64 0
-  %436 = bitcast %union.anon.10* %435 to i64*
+  %435 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %434, i64 0, i64 0
+  %436 = bitcast %union.anon.13* %435 to i64*
   %437 = load i64, i64* %436, align 8
   br label %439
 
@@ -12049,8 +12051,8 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
   %443 = phi i64 [ %440, %439 ], [ 0, %441 ]
   %444 = load %struct._stritem*, %struct._stritem** %23, align 8
   %445 = getelementptr inbounds %struct._stritem, %struct._stritem* %444, i32 0, i32 10
-  %446 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %445, i64 0, i64 0
-  %447 = bitcast %union.anon.10* %446 to i64*
+  %446 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %445, i64 0, i64 0
+  %447 = bitcast %union.anon.13* %446 to i64*
   store i64 %443, i64* %447, align 8
   br label %448
 
@@ -12106,8 +12108,8 @@ define dso_local i32 @do_add_delta(%struct.conn* %0, i8* %1, i64 %2, i1 zeroext 
 476:                                              ; preds = %469
   %477 = load %struct._stritem*, %struct._stritem** %23, align 8
   %478 = getelementptr inbounds %struct._stritem, %struct._stritem* %477, i32 0, i32 10
-  %479 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %478, i64 0, i64 0
-  %480 = bitcast %union.anon.10* %479 to i64*
+  %479 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %478, i64 0, i64 0
+  %480 = bitcast %union.anon.13* %479 to i64*
   %481 = load i64, i64* %480, align 8
   br label %483
 
@@ -12218,7 +12220,7 @@ define dso_local void @do_accept_new_conns(i1 zeroext %0) #0 {
   br i1 %42, label %43, label %58
 
 43:                                               ; preds = %40
-  %44 = call i32 @gettimeofday(%struct.timeval* %4, %struct.timezone* null) #14
+  %44 = call i32 @gettimeofday(%struct.timeval* %4, i8* null) #14
   call void @STATS_LOCK()
   %45 = getelementptr inbounds %struct.timeval, %struct.timeval* %4, i32 0, i32 0
   %46 = load i64, i64* %45, align 8
@@ -12242,7 +12244,7 @@ define dso_local void @do_accept_new_conns(i1 zeroext %0) #0 {
 58:                                               ; preds = %40
   call void @STATS_LOCK()
   store i8 0, i8* getelementptr inbounds (%struct.stats_state, %struct.stats_state* @stats_state, i32 0, i32 9), align 1
-  %59 = call i32 @gettimeofday(%struct.timeval* getelementptr inbounds (%struct.stats, %struct.stats* @stats, i32 0, i32 22), %struct.timezone* null) #14
+  %59 = call i32 @gettimeofday(%struct.timeval* getelementptr inbounds (%struct.stats, %struct.stats* @stats, i32 0, i32 22), i8* null) #14
   %60 = load i64, i64* getelementptr inbounds (%struct.stats, %struct.stats* @stats, i32 0, i32 4), align 8
   %61 = add i64 %60, 1
   store i64 %61, i64* getelementptr inbounds (%struct.stats, %struct.stats* @stats, i32 0, i32 4), align 8
@@ -12259,7 +12261,7 @@ define dso_local void @do_accept_new_conns(i1 zeroext %0) #0 {
 declare dso_local i32 @listen(i32, i32) #2
 
 ; Function Attrs: nounwind
-declare dso_local i32 @gettimeofday(%struct.timeval*, %struct.timezone*) #2
+declare dso_local i32 @gettimeofday(%struct.timeval*, i8*) #2
 
 ; Function Attrs: noinline nounwind optnone uwtable
 define internal void @maxconns_handler(i32 %0, i16 signext %1, i8* %2) #0 {
@@ -12296,6 +12298,11 @@ define internal void @maxconns_handler(i32 %0, i16 signext %1, i8* %2) #0 {
   br label %22
 
 22:                                               ; preds = %20, %16
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local void @klee_dump_memory() #0 {
   ret void
 }
 
@@ -13728,6 +13735,7 @@ define dso_local i32 @main(i32 %0, i8** %1) #0 {
   br label %86, !llvm.loop !29
 
 703:                                              ; preds = %86
+  call void @klee_dump_memory()
   %704 = load i32, i32* getelementptr inbounds (%struct.settings, %struct.settings* @settings, i32 0, i32 72), align 4
   %705 = load i32, i32* getelementptr inbounds (%struct.settings, %struct.settings* @settings, i32 0, i32 14), align 4
   %706 = icmp sgt i32 %704, %705
@@ -16036,7 +16044,7 @@ define internal i32 @_mc_meta_load_cb(i8* %0, i8* %1, i8* %2) #0 {
   br label %235
 
 221:                                              ; preds = %217
-  %222 = call i32 @gettimeofday(%struct.timeval* %20, %struct.timezone* null) #14
+  %222 = call i32 @gettimeofday(%struct.timeval* %20, i8* null) #14
   %223 = getelementptr inbounds %struct.timeval, %struct.timeval* %20, i32 0, i32 0
   %224 = load i64, i64* %223, align 8
   %225 = load i64, i64* %16, align 8
@@ -16165,7 +16173,7 @@ define internal i32 @_mc_meta_save_cb(i8* %0, i8* %1, i8* %2) #0 {
   %37 = load i8*, i8** %5, align 8
   %38 = load i64, i64* @process_started, align 8
   call void (i8*, i8*, i8*, ...) @restart_set_kv(i8* %37, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.466, i64 0, i64 0), i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.39, i64 0, i64 0), i64 %38)
-  %39 = call i32 @gettimeofday(%struct.timeval* %8, %struct.timezone* null) #14
+  %39 = call i32 @gettimeofday(%struct.timeval* %8, i8* null) #14
   %40 = load i8*, i8** %5, align 8
   %41 = getelementptr inbounds %struct.timeval, %struct.timeval* %8, i32 0, i32 0
   %42 = load i64, i64* %41, align 8
@@ -16297,7 +16305,7 @@ define internal void @clock_handler(i32 %0, i16 signext %1, i8* %2) #0 {
   br label %46
 
 39:                                               ; preds = %23
-  %40 = call i32 @gettimeofday(%struct.timeval* %9, %struct.timezone* null) #14
+  %40 = call i32 @gettimeofday(%struct.timeval* %9, i8* null) #14
   %41 = getelementptr inbounds %struct.timeval, %struct.timeval* %9, i32 0, i32 0
   %42 = load i64, i64* %41, align 8
   %43 = load i64, i64* @process_started, align 8
@@ -16316,7 +16324,7 @@ define internal i32 @server_socket_unix(i8* %0, i32 %1) #0 {
   %4 = alloca i8*, align 8
   %5 = alloca i32, align 4
   %6 = alloca i32, align 4
-  %7 = alloca %struct.timezone, align 4
+  %7 = alloca %struct.linger, align 4
   %8 = alloca %struct.sockaddr_un, align 2
   %9 = alloca %struct.stat, align 8
   %10 = alloca i32, align 4
@@ -16324,7 +16332,7 @@ define internal i32 @server_socket_unix(i8* %0, i32 %1) #0 {
   %12 = alloca %union.__SOCKADDR_ARG, align 8
   store i8* %0, i8** %4, align 8
   store i32 %1, i32* %5, align 4
-  %13 = bitcast %struct.timezone* %7 to i8*
+  %13 = bitcast %struct.linger* %7 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 4 %13, i8 0, i64 8, i1 false)
   store i32 1, i32* %10, align 4
   %14 = load i8*, i8** %4, align 8
@@ -16374,7 +16382,7 @@ define internal i32 @server_socket_unix(i8* %0, i32 %1) #0 {
   %39 = bitcast i32* %10 to i8*
   %40 = call i32 @setsockopt(i32 %38, i32 1, i32 9, i8* %39, i32 4) #14
   %41 = load i32, i32* %6, align 4
-  %42 = bitcast %struct.timezone* %7 to i8*
+  %42 = bitcast %struct.linger* %7 to i8*
   %43 = call i32 @setsockopt(i32 %41, i32 1, i32 13, i8* %42, i32 8) #14
   %44 = bitcast %struct.sockaddr_un* %8 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 2 %44, i8 0, i64 110, i1 false)
@@ -16827,7 +16835,7 @@ define internal i32 @server_socket(i8* %0, i32 %1, i32 %2, %struct._IO_FILE* %3,
   %10 = alloca %struct._IO_FILE*, align 8
   %11 = alloca i8, align 1
   %12 = alloca i32, align 4
-  %13 = alloca %struct.timezone, align 4
+  %13 = alloca %struct.linger, align 4
   %14 = alloca %struct.addrinfo*, align 8
   %15 = alloca %struct.addrinfo*, align 8
   %16 = alloca %struct.addrinfo, align 8
@@ -16839,7 +16847,7 @@ define internal i32 @server_socket(i8* %0, i32 %1, i32 %2, %struct._IO_FILE* %3,
   %22 = alloca i32, align 4
   %23 = alloca i32, align 4
   %24 = alloca %union.__SOCKADDR_ARG, align 8
-  %25 = alloca %union.anon.29, align 4
+  %25 = alloca %union.anon.32, align 4
   %26 = alloca i32, align 4
   %27 = alloca %union.__SOCKADDR_ARG, align 8
   %28 = alloca i32, align 4
@@ -16850,7 +16858,7 @@ define internal i32 @server_socket(i8* %0, i32 %1, i32 %2, %struct._IO_FILE* %3,
   store %struct._IO_FILE* %3, %struct._IO_FILE** %10, align 8
   %30 = zext i1 %4 to i8
   store i8 %30, i8* %11, align 1
-  %31 = bitcast %struct.timezone* %13 to i8*
+  %31 = bitcast %struct.linger* %13 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 4 %31, i8 0, i64 8, i1 false)
   %32 = bitcast %struct.addrinfo* %16 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 8 %32, i8 0, i64 48, i1 false)
@@ -17013,7 +17021,7 @@ define internal i32 @server_socket(i8* %0, i32 %1, i32 %2, %struct._IO_FILE* %3,
 
 120:                                              ; preds = %119, %113
   %121 = load i32, i32* %12, align 4
-  %122 = bitcast %struct.timezone* %13 to i8*
+  %122 = bitcast %struct.linger* %13 to i8*
   %123 = call i32 @setsockopt(i32 %121, i32 1, i32 13, i8* %122, i32 8) #14
   store i32 %123, i32* %18, align 4
   %124 = load i32, i32* %18, align 4
@@ -17129,7 +17137,7 @@ define internal i32 @server_socket(i8* %0, i32 %1, i32 %2, %struct._IO_FILE* %3,
   store i32 28, i32* %26, align 4
   %193 = load i32, i32* %12, align 4
   %194 = bitcast %union.__SOCKADDR_ARG* %27 to %struct.sockaddr**
-  %195 = bitcast %union.anon.29* %25 to %struct.sockaddr*
+  %195 = bitcast %union.anon.32* %25 to %struct.sockaddr*
   store %struct.sockaddr* %195, %struct.sockaddr** %194, align 8
   %196 = getelementptr inbounds %union.__SOCKADDR_ARG, %union.__SOCKADDR_ARG* %27, i32 0, i32 0
   %197 = load %struct.sockaddr*, %struct.sockaddr** %196, align 8
@@ -17153,7 +17161,7 @@ define internal i32 @server_socket(i8* %0, i32 %1, i32 %2, %struct._IO_FILE* %3,
   %211 = icmp eq i32 %210, 2
   %212 = zext i1 %211 to i64
   %213 = select i1 %211, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.196, i64 0, i64 0), i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.494, i64 0, i64 0)
-  %214 = bitcast %union.anon.29* %25 to %struct.sockaddr_in*
+  %214 = bitcast %union.anon.32* %25 to %struct.sockaddr_in*
   %215 = getelementptr inbounds %struct.sockaddr_in, %struct.sockaddr_in* %214, i32 0, i32 1
   %216 = load i16, i16* %215, align 2
   %217 = call zeroext i16 @ntohs(i16 zeroext %216) #15
@@ -17167,7 +17175,7 @@ define internal i32 @server_socket(i8* %0, i32 %1, i32 %2, %struct._IO_FILE* %3,
   %223 = icmp eq i32 %222, 2
   %224 = zext i1 %223 to i64
   %225 = select i1 %223, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.196, i64 0, i64 0), i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.494, i64 0, i64 0)
-  %226 = bitcast %union.anon.29* %25 to %struct.sockaddr_in6*
+  %226 = bitcast %union.anon.32* %25 to %struct.sockaddr_in6*
   %227 = getelementptr inbounds %struct.sockaddr_in6, %struct.sockaddr_in6* %226, i32 0, i32 1
   %228 = load i16, i16* %227, align 2
   %229 = call zeroext i16 @ntohs(i16 zeroext %228) #15
@@ -17707,7 +17715,7 @@ define internal i8* @conn_timeout_thread(i8* %0) #0 {
   br label %121
 
 121:                                              ; preds = %117, %114
-  %122 = call i32 @gettimeofday(%struct.timeval* %9, %struct.timezone* null) #14
+  %122 = call i32 @gettimeofday(%struct.timeval* %9, i8* null) #14
   %123 = getelementptr inbounds %struct.timeval, %struct.timeval* %9, i32 0, i32 0
   %124 = load i64, i64* %123, align 8
   %125 = load i32, i32* %6, align 4
@@ -19287,7 +19295,7 @@ define dso_local i32 @jenkins_hash(i8* %0, i64 %1) #0 {
   %6 = alloca i32, align 4
   %7 = alloca i32, align 4
   %8 = alloca i32, align 4
-  %9 = alloca %union.anon.2, align 8
+  %9 = alloca %union.anon, align 8
   %10 = alloca i32*, align 8
   %11 = alloca i16*, align 8
   %12 = alloca i8*, align 8
@@ -19302,9 +19310,9 @@ define dso_local i32 @jenkins_hash(i8* %0, i64 %1) #0 {
   store i32 %17, i32* %7, align 4
   store i32 %17, i32* %6, align 4
   %18 = load i8*, i8** %4, align 8
-  %19 = bitcast %union.anon.2* %9 to i8**
+  %19 = bitcast %union.anon* %9 to i8**
   store i8* %18, i8** %19, align 8
-  %20 = bitcast %union.anon.2* %9 to i64*
+  %20 = bitcast %union.anon* %9 to i64*
   %21 = load i64, i64* %20, align 8
   %22 = and i64 %21, 3
   %23 = icmp eq i64 %22, 0
@@ -19660,7 +19668,7 @@ define dso_local i32 @jenkins_hash(i8* %0, i64 %1) #0 {
   br label %856
 
 274:                                              ; preds = %2
-  %275 = bitcast %union.anon.2* %9 to i64*
+  %275 = bitcast %union.anon* %9 to i64*
   %276 = load i64, i64* %275, align 8
   %277 = and i64 %276, 1
   %278 = icmp eq i64 %277, 0
@@ -21366,7 +21374,7 @@ define internal i8* @alloc_large_chunk(i64 %0) #0 {
 22:                                               ; preds = %18
   %23 = getelementptr inbounds [64 x i8], [64 x i8]* %8, i64 0, i64 0
   %24 = getelementptr inbounds i8, i8* %23, i64 13
-  %25 = call i32 (i8*, i8*, ...) @sscanf(i8* %24, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.7.526, i64 0, i64 0), i64* %5) #14
+  %25 = call i32 (i8*, i8*, ...) @__isoc99_sscanf(i8* %24, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.7.526, i64 0, i64 0), i64* %5) #14
   store i32 %25, i32* %7, align 4
   %26 = load i64, i64* %5, align 8
   %27 = shl i64 %26, 10
@@ -21903,7 +21911,7 @@ define internal void @do_slabs_free_chunked(%struct._stritem* %0, i64 %1) #0 {
   store i64 %1, i64* %4, align 8
   %8 = load %struct._stritem*, %struct._stritem** %3, align 8
   %9 = getelementptr inbounds %struct._stritem, %struct._stritem* %8, i32 0, i32 10
-  %10 = bitcast [0 x %union.anon.10]* %9 to i8*
+  %10 = bitcast [0 x %union.anon.13]* %9 to i8*
   %11 = load %struct._stritem*, %struct._stritem** %3, align 8
   %12 = getelementptr inbounds %struct._stritem, %struct._stritem* %11, i32 0, i32 9
   %13 = load i8, i8* %12, align 1
@@ -22072,7 +22080,7 @@ define internal void @do_slabs_free_chunked(%struct._stritem* %0, i64 %1) #0 {
 }
 
 ; Function Attrs: nounwind
-declare dso_local i32 @sscanf(i8*, i8*, ...) #2
+declare dso_local i32 @__isoc99_sscanf(i8*, i8*, ...) #2
 
 ; Function Attrs: nounwind
 declare dso_local i32 @posix_memalign(i8**, i64, i64) #2
@@ -23546,7 +23554,7 @@ define internal i32 @slab_rebalance_move() #0 {
   %77 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %78 = load %struct._stritem*, %struct._stritem** %8, align 8
   %79 = getelementptr inbounds %struct._stritem, %struct._stritem* %78, i32 0, i32 10
-  %80 = bitcast [0 x %union.anon.10]* %79 to i8*
+  %80 = bitcast [0 x %union.anon.13]* %79 to i8*
   %81 = load %struct._stritem*, %struct._stritem** %8, align 8
   %82 = getelementptr inbounds %struct._stritem, %struct._stritem* %81, i32 0, i32 7
   %83 = load i16, i16* %82, align 2
@@ -23918,7 +23926,7 @@ define internal i32 @slab_rebalance_move() #0 {
 313:                                              ; preds = %283
   %314 = load %struct._stritem*, %struct._stritem** %12, align 8
   %315 = getelementptr inbounds %struct._stritem, %struct._stritem* %314, i32 0, i32 10
-  %316 = bitcast [0 x %union.anon.10]* %315 to i8*
+  %316 = bitcast [0 x %union.anon.13]* %315 to i8*
   %317 = load %struct._stritem*, %struct._stritem** %12, align 8
   %318 = getelementptr inbounds %struct._stritem, %struct._stritem* %317, i32 0, i32 9
   %319 = load i8, i8* %318, align 1
@@ -24675,8 +24683,8 @@ define dso_local i32 @item_is_flushed(%struct._stritem* %0) #0 {
 14:                                               ; preds = %1
   %15 = load %struct._stritem*, %struct._stritem** %3, align 8
   %16 = getelementptr inbounds %struct._stritem, %struct._stritem* %15, i32 0, i32 10
-  %17 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %16, i64 0, i64 0
-  %18 = bitcast %union.anon.10* %17 to i64*
+  %17 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %16, i64 0, i64 0
+  %18 = bitcast %union.anon.13* %17 to i64*
   %19 = load i64, i64* %18, align 8
   br label %21
 
@@ -24978,7 +24986,7 @@ define dso_local i32 @lru_pull_tail(i32 %0, i32 %1, i64 %2, i8 zeroext %3, i32 %
   %83 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %84 = load %struct._stritem*, %struct._stritem** %18, align 8
   %85 = getelementptr inbounds %struct._stritem, %struct._stritem* %84, i32 0, i32 10
-  %86 = bitcast [0 x %union.anon.10]* %85 to i8*
+  %86 = bitcast [0 x %union.anon.13]* %85 to i8*
   %87 = load %struct._stritem*, %struct._stritem** %18, align 8
   %88 = getelementptr inbounds %struct._stritem, %struct._stritem* %87, i32 0, i32 7
   %89 = load i16, i16* %88, align 2
@@ -25632,7 +25640,7 @@ define dso_local void @do_item_unlink_nolock(%struct._stritem* %0, i32 %1) #0 {
   call void @item_stats_sizes_remove(%struct._stritem* %51)
   %52 = load %struct._stritem*, %struct._stritem** %3, align 8
   %53 = getelementptr inbounds %struct._stritem, %struct._stritem* %52, i32 0, i32 10
-  %54 = bitcast [0 x %union.anon.10]* %53 to i8*
+  %54 = bitcast [0 x %union.anon.13]* %53 to i8*
   %55 = load %struct._stritem*, %struct._stritem** %3, align 8
   %56 = getelementptr inbounds %struct._stritem, %struct._stritem* %55, i32 0, i32 7
   %57 = load i16, i16* %56, align 2
@@ -26136,8 +26144,8 @@ define dso_local void @item_stats_sizes_remove(%struct._stritem* %0) #0 {
 15:                                               ; preds = %7
   %16 = load %struct._stritem*, %struct._stritem** %2, align 8
   %17 = getelementptr inbounds %struct._stritem, %struct._stritem* %16, i32 0, i32 10
-  %18 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %17, i64 0, i64 0
-  %19 = bitcast %union.anon.10* %18 to i64*
+  %18 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %17, i64 0, i64 0
+  %19 = bitcast %union.anon.13* %18 to i64*
   %20 = load i64, i64* %19, align 8
   br label %22
 
@@ -26552,7 +26560,7 @@ define dso_local %struct._stritem* @do_item_alloc(i8* %0, i64 %1, i32 %2, i32 %3
   store i32 %161, i32* %163, align 8
   %164 = load %struct._stritem*, %struct._stritem** %13, align 8
   %165 = getelementptr inbounds %struct._stritem, %struct._stritem* %164, i32 0, i32 10
-  %166 = bitcast [0 x %union.anon.10]* %165 to i8*
+  %166 = bitcast [0 x %union.anon.13]* %165 to i8*
   %167 = load %struct._stritem*, %struct._stritem** %13, align 8
   %168 = getelementptr inbounds %struct._stritem, %struct._stritem* %167, i32 0, i32 7
   %169 = load i16, i16* %168, align 2
@@ -26577,7 +26585,7 @@ define dso_local %struct._stritem* @do_item_alloc(i8* %0, i64 %1, i32 %2, i32 %3
 184:                                              ; preds = %135
   %185 = load %struct._stritem*, %struct._stritem** %13, align 8
   %186 = getelementptr inbounds %struct._stritem, %struct._stritem* %185, i32 0, i32 10
-  %187 = bitcast [0 x %union.anon.10]* %186 to i8*
+  %187 = bitcast [0 x %union.anon.13]* %186 to i8*
   %188 = load %struct._stritem*, %struct._stritem** %13, align 8
   %189 = getelementptr inbounds %struct._stritem, %struct._stritem* %188, i32 0, i32 9
   %190 = load i8, i8* %189, align 1
@@ -26610,7 +26618,7 @@ define dso_local %struct._stritem* @do_item_alloc(i8* %0, i64 %1, i32 %2, i32 %3
 212:                                              ; preds = %205
   %213 = load %struct._stritem*, %struct._stritem** %13, align 8
   %214 = getelementptr inbounds %struct._stritem, %struct._stritem* %213, i32 0, i32 10
-  %215 = bitcast [0 x %union.anon.10]* %214 to i8*
+  %215 = bitcast [0 x %union.anon.13]* %214 to i8*
   %216 = load %struct._stritem*, %struct._stritem** %13, align 8
   %217 = getelementptr inbounds %struct._stritem, %struct._stritem* %216, i32 0, i32 9
   %218 = load i8, i8* %217, align 1
@@ -26807,7 +26815,7 @@ define dso_local void @do_item_link_fixup(%struct._stritem* %0) #0 {
   %37 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %38 = load %struct._stritem*, %struct._stritem** %2, align 8
   %39 = getelementptr inbounds %struct._stritem, %struct._stritem* %38, i32 0, i32 10
-  %40 = bitcast [0 x %union.anon.10]* %39 to i8*
+  %40 = bitcast [0 x %union.anon.13]* %39 to i8*
   %41 = load %struct._stritem*, %struct._stritem** %2, align 8
   %42 = getelementptr inbounds %struct._stritem, %struct._stritem* %41, i32 0, i32 7
   %43 = load i16, i16* %42, align 2
@@ -26935,8 +26943,8 @@ define dso_local void @item_stats_sizes_add(%struct._stritem* %0) #0 {
 15:                                               ; preds = %7
   %16 = load %struct._stritem*, %struct._stritem** %2, align 8
   %17 = getelementptr inbounds %struct._stritem, %struct._stritem* %16, i32 0, i32 10
-  %18 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %17, i64 0, i64 0
-  %19 = bitcast %union.anon.10* %18 to i64*
+  %18 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %17, i64 0, i64 0
+  %19 = bitcast %union.anon.13* %18 to i64*
   %20 = load i64, i64* %19, align 8
   br label %22
 
@@ -27098,8 +27106,8 @@ define dso_local i32 @do_item_link(%struct._stritem* %0, i32 %1) #0 {
   %62 = phi i64 [ %59, %58 ], [ 0, %60 ]
   %63 = load %struct._stritem*, %struct._stritem** %3, align 8
   %64 = getelementptr inbounds %struct._stritem, %struct._stritem* %63, i32 0, i32 10
-  %65 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %64, i64 0, i64 0
-  %66 = bitcast %union.anon.10* %65 to i64*
+  %65 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %64, i64 0, i64 0
+  %66 = bitcast %union.anon.13* %65 to i64*
   store i64 %62, i64* %66, align 8
   br label %67
 
@@ -27182,7 +27190,7 @@ define dso_local void @do_item_unlink(%struct._stritem* %0, i32 %1) #0 {
   call void @item_stats_sizes_remove(%struct._stritem* %51)
   %52 = load %struct._stritem*, %struct._stritem** %3, align 8
   %53 = getelementptr inbounds %struct._stritem, %struct._stritem* %52, i32 0, i32 10
-  %54 = bitcast [0 x %union.anon.10]* %53 to i8*
+  %54 = bitcast [0 x %union.anon.13]* %53 to i8*
   %55 = load %struct._stritem*, %struct._stritem** %3, align 8
   %56 = getelementptr inbounds %struct._stritem, %struct._stritem* %55, i32 0, i32 7
   %57 = load i16, i16* %56, align 2
@@ -27510,7 +27518,7 @@ define dso_local i8* @item_cachedump(i32 %0, i32 %1, i32* %2) #0 {
   %76 = getelementptr inbounds [251 x i8], [251 x i8]* %14, i64 0, i64 0
   %77 = load %struct._stritem*, %struct._stritem** %11, align 8
   %78 = getelementptr inbounds %struct._stritem, %struct._stritem* %77, i32 0, i32 10
-  %79 = bitcast [0 x %union.anon.10]* %78 to i8*
+  %79 = bitcast [0 x %union.anon.13]* %78 to i8*
   %80 = load %struct._stritem*, %struct._stritem** %11, align 8
   %81 = getelementptr inbounds %struct._stritem, %struct._stritem* %80, i32 0, i32 7
   %82 = load i16, i16* %81, align 2
@@ -31605,7 +31613,7 @@ define dso_local %struct._stritem* @assoc_find(i8* %0, i64 %1, i32 %2) #0 {
   %52 = load i8*, i8** %4, align 8
   %53 = load %struct._stritem*, %struct._stritem** %7, align 8
   %54 = getelementptr inbounds %struct._stritem, %struct._stritem* %53, i32 0, i32 10
-  %55 = bitcast [0 x %union.anon.10]* %54 to i8*
+  %55 = bitcast [0 x %union.anon.13]* %54 to i8*
   %56 = load %struct._stritem*, %struct._stritem** %7, align 8
   %57 = getelementptr inbounds %struct._stritem, %struct._stritem* %56, i32 0, i32 7
   %58 = load i16, i16* %57, align 2
@@ -31860,7 +31868,7 @@ define internal %struct._stritem** @_hashitem_before(i8* %0, i64 %1, i32 %2) #0 
   %51 = load %struct._stritem**, %struct._stritem*** %7, align 8
   %52 = load %struct._stritem*, %struct._stritem** %51, align 8
   %53 = getelementptr inbounds %struct._stritem, %struct._stritem* %52, i32 0, i32 10
-  %54 = bitcast [0 x %union.anon.10]* %53 to i8*
+  %54 = bitcast [0 x %union.anon.13]* %53 to i8*
   %55 = load %struct._stritem**, %struct._stritem*** %7, align 8
   %56 = load %struct._stritem*, %struct._stritem** %55, align 8
   %57 = getelementptr inbounds %struct._stritem, %struct._stritem* %56, i32 0, i32 7
@@ -32012,7 +32020,7 @@ define internal i8* @assoc_maintenance_thread(i8* %0) #0 {
   %39 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %40 = load %struct._stritem*, %struct._stritem** %4, align 8
   %41 = getelementptr inbounds %struct._stritem, %struct._stritem* %40, i32 0, i32 10
-  %42 = bitcast [0 x %union.anon.10]* %41 to i8*
+  %42 = bitcast [0 x %union.anon.13]* %41 to i8*
   %43 = load %struct._stritem*, %struct._stritem** %4, align 8
   %44 = getelementptr inbounds %struct._stritem, %struct._stritem* %43, i32 0, i32 7
   %45 = load i16, i16* %44, align 2
@@ -32725,7 +32733,7 @@ define internal void @cq_push(%struct.conn_queue* %0, %struct.conn_queue_item* %
 8:                                                ; preds = %2
   %9 = load %struct.conn_queue_item*, %struct.conn_queue_item** %4, align 8
   %10 = getelementptr inbounds %struct.conn_queue_item, %struct.conn_queue_item* %9, i32 0, i32 9
-  %11 = getelementptr inbounds %struct.anon.11, %struct.anon.11* %10, i32 0, i32 0
+  %11 = getelementptr inbounds %struct.anon.11.136, %struct.anon.11.136* %10, i32 0, i32 0
   store %struct.conn_queue_item* null, %struct.conn_queue_item** %11, align 8
   %12 = load %struct.conn_queue_item*, %struct.conn_queue_item** %4, align 8
   %13 = load %struct.conn_queue*, %struct.conn_queue** %3, align 8
@@ -32735,7 +32743,7 @@ define internal void @cq_push(%struct.conn_queue* %0, %struct.conn_queue_item* %
   store %struct.conn_queue_item* %12, %struct.conn_queue_item** %16, align 8
   %17 = load %struct.conn_queue_item*, %struct.conn_queue_item** %4, align 8
   %18 = getelementptr inbounds %struct.conn_queue_item, %struct.conn_queue_item* %17, i32 0, i32 9
-  %19 = getelementptr inbounds %struct.anon.11, %struct.anon.11* %18, i32 0, i32 0
+  %19 = getelementptr inbounds %struct.anon.11.136, %struct.anon.11.136* %18, i32 0, i32 0
   %20 = load %struct.conn_queue*, %struct.conn_queue** %3, align 8
   %21 = getelementptr inbounds %struct.conn_queue, %struct.conn_queue* %20, i32 0, i32 0
   %22 = getelementptr inbounds %struct.conn_ev_head, %struct.conn_ev_head* %21, i32 0, i32 1
@@ -33465,7 +33473,7 @@ define dso_local i32 @item_link(%struct._stritem* %0) #0 {
   %5 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %6 = load %struct._stritem*, %struct._stritem** %2, align 8
   %7 = getelementptr inbounds %struct._stritem, %struct._stritem* %6, i32 0, i32 10
-  %8 = bitcast [0 x %union.anon.10]* %7 to i8*
+  %8 = bitcast [0 x %union.anon.13]* %7 to i8*
   %9 = load %struct._stritem*, %struct._stritem** %2, align 8
   %10 = getelementptr inbounds %struct._stritem, %struct._stritem* %9, i32 0, i32 7
   %11 = load i16, i16* %10, align 2
@@ -33501,7 +33509,7 @@ define dso_local void @item_remove(%struct._stritem* %0) #0 {
   %4 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %5 = load %struct._stritem*, %struct._stritem** %2, align 8
   %6 = getelementptr inbounds %struct._stritem, %struct._stritem* %5, i32 0, i32 10
-  %7 = bitcast [0 x %union.anon.10]* %6 to i8*
+  %7 = bitcast [0 x %union.anon.13]* %6 to i8*
   %8 = load %struct._stritem*, %struct._stritem** %2, align 8
   %9 = getelementptr inbounds %struct._stritem, %struct._stritem* %8, i32 0, i32 7
   %10 = load i16, i16* %9, align 2
@@ -33549,7 +33557,7 @@ define dso_local void @item_unlink(%struct._stritem* %0) #0 {
   %4 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %5 = load %struct._stritem*, %struct._stritem** %2, align 8
   %6 = getelementptr inbounds %struct._stritem, %struct._stritem* %5, i32 0, i32 10
-  %7 = bitcast [0 x %union.anon.10]* %6 to i8*
+  %7 = bitcast [0 x %union.anon.13]* %6 to i8*
   %8 = load %struct._stritem*, %struct._stritem** %2, align 8
   %9 = getelementptr inbounds %struct._stritem, %struct._stritem* %8, i32 0, i32 7
   %10 = load i16, i16* %9, align 2
@@ -33631,7 +33639,7 @@ define dso_local i32 @store_item(%struct._stritem* %0, i32 %1, %struct.conn* %2)
   %9 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %10 = load %struct._stritem*, %struct._stritem** %4, align 8
   %11 = getelementptr inbounds %struct._stritem, %struct._stritem* %10, i32 0, i32 10
-  %12 = bitcast [0 x %union.anon.10]* %11 to i8*
+  %12 = bitcast [0 x %union.anon.13]* %11 to i8*
   %13 = load %struct._stritem*, %struct._stritem** %4, align 8
   %14 = getelementptr inbounds %struct._stritem, %struct._stritem* %13, i32 0, i32 7
   %15 = load i16, i16* %14, align 2
@@ -35559,7 +35567,7 @@ define internal %struct.conn_queue_item* @cq_pop(%struct.conn_queue* %0) #0 {
   %17 = getelementptr inbounds %struct.conn_ev_head, %struct.conn_ev_head* %16, i32 0, i32 0
   %18 = load %struct.conn_queue_item*, %struct.conn_queue_item** %17, align 8
   %19 = getelementptr inbounds %struct.conn_queue_item, %struct.conn_queue_item* %18, i32 0, i32 9
-  %20 = getelementptr inbounds %struct.anon.11, %struct.anon.11* %19, i32 0, i32 0
+  %20 = getelementptr inbounds %struct.anon.11.136, %struct.anon.11.136* %19, i32 0, i32 0
   %21 = load %struct.conn_queue_item*, %struct.conn_queue_item** %20, align 8
   %22 = load %struct.conn_queue*, %struct.conn_queue** %2, align 8
   %23 = getelementptr inbounds %struct.conn_queue, %struct.conn_queue* %22, i32 0, i32 0
@@ -37318,7 +37326,7 @@ define dso_local void @cache_destroy(%struct.cache_t* %0) #0 {
   %19 = getelementptr inbounds %struct.cache_head, %struct.cache_head* %18, i32 0, i32 0
   %20 = load %struct.cache_free_s*, %struct.cache_free_s** %19, align 8
   %21 = getelementptr inbounds %struct.cache_free_s, %struct.cache_free_s* %20, i32 0, i32 0
-  %22 = getelementptr inbounds %struct.anon.8, %struct.anon.8* %21, i32 0, i32 0
+  %22 = getelementptr inbounds %struct.anon.11, %struct.anon.11* %21, i32 0, i32 0
   %23 = load %struct.cache_free_s*, %struct.cache_free_s** %22, align 8
   %24 = load %struct.cache_t*, %struct.cache_t** %2, align 8
   %25 = getelementptr inbounds %struct.cache_t, %struct.cache_t* %24, i32 0, i32 2
@@ -37408,7 +37416,7 @@ define dso_local i8* @do_cache_alloc(%struct.cache_t* %0) #0 {
   %18 = getelementptr inbounds %struct.cache_head, %struct.cache_head* %17, i32 0, i32 0
   %19 = load %struct.cache_free_s*, %struct.cache_free_s** %18, align 8
   %20 = getelementptr inbounds %struct.cache_free_s, %struct.cache_free_s* %19, i32 0, i32 0
-  %21 = getelementptr inbounds %struct.anon.8, %struct.anon.8* %20, i32 0, i32 0
+  %21 = getelementptr inbounds %struct.anon.11, %struct.anon.11* %20, i32 0, i32 0
   %22 = load %struct.cache_free_s*, %struct.cache_free_s** %21, align 8
   %23 = load %struct.cache_t*, %struct.cache_t** %2, align 8
   %24 = getelementptr inbounds %struct.cache_t, %struct.cache_t* %23, i32 0, i32 2
@@ -37564,7 +37572,7 @@ define dso_local void @do_cache_free(%struct.cache_t* %0, i8* %1) #0 {
   %29 = load i8*, i8** %4, align 8
   %30 = bitcast i8* %29 to %struct.cache_free_s*
   %31 = getelementptr inbounds %struct.cache_free_s, %struct.cache_free_s* %30, i32 0, i32 0
-  %32 = getelementptr inbounds %struct.anon.8, %struct.anon.8* %31, i32 0, i32 0
+  %32 = getelementptr inbounds %struct.anon.11, %struct.anon.11* %31, i32 0, i32 0
   store %struct.cache_free_s* %28, %struct.cache_free_s** %32, align 8
   %33 = icmp eq %struct.cache_free_s* %28, null
   br i1 %33, label %34, label %42
@@ -37573,7 +37581,7 @@ define dso_local void @do_cache_free(%struct.cache_t* %0, i8* %1) #0 {
   %35 = load i8*, i8** %4, align 8
   %36 = bitcast i8* %35 to %struct.cache_free_s*
   %37 = getelementptr inbounds %struct.cache_free_s, %struct.cache_free_s* %36, i32 0, i32 0
-  %38 = getelementptr inbounds %struct.anon.8, %struct.anon.8* %37, i32 0, i32 0
+  %38 = getelementptr inbounds %struct.anon.11, %struct.anon.11* %37, i32 0, i32 0
   %39 = load %struct.cache_t*, %struct.cache_t** %3, align 8
   %40 = getelementptr inbounds %struct.cache_t, %struct.cache_t* %39, i32 0, i32 2
   %41 = getelementptr inbounds %struct.cache_head, %struct.cache_head* %40, i32 0, i32 1
@@ -39841,8 +39849,8 @@ define internal void @_logger_log_text(%struct._logentry* %0, %struct._entry_det
   store i32 %13, i32* %9, align 4
   %14 = load %struct._logentry*, %struct._logentry** %5, align 8
   %15 = getelementptr inbounds %struct._logentry, %struct._logentry* %14, i32 0, i32 6
-  %16 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %15, i64 0, i64 0
-  %17 = bitcast %union.anon.9* %16 to i8*
+  %16 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %15, i64 0, i64 0
+  %17 = bitcast %union.anon.12* %16 to i8*
   %18 = load i32, i32* %9, align 4
   %19 = sext i32 %18 to i64
   %20 = load %struct._entry_details*, %struct._entry_details** %6, align 8
@@ -39892,8 +39900,8 @@ define internal i32 @_logger_parse_text(%struct._logentry* %0, i8* %1) #0 {
   %18 = load i64, i64* %17, align 8
   %19 = load %struct._logentry*, %struct._logentry** %3, align 8
   %20 = getelementptr inbounds %struct._logentry, %struct._logentry* %19, i32 0, i32 6
-  %21 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %20, i64 0, i64 0
-  %22 = bitcast %union.anon.9* %21 to i8*
+  %21 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %20, i64 0, i64 0
+  %22 = bitcast %union.anon.12* %21 to i8*
   %23 = call i32 (i8*, i64, i8*, ...) @snprintf(i8* %5, i64 4096, i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.17.878, i64 0, i64 0), i32 %10, i32 %15, i64 %18, i8* %22) #14
   ret i32 %23
 }
@@ -39915,8 +39923,8 @@ define internal void @_logger_log_evictions(%struct._logentry* %0, %struct._entr
   store %struct._stritem* %12, %struct._stritem** %9, align 8
   %13 = load %struct._logentry*, %struct._logentry** %5, align 8
   %14 = getelementptr inbounds %struct._logentry, %struct._logentry* %13, i32 0, i32 6
-  %15 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %14, i64 0, i64 0
-  %16 = bitcast %union.anon.9* %15 to %struct.logentry_eviction*
+  %15 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %14, i64 0, i64 0
+  %16 = bitcast %union.anon.12* %15 to %struct.logentry_eviction*
   store %struct.logentry_eviction* %16, %struct.logentry_eviction** %10, align 8
   %17 = load %struct._stritem*, %struct._stritem** %9, align 8
   %18 = getelementptr inbounds %struct._stritem, %struct._stritem* %17, i32 0, i32 4
@@ -39981,7 +39989,7 @@ define internal void @_logger_log_evictions(%struct._logentry* %0, %struct._entr
   %65 = getelementptr inbounds [0 x i8], [0 x i8]* %64, i64 0, i64 0
   %66 = load %struct._stritem*, %struct._stritem** %9, align 8
   %67 = getelementptr inbounds %struct._stritem, %struct._stritem* %66, i32 0, i32 10
-  %68 = bitcast [0 x %union.anon.10]* %67 to i8*
+  %68 = bitcast [0 x %union.anon.13]* %67 to i8*
   %69 = load %struct._stritem*, %struct._stritem** %9, align 8
   %70 = getelementptr inbounds %struct._stritem, %struct._stritem* %69, i32 0, i32 7
   %71 = load i16, i16* %70, align 2
@@ -40019,8 +40027,8 @@ define internal i32 @_logger_parse_ee(%struct._logentry* %0, i8* %1) #0 {
   store i8* %1, i8** %4, align 8
   %8 = load %struct._logentry*, %struct._logentry** %3, align 8
   %9 = getelementptr inbounds %struct._logentry, %struct._logentry* %8, i32 0, i32 6
-  %10 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %9, i64 0, i64 0
-  %11 = bitcast %union.anon.9* %10 to %struct.logentry_eviction*
+  %10 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %9, i64 0, i64 0
+  %11 = bitcast %union.anon.12* %10 to %struct.logentry_eviction*
   store %struct.logentry_eviction* %11, %struct.logentry_eviction** %7, align 8
   %12 = load %struct.logentry_eviction*, %struct.logentry_eviction** %7, align 8
   %13 = getelementptr inbounds %struct.logentry_eviction, %struct.logentry_eviction* %12, i32 0, i32 6
@@ -40270,8 +40278,8 @@ define internal void @_logger_log_item_get(%struct._logentry* %0, %struct._entry
   store i32 %124, i32* %14, align 4
   %125 = load %struct._logentry*, %struct._logentry** %5, align 8
   %126 = getelementptr inbounds %struct._logentry, %struct._logentry* %125, i32 0, i32 6
-  %127 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %126, i64 0, i64 0
-  %128 = bitcast %union.anon.9* %127 to %struct.logentry_item_get*
+  %127 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %126, i64 0, i64 0
+  %128 = bitcast %union.anon.12* %127 to %struct.logentry_item_get*
   store %struct.logentry_item_get* %128, %struct.logentry_item_get** %15, align 8
   %129 = load i32, i32* %9, align 4
   %130 = trunc i32 %129 to i8
@@ -40322,8 +40330,8 @@ define internal i32 @_logger_parse_ige(%struct._logentry* %0, i8* %1) #0 {
   store i8* %1, i8** %4, align 8
   %9 = load %struct._logentry*, %struct._logentry** %3, align 8
   %10 = getelementptr inbounds %struct._logentry, %struct._logentry* %9, i32 0, i32 6
-  %11 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %10, i64 0, i64 0
-  %12 = bitcast %union.anon.9* %11 to %struct.logentry_item_get*
+  %11 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %10, i64 0, i64 0
+  %12 = bitcast %union.anon.12* %11 to %struct.logentry_item_get*
   store %struct.logentry_item_get* %12, %struct.logentry_item_get** %6, align 8
   %13 = bitcast [4 x i8*]* %8 to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 16 %13, i8* align 16 bitcast ([4 x i8*]* @__const._logger_parse_ige.was_found_map to i8*), i64 32, i1 false)
@@ -40626,8 +40634,8 @@ define internal void @_logger_log_item_store(%struct._logentry* %0, %struct._ent
   store i32 %162, i32* %16, align 4
   %163 = load %struct._logentry*, %struct._logentry** %5, align 8
   %164 = getelementptr inbounds %struct._logentry, %struct._logentry* %163, i32 0, i32 6
-  %165 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %164, i64 0, i64 0
-  %166 = bitcast %union.anon.9* %165 to %struct.logentry_item_store*
+  %165 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %164, i64 0, i64 0
+  %166 = bitcast %union.anon.12* %165 to %struct.logentry_item_store*
   store %struct.logentry_item_store* %166, %struct.logentry_item_store** %17, align 8
   %167 = load i32, i32* %9, align 4
   %168 = load %struct.logentry_item_store*, %struct.logentry_item_store** %17, align 8
@@ -40704,8 +40712,8 @@ define internal i32 @_logger_parse_ise(%struct._logentry* %0, i8* %1) #0 {
   store i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.26.858, i64 0, i64 0), i8** %6, align 8
   %11 = load %struct._logentry*, %struct._logentry** %3, align 8
   %12 = getelementptr inbounds %struct._logentry, %struct._logentry* %11, i32 0, i32 6
-  %13 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %12, i64 0, i64 0
-  %14 = bitcast %union.anon.9* %13 to %struct.logentry_item_store*
+  %13 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %12, i64 0, i64 0
+  %14 = bitcast %union.anon.12* %13 to %struct.logentry_item_store*
   store %struct.logentry_item_store* %14, %struct.logentry_item_store** %8, align 8
   %15 = bitcast [6 x i8*]* %9 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 16 %15, i8 0, i64 48, i1 false)
@@ -40959,8 +40967,8 @@ define internal void @_logger_log_conn_event(%struct._logentry* %0, %struct._ent
   store i32 %104, i32* %13, align 4
   %105 = load %struct._logentry*, %struct._logentry** %5, align 8
   %106 = getelementptr inbounds %struct._logentry, %struct._logentry* %105, i32 0, i32 6
-  %107 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %106, i64 0, i64 0
-  %108 = bitcast %union.anon.9* %107 to %struct.logentry_conn_event*
+  %107 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %106, i64 0, i64 0
+  %108 = bitcast %union.anon.12* %107 to %struct.logentry_conn_event*
   store %struct.logentry_conn_event* %108, %struct.logentry_conn_event** %14, align 8
   %109 = load %struct.logentry_conn_event*, %struct.logentry_conn_event** %14, align 8
   %110 = getelementptr inbounds %struct.logentry_conn_event, %struct.logentry_conn_event* %109, i32 0, i32 3
@@ -41001,8 +41009,8 @@ define internal i32 @_logger_parse_cne(%struct._logentry* %0, i8* %1) #0 {
   store i8* %1, i8** %4, align 8
   %10 = load %struct._logentry*, %struct._logentry** %3, align 8
   %11 = getelementptr inbounds %struct._logentry, %struct._logentry* %10, i32 0, i32 6
-  %12 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %11, i64 0, i64 0
-  %13 = bitcast %union.anon.9* %12 to %struct.logentry_conn_event*
+  %12 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %11, i64 0, i64 0
+  %13 = bitcast %union.anon.12* %12 to %struct.logentry_conn_event*
   store %struct.logentry_conn_event* %13, %struct.logentry_conn_event** %8, align 8
   %14 = bitcast [3 x i8*]* %9 to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 16 %14, i8* align 16 bitcast ([3 x i8*]* @__const._logger_parse_cne.transport_map to i8*), i64 24, i1 false)
@@ -41056,8 +41064,8 @@ define internal i32 @_logger_parse_cce(%struct._logentry* %0, i8* %1) #0 {
   store i8* %1, i8** %4, align 8
   %11 = load %struct._logentry*, %struct._logentry** %3, align 8
   %12 = getelementptr inbounds %struct._logentry, %struct._logentry* %11, i32 0, i32 6
-  %13 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %12, i64 0, i64 0
-  %14 = bitcast %union.anon.9* %13 to %struct.logentry_conn_event*
+  %13 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %12, i64 0, i64 0
+  %14 = bitcast %union.anon.12* %13 to %struct.logentry_conn_event*
   store %struct.logentry_conn_event* %14, %struct.logentry_conn_event** %8, align 8
   %15 = bitcast [3 x i8*]* %9 to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 16 %15, i8* align 16 bitcast ([3 x i8*]* @__const._logger_parse_cce.transport_map to i8*), i64 24, i1 false)
@@ -41150,8 +41158,8 @@ define internal void @_logger_log_ext_write(%struct._logentry* %0, %struct._entr
   store i32 %31, i32* %10, align 4
   %32 = load %struct._logentry*, %struct._logentry** %5, align 8
   %33 = getelementptr inbounds %struct._logentry, %struct._logentry* %32, i32 0, i32 6
-  %34 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %33, i64 0, i64 0
-  %35 = bitcast %union.anon.9* %34 to %struct.logentry_ext_write*
+  %34 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %33, i64 0, i64 0
+  %35 = bitcast %union.anon.12* %34 to %struct.logentry_ext_write*
   store %struct.logentry_ext_write* %35, %struct.logentry_ext_write** %11, align 8
   %36 = load %struct._stritem*, %struct._stritem** %9, align 8
   %37 = getelementptr inbounds %struct._stritem, %struct._stritem* %36, i32 0, i32 4
@@ -41215,7 +41223,7 @@ define internal void @_logger_log_ext_write(%struct._logentry* %0, %struct._entr
   %83 = getelementptr inbounds [0 x i8], [0 x i8]* %82, i64 0, i64 0
   %84 = load %struct._stritem*, %struct._stritem** %9, align 8
   %85 = getelementptr inbounds %struct._stritem, %struct._stritem* %84, i32 0, i32 10
-  %86 = bitcast [0 x %union.anon.10]* %85 to i8*
+  %86 = bitcast [0 x %union.anon.13]* %85 to i8*
   %87 = load %struct._stritem*, %struct._stritem** %9, align 8
   %88 = getelementptr inbounds %struct._stritem, %struct._stritem* %87, i32 0, i32 7
   %89 = load i16, i16* %88, align 2
@@ -41253,8 +41261,8 @@ define internal i32 @_logger_parse_extw(%struct._logentry* %0, i8* %1) #0 {
   store i8* %1, i8** %4, align 8
   %8 = load %struct._logentry*, %struct._logentry** %3, align 8
   %9 = getelementptr inbounds %struct._logentry, %struct._logentry* %8, i32 0, i32 6
-  %10 = getelementptr inbounds [0 x %union.anon.9], [0 x %union.anon.9]* %9, i64 0, i64 0
-  %11 = bitcast %union.anon.9* %10 to %struct.logentry_ext_write*
+  %10 = getelementptr inbounds [0 x %union.anon.12], [0 x %union.anon.12]* %9, i64 0, i64 0
+  %11 = bitcast %union.anon.12* %10 to %struct.logentry_ext_write*
   store %struct.logentry_ext_write* %11, %struct.logentry_ext_write** %7, align 8
   %12 = load %struct.logentry_ext_write*, %struct.logentry_ext_write** %7, align 8
   %13 = getelementptr inbounds %struct.logentry_ext_write, %struct.logentry_ext_write* %12, i32 0, i32 6
@@ -41578,7 +41586,7 @@ define dso_local i32 @logger_log(%struct._logger* %0, i32 %1, i8* %2, ...) #0 {
   store i16 %57, i16* %59, align 2
   %60 = load %struct._logentry*, %struct._logentry** %11, align 8
   %61 = getelementptr inbounds %struct._logentry, %struct._logentry* %60, i32 0, i32 4
-  %62 = call i32 @gettimeofday(%struct.timeval* %61, %struct.timezone* null) #14
+  %62 = call i32 @gettimeofday(%struct.timeval* %61, i8* null) #14
   %63 = getelementptr inbounds [1 x %struct.__va_list_tag], [1 x %struct.__va_list_tag]* %10, i64 0, i64 0
   %64 = bitcast %struct.__va_list_tag* %63 to i8*
   call void @llvm.va_start(i8* %64)
@@ -41999,7 +42007,7 @@ define internal void @crawler_expired_eval(%struct._crawler_module_t* %0, %struc
 72:                                               ; preds = %59
   %73 = load %struct._stritem*, %struct._stritem** %6, align 8
   %74 = getelementptr inbounds %struct._stritem, %struct._stritem* %73, i32 0, i32 10
-  %75 = bitcast [0 x %union.anon.10]* %74 to i8*
+  %75 = bitcast [0 x %union.anon.13]* %74 to i8*
   %76 = load %struct._stritem*, %struct._stritem** %6, align 8
   %77 = getelementptr inbounds %struct._stritem, %struct._stritem* %76, i32 0, i32 7
   %78 = load i16, i16* %77, align 2
@@ -42299,7 +42307,7 @@ define internal void @crawler_metadump_eval(%struct._crawler_module_t* %0, %stru
 32:                                               ; preds = %24
   %33 = load %struct._stritem*, %struct._stritem** %6, align 8
   %34 = getelementptr inbounds %struct._stritem, %struct._stritem* %33, i32 0, i32 10
-  %35 = bitcast [0 x %union.anon.10]* %34 to i8*
+  %35 = bitcast [0 x %union.anon.13]* %34 to i8*
   %36 = load %struct._stritem*, %struct._stritem** %6, align 8
   %37 = getelementptr inbounds %struct._stritem, %struct._stritem* %36, i32 0, i32 7
   %38 = load i16, i16* %37, align 2
@@ -42357,8 +42365,8 @@ define internal void @crawler_metadump_eval(%struct._crawler_module_t* %0, %stru
 82:                                               ; preds = %68
   %83 = load %struct._stritem*, %struct._stritem** %6, align 8
   %84 = getelementptr inbounds %struct._stritem, %struct._stritem* %83, i32 0, i32 10
-  %85 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %84, i64 0, i64 0
-  %86 = bitcast %union.anon.10* %85 to i64*
+  %85 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %84, i64 0, i64 0
+  %86 = bitcast %union.anon.13* %85 to i64*
   %87 = load i64, i64* %86, align 8
   br label %89
 
@@ -43021,7 +43029,7 @@ define internal i8* @item_crawler_thread(i8* %0) #0 {
   %98 = load i32 (i8*, i64)*, i32 (i8*, i64)** @hash, align 8
   %99 = load %struct._stritem*, %struct._stritem** %5, align 8
   %100 = getelementptr inbounds %struct._stritem, %struct._stritem* %99, i32 0, i32 10
-  %101 = bitcast [0 x %union.anon.10]* %100 to i8*
+  %101 = bitcast [0 x %union.anon.13]* %100 to i8*
   %102 = load %struct._stritem*, %struct._stritem** %5, align 8
   %103 = getelementptr inbounds %struct._stritem, %struct._stritem* %102, i32 0, i32 7
   %104 = load i16, i16* %103, align 2
@@ -46287,7 +46295,7 @@ define dso_local i32 @restart_fixup(i8* %0) #0 {
   store i32 %10, i32* %5, align 4
   %11 = load i32, i32* %5, align 4
   store i32 %11, i32* %6, align 4
-  %12 = call i32 @gettimeofday(%struct.timeval* %3, %struct.timezone* null) #14
+  %12 = call i32 @gettimeofday(%struct.timeval* %3, i8* null) #14
   %13 = load i32, i32* getelementptr inbounds (%struct.settings, %struct.settings* @settings, i32 0, i32 5), align 8
   %14 = icmp sgt i32 %13, 0
   br i1 %14, label %15, label %28
@@ -46445,7 +46453,7 @@ define dso_local i32 @restart_fixup(i8* %0) #0 {
 130:                                              ; preds = %123
   %131 = load %struct._stritem*, %struct._stritem** %7, align 8
   %132 = getelementptr inbounds %struct._stritem, %struct._stritem* %131, i32 0, i32 10
-  %133 = bitcast [0 x %union.anon.10]* %132 to i8*
+  %133 = bitcast [0 x %union.anon.13]* %132 to i8*
   %134 = load %struct._stritem*, %struct._stritem** %7, align 8
   %135 = getelementptr inbounds %struct._stritem, %struct._stritem* %134, i32 0, i32 9
   %136 = load i8, i8* %135, align 1
@@ -46620,7 +46628,7 @@ define dso_local i32 @restart_fixup(i8* %0) #0 {
   br i1 %267, label %268, label %278
 
 268:                                              ; preds = %265
-  %269 = call i32 @gettimeofday(%struct.timeval* %3, %struct.timezone* null) #14
+  %269 = call i32 @gettimeofday(%struct.timeval* %3, i8* null) #14
   %270 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
   %271 = getelementptr inbounds %struct.timeval, %struct.timeval* %3, i32 0, i32 0
   %272 = load i64, i64* %271, align 8
@@ -46695,7 +46703,7 @@ define dso_local void @complete_nread_ascii(%struct.conn* %0) #0 {
 50:                                               ; preds = %1
   %51 = load %struct._stritem*, %struct._stritem** %3, align 8
   %52 = getelementptr inbounds %struct._stritem, %struct._stritem* %51, i32 0, i32 10
-  %53 = bitcast [0 x %union.anon.10]* %52 to i8*
+  %53 = bitcast [0 x %union.anon.13]* %52 to i8*
   %54 = load %struct._stritem*, %struct._stritem** %3, align 8
   %55 = getelementptr inbounds %struct._stritem, %struct._stritem* %54, i32 0, i32 9
   %56 = load i8, i8* %55, align 1
@@ -47102,7 +47110,7 @@ define internal void @_finalize_mset(%struct.conn* %0, i32 %1) #0 {
   %105 = load i8*, i8** %7, align 8
   %106 = load %struct._stritem*, %struct._stritem** %6, align 8
   %107 = getelementptr inbounds %struct._stritem, %struct._stritem* %106, i32 0, i32 10
-  %108 = bitcast [0 x %union.anon.10]* %107 to i8*
+  %108 = bitcast [0 x %union.anon.13]* %107 to i8*
   %109 = load %struct._stritem*, %struct._stritem** %6, align 8
   %110 = getelementptr inbounds %struct._stritem, %struct._stritem* %109, i32 0, i32 7
   %111 = load i16, i16* %110, align 2
@@ -47130,7 +47138,7 @@ define internal void @_finalize_mset(%struct.conn* %0, i32 %1) #0 {
 129:                                              ; preds = %92
   %130 = load %struct._stritem*, %struct._stritem** %6, align 8
   %131 = getelementptr inbounds %struct._stritem, %struct._stritem* %130, i32 0, i32 10
-  %132 = bitcast [0 x %union.anon.10]* %131 to i8*
+  %132 = bitcast [0 x %union.anon.13]* %131 to i8*
   %133 = load %struct._stritem*, %struct._stritem** %6, align 8
   %134 = getelementptr inbounds %struct._stritem, %struct._stritem* %133, i32 0, i32 7
   %135 = load i16, i16* %134, align 2
@@ -49151,7 +49159,7 @@ define internal void @process_mget_command(%struct.conn* %0, %struct.iovec* %1, 
 123:                                              ; preds = %116
   %124 = load %struct._stritem*, %struct._stritem** %9, align 8
   %125 = getelementptr inbounds %struct._stritem, %struct._stritem* %124, i32 0, i32 10
-  %126 = bitcast [0 x %union.anon.10]* %125 to i8*
+  %126 = bitcast [0 x %union.anon.13]* %125 to i8*
   %127 = load %struct._stritem*, %struct._stritem** %9, align 8
   %128 = getelementptr inbounds %struct._stritem, %struct._stritem* %127, i32 0, i32 9
   %129 = load i8, i8* %128, align 1
@@ -49412,8 +49420,8 @@ define internal void @process_mget_command(%struct.conn* %0, %struct.iovec* %1, 
 289:                                              ; preds = %277
   %290 = load %struct._stritem*, %struct._stritem** %9, align 8
   %291 = getelementptr inbounds %struct._stritem, %struct._stritem* %290, i32 0, i32 10
-  %292 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %291, i64 0, i64 0
-  %293 = bitcast %union.anon.10* %292 to i64*
+  %292 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %291, i64 0, i64 0
+  %293 = bitcast %union.anon.13* %292 to i64*
   %294 = load i64, i64* %293, align 8
   br label %296
 
@@ -49458,7 +49466,7 @@ define internal void @process_mget_command(%struct.conn* %0, %struct.iovec* %1, 
 319:                                              ; preds = %300
   %320 = load %struct._stritem*, %struct._stritem** %9, align 8
   %321 = getelementptr inbounds %struct._stritem, %struct._stritem* %320, i32 0, i32 10
-  %322 = bitcast [0 x %union.anon.10]* %321 to i8*
+  %322 = bitcast [0 x %union.anon.13]* %321 to i8*
   %323 = load %struct._stritem*, %struct._stritem** %9, align 8
   %324 = getelementptr inbounds %struct._stritem, %struct._stritem* %323, i32 0, i32 9
   %325 = load i8, i8* %324, align 1
@@ -49603,7 +49611,7 @@ define internal void @process_mget_command(%struct.conn* %0, %struct.iovec* %1, 
   %423 = load i8*, i8** %19, align 8
   %424 = load %struct._stritem*, %struct._stritem** %9, align 8
   %425 = getelementptr inbounds %struct._stritem, %struct._stritem* %424, i32 0, i32 10
-  %426 = bitcast [0 x %union.anon.10]* %425 to i8*
+  %426 = bitcast [0 x %union.anon.13]* %425 to i8*
   %427 = load %struct._stritem*, %struct._stritem** %9, align 8
   %428 = getelementptr inbounds %struct._stritem, %struct._stritem* %427, i32 0, i32 7
   %429 = load i16, i16* %428, align 2
@@ -49631,7 +49639,7 @@ define internal void @process_mget_command(%struct.conn* %0, %struct.iovec* %1, 
 447:                                              ; preds = %410
   %448 = load %struct._stritem*, %struct._stritem** %9, align 8
   %449 = getelementptr inbounds %struct._stritem, %struct._stritem* %448, i32 0, i32 10
-  %450 = bitcast [0 x %union.anon.10]* %449 to i8*
+  %450 = bitcast [0 x %union.anon.13]* %449 to i8*
   %451 = load %struct._stritem*, %struct._stritem** %9, align 8
   %452 = getelementptr inbounds %struct._stritem, %struct._stritem* %451, i32 0, i32 7
   %453 = load i16, i16* %452, align 2
@@ -49838,7 +49846,7 @@ define internal void @process_mget_command(%struct.conn* %0, %struct.iovec* %1, 
   %595 = load %struct._mc_resp*, %struct._mc_resp** %18, align 8
   %596 = load %struct._stritem*, %struct._stritem** %9, align 8
   %597 = getelementptr inbounds %struct._stritem, %struct._stritem* %596, i32 0, i32 10
-  %598 = bitcast [0 x %union.anon.10]* %597 to i8*
+  %598 = bitcast [0 x %union.anon.13]* %597 to i8*
   %599 = load %struct._stritem*, %struct._stritem** %9, align 8
   %600 = getelementptr inbounds %struct._stritem, %struct._stritem* %599, i32 0, i32 9
   %601 = load i8, i8* %600, align 1
@@ -50662,8 +50670,8 @@ define internal void @process_mset_command(%struct.conn* %0, %struct.iovec* %1, 
   %315 = load i64, i64* %314, align 8
   %316 = load %struct._stritem*, %struct._stritem** %9, align 8
   %317 = getelementptr inbounds %struct._stritem, %struct._stritem* %316, i32 0, i32 10
-  %318 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %317, i64 0, i64 0
-  %319 = bitcast %union.anon.10* %318 to i64*
+  %318 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %317, i64 0, i64 0
+  %319 = bitcast %union.anon.13* %318 to i64*
   store i64 %315, i64* %319, align 8
   br label %320
 
@@ -50675,7 +50683,7 @@ define internal void @process_mset_command(%struct.conn* %0, %struct.iovec* %1, 
   store i8* %322, i8** %324, align 8
   %325 = load %struct._stritem*, %struct._stritem** %9, align 8
   %326 = getelementptr inbounds %struct._stritem, %struct._stritem* %325, i32 0, i32 10
-  %327 = bitcast [0 x %union.anon.10]* %326 to i8*
+  %327 = bitcast [0 x %union.anon.13]* %326 to i8*
   %328 = load %struct._stritem*, %struct._stritem** %9, align 8
   %329 = getelementptr inbounds %struct._stritem, %struct._stritem* %328, i32 0, i32 9
   %330 = load i8, i8* %329, align 1
@@ -51048,8 +51056,8 @@ define internal void @process_mdelete_command(%struct.conn* %0, %struct.iovec* %
 174:                                              ; preds = %167
   %175 = load %struct._stritem*, %struct._stritem** %9, align 8
   %176 = getelementptr inbounds %struct._stritem, %struct._stritem* %175, i32 0, i32 10
-  %177 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %176, i64 0, i64 0
-  %178 = bitcast %union.anon.10* %177 to i64*
+  %177 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %176, i64 0, i64 0
+  %178 = bitcast %union.anon.13* %177 to i64*
   %179 = load i64, i64* %178, align 8
   br label %181
 
@@ -51155,8 +51163,8 @@ define internal void @process_mdelete_command(%struct.conn* %0, %struct.iovec* %
   %254 = phi i64 [ %251, %250 ], [ 0, %252 ]
   %255 = load %struct._stritem*, %struct._stritem** %9, align 8
   %256 = getelementptr inbounds %struct._stritem, %struct._stritem* %255, i32 0, i32 10
-  %257 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %256, i64 0, i64 0
-  %258 = bitcast %union.anon.10* %257 to i64*
+  %257 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %256, i64 0, i64 0
+  %258 = bitcast %union.anon.13* %257 to i64*
   store i64 %254, i64* %258, align 8
   br label %259
 
@@ -51605,7 +51613,7 @@ define internal void @process_marithmetic_command(%struct.conn* %0, %struct.iove
 142:                                              ; preds = %127
   %143 = load %struct._stritem*, %struct._stritem** %17, align 8
   %144 = getelementptr inbounds %struct._stritem, %struct._stritem* %143, i32 0, i32 10
-  %145 = bitcast [0 x %union.anon.10]* %144 to i8*
+  %145 = bitcast [0 x %union.anon.13]* %144 to i8*
   %146 = load %struct._stritem*, %struct._stritem** %17, align 8
   %147 = getelementptr inbounds %struct._stritem, %struct._stritem* %146, i32 0, i32 9
   %148 = load i8, i8* %147, align 1
@@ -51637,7 +51645,7 @@ define internal void @process_marithmetic_command(%struct.conn* %0, %struct.iove
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %170, i8* align 16 %171, i64 %173, i1 false)
   %174 = load %struct._stritem*, %struct._stritem** %17, align 8
   %175 = getelementptr inbounds %struct._stritem, %struct._stritem* %174, i32 0, i32 10
-  %176 = bitcast [0 x %union.anon.10]* %175 to i8*
+  %176 = bitcast [0 x %union.anon.13]* %175 to i8*
   %177 = load %struct._stritem*, %struct._stritem** %17, align 8
   %178 = getelementptr inbounds %struct._stritem, %struct._stritem* %177, i32 0, i32 9
   %179 = load i8, i8* %178, align 1
@@ -51853,8 +51861,8 @@ define internal void @process_marithmetic_command(%struct.conn* %0, %struct.iove
 316:                                              ; preds = %304
   %317 = load %struct._stritem*, %struct._stritem** %17, align 8
   %318 = getelementptr inbounds %struct._stritem, %struct._stritem* %317, i32 0, i32 10
-  %319 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %318, i64 0, i64 0
-  %320 = bitcast %union.anon.10* %319 to i64*
+  %319 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %318, i64 0, i64 0
+  %320 = bitcast %union.anon.13* %319 to i64*
   %321 = load i64, i64* %320, align 8
   br label %323
 
@@ -52393,7 +52401,7 @@ define internal void @process_meta_command(%struct.conn* %0, %struct.iovec* %1, 
 85:                                               ; preds = %70
   %86 = load %struct._stritem*, %struct._stritem** %11, align 8
   %87 = getelementptr inbounds %struct._stritem, %struct._stritem* %86, i32 0, i32 10
-  %88 = bitcast [0 x %union.anon.10]* %87 to i8*
+  %88 = bitcast [0 x %union.anon.13]* %87 to i8*
   %89 = load %struct._stritem*, %struct._stritem** %11, align 8
   %90 = getelementptr inbounds %struct._stritem, %struct._stritem* %89, i32 0, i32 7
   %91 = load i16, i16* %90, align 2
@@ -52428,7 +52436,7 @@ define internal void @process_meta_command(%struct.conn* %0, %struct.iovec* %1, 
   %117 = getelementptr inbounds i8, i8* %115, i64 %116
   %118 = load %struct._stritem*, %struct._stritem** %11, align 8
   %119 = getelementptr inbounds %struct._stritem, %struct._stritem* %118, i32 0, i32 10
-  %120 = bitcast [0 x %union.anon.10]* %119 to i8*
+  %120 = bitcast [0 x %union.anon.13]* %119 to i8*
   %121 = load %struct._stritem*, %struct._stritem** %11, align 8
   %122 = getelementptr inbounds %struct._stritem, %struct._stritem* %121, i32 0, i32 7
   %123 = load i16, i16* %122, align 2
@@ -52509,8 +52517,8 @@ define internal void @process_meta_command(%struct.conn* %0, %struct.iovec* %1, 
 184:                                              ; preds = %170
   %185 = load %struct._stritem*, %struct._stritem** %11, align 8
   %186 = getelementptr inbounds %struct._stritem, %struct._stritem* %185, i32 0, i32 10
-  %187 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %186, i64 0, i64 0
-  %188 = bitcast %union.anon.10* %187 to i64*
+  %187 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %186, i64 0, i64 0
+  %188 = bitcast %union.anon.13* %187 to i64*
   %189 = load i64, i64* %188, align 8
   br label %191
 
@@ -52769,7 +52777,7 @@ define internal void @process_get_command(%struct.conn* %0, %struct.iovec* %1, i
   %100 = load i8*, i8** %21, align 8
   %101 = load %struct._stritem*, %struct._stritem** %13, align 8
   %102 = getelementptr inbounds %struct._stritem, %struct._stritem* %101, i32 0, i32 10
-  %103 = bitcast [0 x %union.anon.10]* %102 to i8*
+  %103 = bitcast [0 x %union.anon.13]* %102 to i8*
   %104 = load %struct._stritem*, %struct._stritem** %13, align 8
   %105 = getelementptr inbounds %struct._stritem, %struct._stritem* %104, i32 0, i32 7
   %106 = load i16, i16* %105, align 2
@@ -52872,7 +52880,7 @@ define internal void @process_get_command(%struct.conn* %0, %struct.iovec* %1, i
   %187 = load %struct._mc_resp*, %struct._mc_resp** %18, align 8
   %188 = load %struct._stritem*, %struct._stritem** %13, align 8
   %189 = getelementptr inbounds %struct._stritem, %struct._stritem* %188, i32 0, i32 10
-  %190 = bitcast [0 x %union.anon.10]* %189 to i8*
+  %190 = bitcast [0 x %union.anon.13]* %189 to i8*
   %191 = load %struct._stritem*, %struct._stritem** %13, align 8
   %192 = getelementptr inbounds %struct._stritem, %struct._stritem* %191, i32 0, i32 9
   %193 = load i8, i8* %192, align 1
@@ -53566,8 +53574,8 @@ define internal void @process_update_command(%struct.conn* %0, %struct.iovec* %1
   %224 = load i64, i64* %17, align 8
   %225 = load %struct._stritem*, %struct._stritem** %18, align 8
   %226 = getelementptr inbounds %struct._stritem, %struct._stritem* %225, i32 0, i32 10
-  %227 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %226, i64 0, i64 0
-  %228 = bitcast %union.anon.10* %227 to i64*
+  %227 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %226, i64 0, i64 0
+  %228 = bitcast %union.anon.13* %227 to i64*
   store i64 %224, i64* %228, align 8
   br label %229
 
@@ -53579,7 +53587,7 @@ define internal void @process_update_command(%struct.conn* %0, %struct.iovec* %1
   store i8* %231, i8** %233, align 8
   %234 = load %struct._stritem*, %struct._stritem** %18, align 8
   %235 = getelementptr inbounds %struct._stritem, %struct._stritem* %234, i32 0, i32 10
-  %236 = bitcast [0 x %union.anon.10]* %235 to i8*
+  %236 = bitcast [0 x %union.anon.13]* %235 to i8*
   %237 = load %struct._stritem*, %struct._stritem** %18, align 8
   %238 = getelementptr inbounds %struct._stritem, %struct._stritem* %237, i32 0, i32 9
   %239 = load i8, i8* %238, align 1
@@ -53824,7 +53832,7 @@ define internal void @process_stat(%struct.conn* %0, %struct.iovec* %1, i64 %2) 
 118:                                              ; preds = %110
   %119 = load %struct.conn*, %struct.conn** %4, align 8
   %120 = getelementptr inbounds %struct.conn, %struct.conn* %119, i32 0, i32 35
-  %121 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %120, i32 0, i32 0
+  %121 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %120, i32 0, i32 0
   %122 = load i8*, i8** %121, align 8
   %123 = icmp eq i8* %122, null
   br i1 %123, label %124, label %126
@@ -53838,17 +53846,17 @@ define internal void @process_stat(%struct.conn* %0, %struct.iovec* %1, i64 %2) 
   %127 = load %struct.conn*, %struct.conn** %4, align 8
   %128 = load %struct.conn*, %struct.conn** %4, align 8
   %129 = getelementptr inbounds %struct.conn, %struct.conn* %128, i32 0, i32 35
-  %130 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %129, i32 0, i32 0
+  %130 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %129, i32 0, i32 0
   %131 = load i8*, i8** %130, align 8
   %132 = load %struct.conn*, %struct.conn** %4, align 8
   %133 = getelementptr inbounds %struct.conn, %struct.conn* %132, i32 0, i32 35
-  %134 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %133, i32 0, i32 2
+  %134 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %133, i32 0, i32 2
   %135 = load i64, i64* %134, align 8
   %136 = trunc i64 %135 to i32
   call void @write_and_free(%struct.conn* %127, i8* %131, i32 %136)
   %137 = load %struct.conn*, %struct.conn** %4, align 8
   %138 = getelementptr inbounds %struct.conn, %struct.conn* %137, i32 0, i32 35
-  %139 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %138, i32 0, i32 0
+  %139 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %138, i32 0, i32 0
   store i8* null, i8** %139, align 8
   br label %140
 
@@ -53887,7 +53895,7 @@ define internal void @process_stat(%struct.conn* %0, %struct.iovec* %1, i64 %2) 
   call void @append_stats(i8* null, i16 zeroext 0, i8* null, i32 0, i8* %152)
   %153 = load %struct.conn*, %struct.conn** %4, align 8
   %154 = getelementptr inbounds %struct.conn, %struct.conn* %153, i32 0, i32 35
-  %155 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %154, i32 0, i32 0
+  %155 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %154, i32 0, i32 0
   %156 = load i8*, i8** %155, align 8
   %157 = icmp eq i8* %156, null
   br i1 %157, label %158, label %160
@@ -53901,17 +53909,17 @@ define internal void @process_stat(%struct.conn* %0, %struct.iovec* %1, i64 %2) 
   %161 = load %struct.conn*, %struct.conn** %4, align 8
   %162 = load %struct.conn*, %struct.conn** %4, align 8
   %163 = getelementptr inbounds %struct.conn, %struct.conn* %162, i32 0, i32 35
-  %164 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %163, i32 0, i32 0
+  %164 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %163, i32 0, i32 0
   %165 = load i8*, i8** %164, align 8
   %166 = load %struct.conn*, %struct.conn** %4, align 8
   %167 = getelementptr inbounds %struct.conn, %struct.conn* %166, i32 0, i32 35
-  %168 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %167, i32 0, i32 2
+  %168 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %167, i32 0, i32 2
   %169 = load i64, i64* %168, align 8
   %170 = trunc i64 %169 to i32
   call void @write_and_free(%struct.conn* %161, i8* %165, i32 %170)
   %171 = load %struct.conn*, %struct.conn** %4, align 8
   %172 = getelementptr inbounds %struct.conn, %struct.conn* %171, i32 0, i32 35
-  %173 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %172, i32 0, i32 0
+  %173 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %172, i32 0, i32 0
   store i8* null, i8** %173, align 8
   br label %174
 
@@ -56430,7 +56438,7 @@ define internal i32 @make_ascii_get_suffix(i8* %0, %struct._stritem* %1, i1 zero
 28:                                               ; preds = %4
   %29 = load %struct._stritem*, %struct._stritem** %6, align 8
   %30 = getelementptr inbounds %struct._stritem, %struct._stritem* %29, i32 0, i32 10
-  %31 = bitcast [0 x %union.anon.10]* %30 to i8*
+  %31 = bitcast [0 x %union.anon.13]* %30 to i8*
   %32 = load %struct._stritem*, %struct._stritem** %6, align 8
   %33 = getelementptr inbounds %struct._stritem, %struct._stritem* %32, i32 0, i32 9
   %34 = load i8, i8* %33, align 1
@@ -56481,8 +56489,8 @@ define internal i32 @make_ascii_get_suffix(i8* %0, %struct._stritem* %1, i1 zero
 69:                                               ; preds = %61
   %70 = load %struct._stritem*, %struct._stritem** %6, align 8
   %71 = getelementptr inbounds %struct._stritem, %struct._stritem* %70, i32 0, i32 10
-  %72 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %71, i64 0, i64 0
-  %73 = bitcast %union.anon.10* %72 to i64*
+  %72 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %71, i64 0, i64 0
+  %73 = bitcast %union.anon.13* %72 to i64*
   %74 = load i64, i64* %73, align 8
   br label %76
 
@@ -57185,7 +57193,7 @@ define internal void @complete_update_bin(%struct.conn* %0) #0 {
 44:                                               ; preds = %1
   %45 = load %struct._stritem*, %struct._stritem** %5, align 8
   %46 = getelementptr inbounds %struct._stritem, %struct._stritem* %45, i32 0, i32 10
-  %47 = bitcast [0 x %union.anon.10]* %46 to i8*
+  %47 = bitcast [0 x %union.anon.13]* %46 to i8*
   %48 = load %struct._stritem*, %struct._stritem** %5, align 8
   %49 = getelementptr inbounds %struct._stritem, %struct._stritem* %48, i32 0, i32 9
   %50 = load i8, i8* %49, align 1
@@ -57220,7 +57228,7 @@ define internal void @complete_update_bin(%struct.conn* %0) #0 {
   store i8 13, i8* %78, align 1
   %79 = load %struct._stritem*, %struct._stritem** %5, align 8
   %80 = getelementptr inbounds %struct._stritem, %struct._stritem* %79, i32 0, i32 10
-  %81 = bitcast [0 x %union.anon.10]* %80 to i8*
+  %81 = bitcast [0 x %union.anon.13]* %80 to i8*
   %82 = load %struct._stritem*, %struct._stritem** %5, align 8
   %83 = getelementptr inbounds %struct._stritem, %struct._stritem* %82, i32 0, i32 9
   %84 = load i8, i8* %83, align 1
@@ -57404,15 +57412,15 @@ define internal void @process_bin_complete_sasl_auth(%struct.conn* %0) #0 {
   call void @init_sasl_conn(%struct.conn* %12)
   %13 = load %struct.conn*, %struct.conn** %2, align 8
   %14 = getelementptr inbounds %struct.conn, %struct.conn* %13, i32 0, i32 36
-  %15 = bitcast %union.protocol_binary_request_header* %14 to %struct.anon.13*
-  %16 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %15, i32 0, i32 2
+  %15 = bitcast %union.protocol_binary_request_header* %14 to %struct.anon.16*
+  %16 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %15, i32 0, i32 2
   %17 = load i16, i16* %16, align 2
   %18 = zext i16 %17 to i32
   store i32 %18, i32* %5, align 4
   %19 = load %struct.conn*, %struct.conn** %2, align 8
   %20 = getelementptr inbounds %struct.conn, %struct.conn* %19, i32 0, i32 36
-  %21 = bitcast %union.protocol_binary_request_header* %20 to %struct.anon.13*
-  %22 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %21, i32 0, i32 6
+  %21 = bitcast %union.protocol_binary_request_header* %20 to %struct.anon.16*
+  %22 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %21, i32 0, i32 6
   %23 = load i32, i32* %22, align 8
   %24 = load i32, i32* %5, align 4
   %25 = sub i32 %23, %24
@@ -57449,7 +57457,7 @@ define internal void @process_bin_complete_sasl_auth(%struct.conn* %0) #0 {
   %47 = load i8*, i8** %46, align 8
   %48 = bitcast i8* %47 to %struct._stritem*
   %49 = getelementptr inbounds %struct._stritem, %struct._stritem* %48, i32 0, i32 10
-  %50 = bitcast [0 x %union.anon.10]* %49 to i8*
+  %50 = bitcast [0 x %union.anon.13]* %49 to i8*
   %51 = load %struct.conn*, %struct.conn** %2, align 8
   %52 = getelementptr inbounds %struct.conn, %struct.conn* %51, i32 0, i32 23
   %53 = load i8*, i8** %52, align 8
@@ -57493,7 +57501,7 @@ define internal void @process_bin_complete_sasl_auth(%struct.conn* %0) #0 {
   %81 = load i8*, i8** %80, align 8
   %82 = bitcast i8* %81 to %struct._stritem*
   %83 = getelementptr inbounds %struct._stritem, %struct._stritem* %82, i32 0, i32 10
-  %84 = bitcast [0 x %union.anon.10]* %83 to i8*
+  %84 = bitcast [0 x %union.anon.13]* %83 to i8*
   %85 = load %struct.conn*, %struct.conn** %2, align 8
   %86 = getelementptr inbounds %struct.conn, %struct.conn* %85, i32 0, i32 23
   %87 = load i8*, i8** %86, align 8
@@ -58043,59 +58051,59 @@ define internal void @add_bin_header(%struct.conn* %0, i16 zeroext %1, i8 zeroex
   %21 = bitcast i8* %20 to %union.protocol_binary_request_header*
   store %union.protocol_binary_request_header* %21, %union.protocol_binary_request_header** %11, align 8
   %22 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %23 = bitcast %union.protocol_binary_request_header* %22 to %struct.anon.13*
-  %24 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %23, i32 0, i32 0
+  %23 = bitcast %union.protocol_binary_request_header* %22 to %struct.anon.16*
+  %24 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %23, i32 0, i32 0
   store i8 -127, i8* %24, align 8
   %25 = load %struct.conn*, %struct.conn** %6, align 8
   %26 = getelementptr inbounds %struct.conn, %struct.conn* %25, i32 0, i32 36
-  %27 = bitcast %union.protocol_binary_request_header* %26 to %struct.anon.13*
-  %28 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 1
+  %27 = bitcast %union.protocol_binary_request_header* %26 to %struct.anon.16*
+  %28 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 1
   %29 = load i8, i8* %28, align 1
   %30 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %31 = bitcast %union.protocol_binary_request_header* %30 to %struct.anon.13*
-  %32 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %31, i32 0, i32 1
+  %31 = bitcast %union.protocol_binary_request_header* %30 to %struct.anon.16*
+  %32 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %31, i32 0, i32 1
   store i8 %29, i8* %32, align 1
   %33 = load i16, i16* %9, align 2
   %34 = call zeroext i16 @htons(i16 zeroext %33) #15
   %35 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %36 = bitcast %union.protocol_binary_request_header* %35 to %struct.anon.13*
-  %37 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %36, i32 0, i32 2
+  %36 = bitcast %union.protocol_binary_request_header* %35 to %struct.anon.16*
+  %37 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %36, i32 0, i32 2
   store i16 %34, i16* %37, align 2
   %38 = load i8, i8* %8, align 1
   %39 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %40 = bitcast %union.protocol_binary_request_header* %39 to %struct.anon.13*
-  %41 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %40, i32 0, i32 3
+  %40 = bitcast %union.protocol_binary_request_header* %39 to %struct.anon.16*
+  %41 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %40, i32 0, i32 3
   store i8 %38, i8* %41, align 4
   %42 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %43 = bitcast %union.protocol_binary_request_header* %42 to %struct.anon.13*
-  %44 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %43, i32 0, i32 4
+  %43 = bitcast %union.protocol_binary_request_header* %42 to %struct.anon.16*
+  %44 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %43, i32 0, i32 4
   store i8 0, i8* %44, align 1
   %45 = load i16, i16* %7, align 2
   %46 = call zeroext i16 @htons(i16 zeroext %45) #15
   %47 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %48 = bitcast %union.protocol_binary_request_header* %47 to %struct.anon.13*
-  %49 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %48, i32 0, i32 5
+  %48 = bitcast %union.protocol_binary_request_header* %47 to %struct.anon.16*
+  %49 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %48, i32 0, i32 5
   store i16 %46, i16* %49, align 2
   %50 = load i32, i32* %10, align 4
   %51 = call i32 @htonl(i32 %50) #15
   %52 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %53 = bitcast %union.protocol_binary_request_header* %52 to %struct.anon.13*
-  %54 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %53, i32 0, i32 6
+  %53 = bitcast %union.protocol_binary_request_header* %52 to %struct.anon.16*
+  %54 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %53, i32 0, i32 6
   store i32 %51, i32* %54, align 8
   %55 = load %struct.conn*, %struct.conn** %6, align 8
   %56 = getelementptr inbounds %struct.conn, %struct.conn* %55, i32 0, i32 39
   %57 = load i32, i32* %56, align 4
   %58 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %59 = bitcast %union.protocol_binary_request_header* %58 to %struct.anon.13*
-  %60 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %59, i32 0, i32 7
+  %59 = bitcast %union.protocol_binary_request_header* %58 to %struct.anon.16*
+  %60 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %59, i32 0, i32 7
   store i32 %57, i32* %60, align 4
   %61 = load %struct.conn*, %struct.conn** %6, align 8
   %62 = getelementptr inbounds %struct.conn, %struct.conn* %61, i32 0, i32 37
   %63 = load i64, i64* %62, align 8
   %64 = call i64 @htonll(i64 %63)
   %65 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %11, align 8
-  %66 = bitcast %union.protocol_binary_request_header* %65 to %struct.anon.13*
-  %67 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %66, i32 0, i32 8
+  %66 = bitcast %union.protocol_binary_request_header* %65 to %struct.anon.16*
+  %67 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %66, i32 0, i32 8
   store i64 %64, i64* %67, align 8
   %68 = load i32, i32* getelementptr inbounds (%struct.settings, %struct.settings* @settings, i32 0, i32 5), align 8
   %69 = icmp sgt i32 %68, 1
@@ -58264,39 +58272,39 @@ define dso_local i32 @try_read_command_binary(%struct.conn* %0) #0 {
   %67 = bitcast %union.protocol_binary_request_header* %65 to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %66, i8* align 8 %67, i64 24, i1 false)
   %68 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %4, align 8
-  %69 = bitcast %union.protocol_binary_request_header* %68 to %struct.anon.13*
-  %70 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %69, i32 0, i32 2
+  %69 = bitcast %union.protocol_binary_request_header* %68 to %struct.anon.16*
+  %70 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %69, i32 0, i32 2
   %71 = load i16, i16* %70, align 2
   %72 = call zeroext i16 @ntohs(i16 zeroext %71) #15
   %73 = load %struct.conn*, %struct.conn** %3, align 8
   %74 = getelementptr inbounds %struct.conn, %struct.conn* %73, i32 0, i32 36
-  %75 = bitcast %union.protocol_binary_request_header* %74 to %struct.anon.13*
-  %76 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %75, i32 0, i32 2
+  %75 = bitcast %union.protocol_binary_request_header* %74 to %struct.anon.16*
+  %76 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %75, i32 0, i32 2
   store i16 %72, i16* %76, align 2
   %77 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %4, align 8
-  %78 = bitcast %union.protocol_binary_request_header* %77 to %struct.anon.13*
-  %79 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %78, i32 0, i32 6
+  %78 = bitcast %union.protocol_binary_request_header* %77 to %struct.anon.16*
+  %79 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %78, i32 0, i32 6
   %80 = load i32, i32* %79, align 8
   %81 = call i32 @ntohl(i32 %80) #15
   %82 = load %struct.conn*, %struct.conn** %3, align 8
   %83 = getelementptr inbounds %struct.conn, %struct.conn* %82, i32 0, i32 36
-  %84 = bitcast %union.protocol_binary_request_header* %83 to %struct.anon.13*
-  %85 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %84, i32 0, i32 6
+  %84 = bitcast %union.protocol_binary_request_header* %83 to %struct.anon.16*
+  %85 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %84, i32 0, i32 6
   store i32 %81, i32* %85, align 8
   %86 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %4, align 8
-  %87 = bitcast %union.protocol_binary_request_header* %86 to %struct.anon.13*
-  %88 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %87, i32 0, i32 8
+  %87 = bitcast %union.protocol_binary_request_header* %86 to %struct.anon.16*
+  %88 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %87, i32 0, i32 8
   %89 = load i64, i64* %88, align 8
   %90 = call i64 @ntohll(i64 %89)
   %91 = load %struct.conn*, %struct.conn** %3, align 8
   %92 = getelementptr inbounds %struct.conn, %struct.conn* %91, i32 0, i32 36
-  %93 = bitcast %union.protocol_binary_request_header* %92 to %struct.anon.13*
-  %94 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %93, i32 0, i32 8
+  %93 = bitcast %union.protocol_binary_request_header* %92 to %struct.anon.16*
+  %94 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %93, i32 0, i32 8
   store i64 %90, i64* %94, align 8
   %95 = load %struct.conn*, %struct.conn** %3, align 8
   %96 = getelementptr inbounds %struct.conn, %struct.conn* %95, i32 0, i32 36
-  %97 = bitcast %union.protocol_binary_request_header* %96 to %struct.anon.13*
-  %98 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %97, i32 0, i32 0
+  %97 = bitcast %union.protocol_binary_request_header* %96 to %struct.anon.16*
+  %98 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %97, i32 0, i32 0
   %99 = load i8, i8* %98, align 8
   %100 = zext i8 %99 to i32
   %101 = icmp ne i32 %100, 128
@@ -58311,8 +58319,8 @@ define dso_local i32 @try_read_command_binary(%struct.conn* %0) #0 {
   %106 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
   %107 = load %struct.conn*, %struct.conn** %3, align 8
   %108 = getelementptr inbounds %struct.conn, %struct.conn* %107, i32 0, i32 36
-  %109 = bitcast %union.protocol_binary_request_header* %108 to %struct.anon.13*
-  %110 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %109, i32 0, i32 0
+  %109 = bitcast %union.protocol_binary_request_header* %108 to %struct.anon.16*
+  %110 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %109, i32 0, i32 0
   %111 = load i8, i8* %110, align 8
   %112 = zext i8 %111 to i32
   %113 = call i32 (%struct._IO_FILE*, i8*, ...) @fprintf(%struct._IO_FILE* %106, i8* getelementptr inbounds ([20 x i8], [20 x i8]* @.str.5.1177, i64 0, i64 0), i32 %112)
@@ -58327,14 +58335,14 @@ define dso_local i32 @try_read_command_binary(%struct.conn* %0) #0 {
 116:                                              ; preds = %62
   %117 = load %struct.conn*, %struct.conn** %3, align 8
   %118 = getelementptr inbounds %struct.conn, %struct.conn* %117, i32 0, i32 36
-  %119 = bitcast %union.protocol_binary_request_header* %118 to %struct.anon.13*
-  %120 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %119, i32 0, i32 3
+  %119 = bitcast %union.protocol_binary_request_header* %118 to %struct.anon.16*
+  %120 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %119, i32 0, i32 3
   %121 = load i8, i8* %120, align 4
   store i8 %121, i8* %6, align 1
   %122 = load %struct.conn*, %struct.conn** %3, align 8
   %123 = getelementptr inbounds %struct.conn, %struct.conn* %122, i32 0, i32 36
-  %124 = bitcast %union.protocol_binary_request_header* %123 to %struct.anon.13*
-  %125 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %124, i32 0, i32 2
+  %124 = bitcast %union.protocol_binary_request_header* %123 to %struct.anon.16*
+  %125 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %124, i32 0, i32 2
   %126 = load i16, i16* %125, align 2
   store i16 %126, i16* %7, align 2
   %127 = load %struct.conn*, %struct.conn** %3, align 8
@@ -58369,8 +58377,8 @@ define dso_local i32 @try_read_command_binary(%struct.conn* %0) #0 {
 145:                                              ; preds = %140
   %146 = load %struct.conn*, %struct.conn** %3, align 8
   %147 = getelementptr inbounds %struct.conn, %struct.conn* %146, i32 0, i32 36
-  %148 = bitcast %union.protocol_binary_request_header* %147 to %struct.anon.13*
-  %149 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %148, i32 0, i32 1
+  %148 = bitcast %union.protocol_binary_request_header* %147 to %struct.anon.16*
+  %149 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %148, i32 0, i32 1
   %150 = load i8, i8* %149, align 1
   %151 = zext i8 %150 to i16
   %152 = load %struct.conn*, %struct.conn** %3, align 8
@@ -58378,8 +58386,8 @@ define dso_local i32 @try_read_command_binary(%struct.conn* %0) #0 {
   store i16 %151, i16* %153, align 8
   %154 = load %struct.conn*, %struct.conn** %3, align 8
   %155 = getelementptr inbounds %struct.conn, %struct.conn* %154, i32 0, i32 36
-  %156 = bitcast %union.protocol_binary_request_header* %155 to %struct.anon.13*
-  %157 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %156, i32 0, i32 2
+  %156 = bitcast %union.protocol_binary_request_header* %155 to %struct.anon.16*
+  %157 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %156, i32 0, i32 2
   %158 = load i16, i16* %157, align 2
   %159 = zext i16 %158 to i32
   %160 = load %struct.conn*, %struct.conn** %3, align 8
@@ -58387,8 +58395,8 @@ define dso_local i32 @try_read_command_binary(%struct.conn* %0) #0 {
   store i32 %159, i32* %161, align 8
   %162 = load %struct.conn*, %struct.conn** %3, align 8
   %163 = getelementptr inbounds %struct.conn, %struct.conn* %162, i32 0, i32 36
-  %164 = bitcast %union.protocol_binary_request_header* %163 to %struct.anon.13*
-  %165 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %164, i32 0, i32 7
+  %164 = bitcast %union.protocol_binary_request_header* %163 to %struct.anon.16*
+  %165 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %164, i32 0, i32 7
   %166 = load i32, i32* %165, align 4
   %167 = load %struct.conn*, %struct.conn** %3, align 8
   %168 = getelementptr inbounds %struct.conn, %struct.conn* %167, i32 0, i32 39
@@ -58477,20 +58485,20 @@ define internal void @dispatch_bin_command(%struct.conn* %0, i8* %1) #0 {
   store i32 0, i32* %5, align 4
   %9 = load %struct.conn*, %struct.conn** %3, align 8
   %10 = getelementptr inbounds %struct.conn, %struct.conn* %9, i32 0, i32 36
-  %11 = bitcast %union.protocol_binary_request_header* %10 to %struct.anon.13*
-  %12 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %11, i32 0, i32 3
+  %11 = bitcast %union.protocol_binary_request_header* %10 to %struct.anon.16*
+  %12 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %11, i32 0, i32 3
   %13 = load i8, i8* %12, align 4
   store i8 %13, i8* %6, align 1
   %14 = load %struct.conn*, %struct.conn** %3, align 8
   %15 = getelementptr inbounds %struct.conn, %struct.conn* %14, i32 0, i32 36
-  %16 = bitcast %union.protocol_binary_request_header* %15 to %struct.anon.13*
-  %17 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %16, i32 0, i32 2
+  %16 = bitcast %union.protocol_binary_request_header* %15 to %struct.anon.16*
+  %17 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %16, i32 0, i32 2
   %18 = load i16, i16* %17, align 2
   store i16 %18, i16* %7, align 2
   %19 = load %struct.conn*, %struct.conn** %3, align 8
   %20 = getelementptr inbounds %struct.conn, %struct.conn* %19, i32 0, i32 36
-  %21 = bitcast %union.protocol_binary_request_header* %20 to %struct.anon.13*
-  %22 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %21, i32 0, i32 6
+  %21 = bitcast %union.protocol_binary_request_header* %20 to %struct.anon.16*
+  %22 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %21, i32 0, i32 6
   %23 = load i32, i32* %22, align 8
   store i32 %23, i32* %8, align 4
   %24 = load i16, i16* %7, align 2
@@ -59168,8 +59176,8 @@ define internal void @handle_binary_protocol_error(%struct.conn* %0) #0 {
   %7 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
   %8 = load %struct.conn*, %struct.conn** %2, align 8
   %9 = getelementptr inbounds %struct.conn, %struct.conn* %8, i32 0, i32 36
-  %10 = bitcast %union.protocol_binary_request_header* %9 to %struct.anon.13*
-  %11 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %10, i32 0, i32 1
+  %10 = bitcast %union.protocol_binary_request_header* %9 to %struct.anon.16*
+  %11 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %10, i32 0, i32 1
   %12 = load i8, i8* %11, align 1
   %13 = zext i8 %12 to i32
   %14 = load %struct.conn*, %struct.conn** %2, align 8
@@ -59211,8 +59219,8 @@ define internal void @process_bin_flush(%struct.conn* %0, i8* %1) #0 {
 14:                                               ; preds = %2
   %15 = load %struct.conn*, %struct.conn** %3, align 8
   %16 = getelementptr inbounds %struct.conn, %struct.conn* %15, i32 0, i32 36
-  %17 = bitcast %union.protocol_binary_request_header* %16 to %struct.anon.13*
-  %18 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %17, i32 0, i32 3
+  %17 = bitcast %union.protocol_binary_request_header* %16 to %struct.anon.16*
+  %18 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %17, i32 0, i32 3
   %19 = load i8, i8* %18, align 4
   %20 = zext i8 %19 to i64
   %21 = icmp eq i64 %20, 4
@@ -59323,43 +59331,43 @@ define internal void @process_bin_update(%struct.conn* %0, i8* %1) #0 {
   store i8* %16, i8** %5, align 8
   %17 = load %struct.conn*, %struct.conn** %3, align 8
   %18 = getelementptr inbounds %struct.conn, %struct.conn* %17, i32 0, i32 36
-  %19 = bitcast %union.protocol_binary_request_header* %18 to %struct.anon.13*
-  %20 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %19, i32 0, i32 2
+  %19 = bitcast %union.protocol_binary_request_header* %18 to %struct.anon.16*
+  %20 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %19, i32 0, i32 2
   %21 = load i16, i16* %20, align 2
   %22 = zext i16 %21 to i32
   store i32 %22, i32* %6, align 4
   %23 = load %union.protocol_binary_request_set*, %union.protocol_binary_request_set** %9, align 8
-  %24 = bitcast %union.protocol_binary_request_set* %23 to %struct.anon.16*
-  %25 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %24, i32 0, i32 1
-  %26 = getelementptr inbounds %struct.timezone, %struct.timezone* %25, i32 0, i32 0
+  %24 = bitcast %union.protocol_binary_request_set* %23 to %struct.anon.16.361*
+  %25 = getelementptr inbounds %struct.anon.16.361, %struct.anon.16.361* %24, i32 0, i32 1
+  %26 = getelementptr inbounds %struct.linger, %struct.linger* %25, i32 0, i32 0
   %27 = load i32, i32* %26, align 8
   %28 = call i32 @ntohl(i32 %27) #15
   %29 = load %union.protocol_binary_request_set*, %union.protocol_binary_request_set** %9, align 8
-  %30 = bitcast %union.protocol_binary_request_set* %29 to %struct.anon.16*
-  %31 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %30, i32 0, i32 1
-  %32 = getelementptr inbounds %struct.timezone, %struct.timezone* %31, i32 0, i32 0
+  %30 = bitcast %union.protocol_binary_request_set* %29 to %struct.anon.16.361*
+  %31 = getelementptr inbounds %struct.anon.16.361, %struct.anon.16.361* %30, i32 0, i32 1
+  %32 = getelementptr inbounds %struct.linger, %struct.linger* %31, i32 0, i32 0
   store i32 %28, i32* %32, align 8
   %33 = load %union.protocol_binary_request_set*, %union.protocol_binary_request_set** %9, align 8
-  %34 = bitcast %union.protocol_binary_request_set* %33 to %struct.anon.16*
-  %35 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %34, i32 0, i32 1
-  %36 = getelementptr inbounds %struct.timezone, %struct.timezone* %35, i32 0, i32 1
+  %34 = bitcast %union.protocol_binary_request_set* %33 to %struct.anon.16.361*
+  %35 = getelementptr inbounds %struct.anon.16.361, %struct.anon.16.361* %34, i32 0, i32 1
+  %36 = getelementptr inbounds %struct.linger, %struct.linger* %35, i32 0, i32 1
   %37 = load i32, i32* %36, align 4
   %38 = call i32 @ntohl(i32 %37) #15
   %39 = load %union.protocol_binary_request_set*, %union.protocol_binary_request_set** %9, align 8
-  %40 = bitcast %union.protocol_binary_request_set* %39 to %struct.anon.16*
-  %41 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %40, i32 0, i32 1
-  %42 = getelementptr inbounds %struct.timezone, %struct.timezone* %41, i32 0, i32 1
+  %40 = bitcast %union.protocol_binary_request_set* %39 to %struct.anon.16.361*
+  %41 = getelementptr inbounds %struct.anon.16.361, %struct.anon.16.361* %40, i32 0, i32 1
+  %42 = getelementptr inbounds %struct.linger, %struct.linger* %41, i32 0, i32 1
   store i32 %38, i32* %42, align 4
   %43 = load %struct.conn*, %struct.conn** %3, align 8
   %44 = getelementptr inbounds %struct.conn, %struct.conn* %43, i32 0, i32 36
-  %45 = bitcast %union.protocol_binary_request_header* %44 to %struct.anon.13*
-  %46 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %45, i32 0, i32 6
+  %45 = bitcast %union.protocol_binary_request_header* %44 to %struct.anon.16*
+  %46 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %45, i32 0, i32 6
   %47 = load i32, i32* %46, align 8
   %48 = load i32, i32* %6, align 4
   %49 = load %struct.conn*, %struct.conn** %3, align 8
   %50 = getelementptr inbounds %struct.conn, %struct.conn* %49, i32 0, i32 36
-  %51 = bitcast %union.protocol_binary_request_header* %50 to %struct.anon.13*
-  %52 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %51, i32 0, i32 3
+  %51 = bitcast %union.protocol_binary_request_header* %50 to %struct.anon.16*
+  %52 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %51, i32 0, i32 3
   %53 = load i8, i8* %52, align 4
   %54 = zext i8 %53 to i32
   %55 = add nsw i32 %48, %54
@@ -59464,14 +59472,14 @@ define internal void @process_bin_update(%struct.conn* %0, i8* %1) #0 {
   %122 = load i32, i32* %6, align 4
   %123 = sext i32 %122 to i64
   %124 = load %union.protocol_binary_request_set*, %union.protocol_binary_request_set** %9, align 8
-  %125 = bitcast %union.protocol_binary_request_set* %124 to %struct.anon.16*
-  %126 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %125, i32 0, i32 1
-  %127 = getelementptr inbounds %struct.timezone, %struct.timezone* %126, i32 0, i32 0
+  %125 = bitcast %union.protocol_binary_request_set* %124 to %struct.anon.16.361*
+  %126 = getelementptr inbounds %struct.anon.16.361, %struct.anon.16.361* %125, i32 0, i32 1
+  %127 = getelementptr inbounds %struct.linger, %struct.linger* %126, i32 0, i32 0
   %128 = load i32, i32* %127, align 8
   %129 = load %union.protocol_binary_request_set*, %union.protocol_binary_request_set** %9, align 8
-  %130 = bitcast %union.protocol_binary_request_set* %129 to %struct.anon.16*
-  %131 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %130, i32 0, i32 1
-  %132 = getelementptr inbounds %struct.timezone, %struct.timezone* %131, i32 0, i32 1
+  %130 = bitcast %union.protocol_binary_request_set* %129 to %struct.anon.16.361*
+  %131 = getelementptr inbounds %struct.anon.16.361, %struct.anon.16.361* %130, i32 0, i32 1
+  %132 = getelementptr inbounds %struct.linger, %struct.linger* %131, i32 0, i32 1
   %133 = load i32, i32* %132, align 4
   %134 = zext i32 %133 to i64
   %135 = call i32 @realtime(i64 %134)
@@ -59487,9 +59495,9 @@ define internal void @process_bin_update(%struct.conn* %0, i8* %1) #0 {
   %142 = load i32, i32* %6, align 4
   %143 = sext i32 %142 to i64
   %144 = load %union.protocol_binary_request_set*, %union.protocol_binary_request_set** %9, align 8
-  %145 = bitcast %union.protocol_binary_request_set* %144 to %struct.anon.16*
-  %146 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %145, i32 0, i32 1
-  %147 = getelementptr inbounds %struct.timezone, %struct.timezone* %146, i32 0, i32 0
+  %145 = bitcast %union.protocol_binary_request_set* %144 to %struct.anon.16.361*
+  %146 = getelementptr inbounds %struct.anon.16.361, %struct.anon.16.361* %145, i32 0, i32 1
+  %147 = getelementptr inbounds %struct.linger, %struct.linger* %146, i32 0, i32 0
   %148 = load i32, i32* %147, align 8
   %149 = load i32, i32* %7, align 4
   %150 = add nsw i32 %149, 2
@@ -59553,9 +59561,9 @@ define internal void @process_bin_update(%struct.conn* %0, i8* %1) #0 {
   %187 = load i8*, i8** %5, align 8
   %188 = load i32, i32* %6, align 4
   %189 = load %union.protocol_binary_request_set*, %union.protocol_binary_request_set** %9, align 8
-  %190 = bitcast %union.protocol_binary_request_set* %189 to %struct.anon.16*
-  %191 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %190, i32 0, i32 1
-  %192 = getelementptr inbounds %struct.timezone, %struct.timezone* %191, i32 0, i32 1
+  %190 = bitcast %union.protocol_binary_request_set* %189 to %struct.anon.16.361*
+  %191 = getelementptr inbounds %struct.anon.16.361, %struct.anon.16.361* %190, i32 0, i32 1
+  %192 = getelementptr inbounds %struct.linger, %struct.linger* %191, i32 0, i32 1
   %193 = load i32, i32* %192, align 4
   %194 = load %struct._stritem*, %struct._stritem** %8, align 8
   %195 = getelementptr inbounds %struct._stritem, %struct._stritem* %194, i32 0, i32 8
@@ -59630,13 +59638,13 @@ define internal void @process_bin_update(%struct.conn* %0, i8* %1) #0 {
 239:                                              ; preds = %232
   %240 = load %struct.conn*, %struct.conn** %3, align 8
   %241 = getelementptr inbounds %struct.conn, %struct.conn* %240, i32 0, i32 36
-  %242 = bitcast %union.protocol_binary_request_header* %241 to %struct.anon.13*
-  %243 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %242, i32 0, i32 8
+  %242 = bitcast %union.protocol_binary_request_header* %241 to %struct.anon.16*
+  %243 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %242, i32 0, i32 8
   %244 = load i64, i64* %243, align 8
   %245 = load %struct._stritem*, %struct._stritem** %8, align 8
   %246 = getelementptr inbounds %struct._stritem, %struct._stritem* %245, i32 0, i32 10
-  %247 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %246, i64 0, i64 0
-  %248 = bitcast %union.anon.10* %247 to i64*
+  %247 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %246, i64 0, i64 0
+  %248 = bitcast %union.anon.13* %247 to i64*
   store i64 %244, i64* %248, align 8
   br label %249
 
@@ -59684,8 +59692,8 @@ define internal void @process_bin_update(%struct.conn* %0, i8* %1) #0 {
 271:                                              ; preds = %264
   %272 = load %struct._stritem*, %struct._stritem** %8, align 8
   %273 = getelementptr inbounds %struct._stritem, %struct._stritem* %272, i32 0, i32 10
-  %274 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %273, i64 0, i64 0
-  %275 = bitcast %union.anon.10* %274 to i64*
+  %274 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %273, i64 0, i64 0
+  %275 = bitcast %union.anon.13* %274 to i64*
   %276 = load i64, i64* %275, align 8
   br label %278
 
@@ -59711,7 +59719,7 @@ define internal void @process_bin_update(%struct.conn* %0, i8* %1) #0 {
   store i8* %286, i8** %288, align 8
   %289 = load %struct._stritem*, %struct._stritem** %8, align 8
   %290 = getelementptr inbounds %struct._stritem, %struct._stritem* %289, i32 0, i32 10
-  %291 = bitcast [0 x %union.anon.10]* %290 to i8*
+  %291 = bitcast [0 x %union.anon.13]* %290 to i8*
   %292 = load %struct._stritem*, %struct._stritem** %8, align 8
   %293 = getelementptr inbounds %struct._stritem, %struct._stritem* %292, i32 0, i32 9
   %294 = load i8, i8* %293, align 1
@@ -59785,8 +59793,8 @@ define internal void @process_bin_get_or_touch(%struct.conn* %0, i8* %1) #0 {
   store i8* %24, i8** %7, align 8
   %25 = load %struct.conn*, %struct.conn** %3, align 8
   %26 = getelementptr inbounds %struct.conn, %struct.conn* %25, i32 0, i32 36
-  %27 = bitcast %union.protocol_binary_request_header* %26 to %struct.anon.13*
-  %28 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %27, i32 0, i32 2
+  %27 = bitcast %union.protocol_binary_request_header* %26 to %struct.anon.16*
+  %28 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %27, i32 0, i32 2
   %29 = load i16, i16* %28, align 2
   %30 = zext i16 %29 to i64
   store i64 %30, i64* %8, align 8
@@ -60054,8 +60062,8 @@ define internal void @process_bin_get_or_touch(%struct.conn* %0, i8* %1) #0 {
 224:                                              ; preds = %214
   %225 = load %struct._stritem*, %struct._stritem** %5, align 8
   %226 = getelementptr inbounds %struct._stritem, %struct._stritem* %225, i32 0, i32 10
-  %227 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %226, i64 0, i64 0
-  %228 = bitcast %union.anon.10* %227 to i64*
+  %227 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %226, i64 0, i64 0
+  %228 = bitcast %union.anon.13* %227 to i64*
   %229 = load i64, i64* %228, align 8
   br label %231
 
@@ -60068,8 +60076,8 @@ define internal void @process_bin_get_or_touch(%struct.conn* %0, i8* %1) #0 {
   %234 = load %union.protocol_binary_response_get*, %union.protocol_binary_response_get** %6, align 8
   %235 = bitcast %union.protocol_binary_response_get* %234 to %struct.anon.18*
   %236 = getelementptr inbounds %struct.anon.18, %struct.anon.18* %235, i32 0, i32 0
-  %237 = bitcast %union.protocol_binary_request_header* %236 to %struct.anon.13*
-  %238 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %237, i32 0, i32 8
+  %237 = bitcast %union.protocol_binary_request_header* %236 to %struct.anon.16*
+  %238 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %237, i32 0, i32 8
   store i64 %233, i64* %238, align 8
   %239 = load %struct._stritem*, %struct._stritem** %5, align 8
   %240 = getelementptr inbounds %struct._stritem, %struct._stritem* %239, i32 0, i32 7
@@ -60082,7 +60090,7 @@ define internal void @process_bin_get_or_touch(%struct.conn* %0, i8* %1) #0 {
 245:                                              ; preds = %231
   %246 = load %struct._stritem*, %struct._stritem** %5, align 8
   %247 = getelementptr inbounds %struct._stritem, %struct._stritem* %246, i32 0, i32 10
-  %248 = bitcast [0 x %union.anon.10]* %247 to i8*
+  %248 = bitcast [0 x %union.anon.13]* %247 to i8*
   %249 = load %struct._stritem*, %struct._stritem** %5, align 8
   %250 = getelementptr inbounds %struct._stritem, %struct._stritem* %249, i32 0, i32 9
   %251 = load i8, i8* %250, align 1
@@ -60146,7 +60154,7 @@ define internal void @process_bin_get_or_touch(%struct.conn* %0, i8* %1) #0 {
   %299 = load %struct._mc_resp*, %struct._mc_resp** %298, align 8
   %300 = load %struct._stritem*, %struct._stritem** %5, align 8
   %301 = getelementptr inbounds %struct._stritem, %struct._stritem* %300, i32 0, i32 10
-  %302 = bitcast [0 x %union.anon.10]* %301 to i8*
+  %302 = bitcast [0 x %union.anon.13]* %301 to i8*
   %303 = load %struct._stritem*, %struct._stritem** %5, align 8
   %304 = getelementptr inbounds %struct._stritem, %struct._stritem* %303, i32 0, i32 7
   %305 = load i16, i16* %304, align 2
@@ -60227,7 +60235,7 @@ define internal void @process_bin_get_or_touch(%struct.conn* %0, i8* %1) #0 {
   %363 = load %struct._mc_resp*, %struct._mc_resp** %362, align 8
   %364 = load %struct._stritem*, %struct._stritem** %5, align 8
   %365 = getelementptr inbounds %struct._stritem, %struct._stritem* %364, i32 0, i32 10
-  %366 = bitcast [0 x %union.anon.10]* %365 to i8*
+  %366 = bitcast [0 x %union.anon.13]* %365 to i8*
   %367 = load %struct._stritem*, %struct._stritem** %5, align 8
   %368 = getelementptr inbounds %struct._stritem, %struct._stritem* %367, i32 0, i32 9
   %369 = load i8, i8* %368, align 1
@@ -60470,8 +60478,8 @@ define internal void @process_bin_delete(%struct.conn* %0) #0 {
   store i8* %10, i8** %5, align 8
   %11 = load %struct.conn*, %struct.conn** %2, align 8
   %12 = getelementptr inbounds %struct.conn, %struct.conn* %11, i32 0, i32 36
-  %13 = bitcast %union.protocol_binary_request_header* %12 to %struct.anon.13*
-  %14 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %13, i32 0, i32 2
+  %13 = bitcast %union.protocol_binary_request_header* %12 to %struct.anon.16*
+  %14 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %13, i32 0, i32 2
   %15 = load i16, i16* %14, align 2
   %16 = zext i16 %15 to i64
   store i64 %16, i64* %6, align 8
@@ -60538,8 +60546,8 @@ define internal void @process_bin_delete(%struct.conn* %0) #0 {
 55:                                               ; preds = %48
   %56 = load %struct.conn*, %struct.conn** %2, align 8
   %57 = getelementptr inbounds %struct.conn, %struct.conn* %56, i32 0, i32 36
-  %58 = bitcast %union.protocol_binary_request_header* %57 to %struct.anon.13*
-  %59 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %58, i32 0, i32 8
+  %58 = bitcast %union.protocol_binary_request_header* %57 to %struct.anon.16*
+  %59 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %58, i32 0, i32 8
   %60 = load i64, i64* %59, align 8
   store i64 %60, i64* %8, align 8
   %61 = load i64, i64* %8, align 8
@@ -60559,8 +60567,8 @@ define internal void @process_bin_delete(%struct.conn* %0) #0 {
 71:                                               ; preds = %63
   %72 = load %struct._stritem*, %struct._stritem** %3, align 8
   %73 = getelementptr inbounds %struct._stritem, %struct._stritem* %72, i32 0, i32 10
-  %74 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %73, i64 0, i64 0
-  %75 = bitcast %union.anon.10* %74 to i64*
+  %74 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %73, i64 0, i64 0
+  %75 = bitcast %union.anon.13* %74 to i64*
   %76 = load i64, i64* %75, align 8
   br label %78
 
@@ -60726,8 +60734,8 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
   store i8* %53, i8** %6, align 8
   %54 = load %struct.conn*, %struct.conn** %3, align 8
   %55 = getelementptr inbounds %struct.conn, %struct.conn* %54, i32 0, i32 36
-  %56 = bitcast %union.protocol_binary_request_header* %55 to %struct.anon.13*
-  %57 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %56, i32 0, i32 2
+  %56 = bitcast %union.protocol_binary_request_header* %55 to %struct.anon.16*
+  %57 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %56, i32 0, i32 2
   %58 = load i16, i16* %57, align 2
   %59 = zext i16 %58 to i64
   store i64 %59, i64* %7, align 8
@@ -60788,8 +60796,8 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
 100:                                              ; preds = %82, %2
   %101 = load %struct.conn*, %struct.conn** %3, align 8
   %102 = getelementptr inbounds %struct.conn, %struct.conn* %101, i32 0, i32 36
-  %103 = bitcast %union.protocol_binary_request_header* %102 to %struct.anon.13*
-  %104 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %103, i32 0, i32 8
+  %103 = bitcast %union.protocol_binary_request_header* %102 to %struct.anon.16*
+  %104 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %103, i32 0, i32 8
   %105 = load i64, i64* %104, align 8
   %106 = icmp ne i64 %105, 0
   br i1 %106, label %107, label %113
@@ -60797,8 +60805,8 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
 107:                                              ; preds = %100
   %108 = load %struct.conn*, %struct.conn** %3, align 8
   %109 = getelementptr inbounds %struct.conn, %struct.conn* %108, i32 0, i32 36
-  %110 = bitcast %union.protocol_binary_request_header* %109 to %struct.anon.13*
-  %111 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %110, i32 0, i32 8
+  %110 = bitcast %union.protocol_binary_request_header* %109 to %struct.anon.16*
+  %111 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %110, i32 0, i32 8
   %112 = load i64, i64* %111, align 8
   store i64 %112, i64* %9, align 8
   br label %113
@@ -60834,7 +60842,7 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
   %133 = load %union.protocol_binary_response_incr*, %union.protocol_binary_response_incr** %10, align 8
   %134 = bitcast %union.protocol_binary_response_incr* %133 to %struct.anon.22*
   %135 = getelementptr inbounds %struct.anon.22, %struct.anon.22* %134, i32 0, i32 1
-  %136 = getelementptr inbounds %union.anon.10, %union.anon.10* %135, i32 0, i32 0
+  %136 = getelementptr inbounds %union.anon.13, %union.anon.13* %135, i32 0, i32 0
   store i64 %132, i64* %136, align 8
   %137 = load i64, i64* %9, align 8
   %138 = icmp ne i64 %137, 0
@@ -60852,7 +60860,7 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
   %145 = load %union.protocol_binary_response_incr*, %union.protocol_binary_response_incr** %10, align 8
   %146 = bitcast %union.protocol_binary_response_incr* %145 to %struct.anon.22*
   %147 = getelementptr inbounds %struct.anon.22, %struct.anon.22* %146, i32 0, i32 1
-  %148 = bitcast %union.anon.10* %147 to i8*
+  %148 = bitcast %union.anon.13* %147 to i8*
   call void @write_bin_response(%struct.conn* %144, i8* %148, i32 0, i32 0, i32 8)
   br label %331
 
@@ -60885,7 +60893,7 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
   %167 = load %union.protocol_binary_response_incr*, %union.protocol_binary_response_incr** %10, align 8
   %168 = bitcast %union.protocol_binary_response_incr* %167 to %struct.anon.22*
   %169 = getelementptr inbounds %struct.anon.22, %struct.anon.22* %168, i32 0, i32 1
-  %170 = getelementptr inbounds %union.anon.10, %union.anon.10* %169, i32 0, i32 0
+  %170 = getelementptr inbounds %union.anon.13, %union.anon.13* %169, i32 0, i32 0
   store i64 %166, i64* %170, align 8
   %171 = getelementptr inbounds [24 x i8], [24 x i8]* %8, i64 0, i64 0
   %172 = load %union.protocol_binary_request_incr*, %union.protocol_binary_request_incr** %11, align 8
@@ -60918,7 +60926,7 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
 195:                                              ; preds = %160
   %196 = load %struct._stritem*, %struct._stritem** %5, align 8
   %197 = getelementptr inbounds %struct._stritem, %struct._stritem* %196, i32 0, i32 10
-  %198 = bitcast [0 x %union.anon.10]* %197 to i8*
+  %198 = bitcast [0 x %union.anon.13]* %197 to i8*
   %199 = load %struct._stritem*, %struct._stritem** %5, align 8
   %200 = getelementptr inbounds %struct._stritem, %struct._stritem* %199, i32 0, i32 9
   %201 = load i8, i8* %200, align 1
@@ -60950,7 +60958,7 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %223, i8* align 16 %224, i64 %226, i1 false)
   %227 = load %struct._stritem*, %struct._stritem** %5, align 8
   %228 = getelementptr inbounds %struct._stritem, %struct._stritem* %227, i32 0, i32 10
-  %229 = bitcast [0 x %union.anon.10]* %228 to i8*
+  %229 = bitcast [0 x %union.anon.13]* %228 to i8*
   %230 = load %struct._stritem*, %struct._stritem** %5, align 8
   %231 = getelementptr inbounds %struct._stritem, %struct._stritem* %230, i32 0, i32 9
   %232 = load i8, i8* %231, align 1
@@ -60998,8 +61006,8 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
 269:                                              ; preds = %262
   %270 = load %struct._stritem*, %struct._stritem** %5, align 8
   %271 = getelementptr inbounds %struct._stritem, %struct._stritem* %270, i32 0, i32 10
-  %272 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %271, i64 0, i64 0
-  %273 = bitcast %union.anon.10* %272 to i64*
+  %272 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %271, i64 0, i64 0
+  %273 = bitcast %union.anon.13* %272 to i64*
   %274 = load i64, i64* %273, align 8
   br label %276
 
@@ -61015,7 +61023,7 @@ define internal void @complete_incr_bin(%struct.conn* %0, i8* %1) #0 {
   %281 = load %union.protocol_binary_response_incr*, %union.protocol_binary_response_incr** %10, align 8
   %282 = bitcast %union.protocol_binary_response_incr* %281 to %struct.anon.22*
   %283 = getelementptr inbounds %struct.anon.22, %struct.anon.22* %282, i32 0, i32 1
-  %284 = bitcast %union.anon.10* %283 to i8*
+  %284 = bitcast %union.anon.13* %283 to i8*
   call void @write_bin_response(%struct.conn* %280, i8* %284, i32 0, i32 0, i32 8)
   br label %287
 
@@ -61109,15 +61117,15 @@ define internal void @process_bin_append_prepend(%struct.conn* %0) #0 {
   store i8* %8, i8** %3, align 8
   %9 = load %struct.conn*, %struct.conn** %2, align 8
   %10 = getelementptr inbounds %struct.conn, %struct.conn* %9, i32 0, i32 36
-  %11 = bitcast %union.protocol_binary_request_header* %10 to %struct.anon.13*
-  %12 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %11, i32 0, i32 2
+  %11 = bitcast %union.protocol_binary_request_header* %10 to %struct.anon.16*
+  %12 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %11, i32 0, i32 2
   %13 = load i16, i16* %12, align 2
   %14 = zext i16 %13 to i32
   store i32 %14, i32* %4, align 4
   %15 = load %struct.conn*, %struct.conn** %2, align 8
   %16 = getelementptr inbounds %struct.conn, %struct.conn* %15, i32 0, i32 36
-  %17 = bitcast %union.protocol_binary_request_header* %16 to %struct.anon.13*
-  %18 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %17, i32 0, i32 6
+  %17 = bitcast %union.protocol_binary_request_header* %16 to %struct.anon.16*
+  %18 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %17, i32 0, i32 6
   %19 = load i32, i32* %18, align 8
   %20 = load i32, i32* %4, align 4
   %21 = sub i32 %19, %20
@@ -61196,13 +61204,13 @@ define internal void @process_bin_append_prepend(%struct.conn* %0) #0 {
 67:                                               ; preds = %60
   %68 = load %struct.conn*, %struct.conn** %2, align 8
   %69 = getelementptr inbounds %struct.conn, %struct.conn* %68, i32 0, i32 36
-  %70 = bitcast %union.protocol_binary_request_header* %69 to %struct.anon.13*
-  %71 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %70, i32 0, i32 8
+  %70 = bitcast %union.protocol_binary_request_header* %69 to %struct.anon.16*
+  %71 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %70, i32 0, i32 8
   %72 = load i64, i64* %71, align 8
   %73 = load %struct._stritem*, %struct._stritem** %6, align 8
   %74 = getelementptr inbounds %struct._stritem, %struct._stritem* %73, i32 0, i32 10
-  %75 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %74, i64 0, i64 0
-  %76 = bitcast %union.anon.10* %75 to i64*
+  %75 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %74, i64 0, i64 0
+  %76 = bitcast %union.anon.13* %75 to i64*
   store i64 %72, i64* %76, align 8
   br label %77
 
@@ -61239,7 +61247,7 @@ define internal void @process_bin_append_prepend(%struct.conn* %0) #0 {
   store i8* %91, i8** %93, align 8
   %94 = load %struct._stritem*, %struct._stritem** %6, align 8
   %95 = getelementptr inbounds %struct._stritem, %struct._stritem* %94, i32 0, i32 10
-  %96 = bitcast [0 x %union.anon.10]* %95 to i8*
+  %96 = bitcast [0 x %union.anon.13]* %95 to i8*
   %97 = load %struct._stritem*, %struct._stritem** %6, align 8
   %98 = getelementptr inbounds %struct._stritem, %struct._stritem* %97, i32 0, i32 9
   %99 = load i8, i8* %98, align 1
@@ -61298,8 +61306,8 @@ define internal void @process_bin_stat(%struct.conn* %0) #0 {
   store i8* %10, i8** %3, align 8
   %11 = load %struct.conn*, %struct.conn** %2, align 8
   %12 = getelementptr inbounds %struct.conn, %struct.conn* %11, i32 0, i32 36
-  %13 = bitcast %union.protocol_binary_request_header* %12 to %struct.anon.13*
-  %14 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %13, i32 0, i32 2
+  %13 = bitcast %union.protocol_binary_request_header* %12 to %struct.anon.16*
+  %14 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %13, i32 0, i32 2
   %15 = load i16, i16* %14, align 2
   %16 = zext i16 %15 to i64
   store i64 %16, i64* %4, align 8
@@ -61481,7 +61489,7 @@ define internal void @process_bin_stat(%struct.conn* %0) #0 {
 118:                                              ; preds = %111
   %119 = load %struct.conn*, %struct.conn** %2, align 8
   %120 = getelementptr inbounds %struct.conn, %struct.conn* %119, i32 0, i32 35
-  %121 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %120, i32 0, i32 0
+  %121 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %120, i32 0, i32 0
   %122 = load i8*, i8** %121, align 8
   %123 = icmp eq i8* %122, null
   br i1 %123, label %124, label %126
@@ -61495,17 +61503,17 @@ define internal void @process_bin_stat(%struct.conn* %0) #0 {
   %127 = load %struct.conn*, %struct.conn** %2, align 8
   %128 = load %struct.conn*, %struct.conn** %2, align 8
   %129 = getelementptr inbounds %struct.conn, %struct.conn* %128, i32 0, i32 35
-  %130 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %129, i32 0, i32 0
+  %130 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %129, i32 0, i32 0
   %131 = load i8*, i8** %130, align 8
   %132 = load %struct.conn*, %struct.conn** %2, align 8
   %133 = getelementptr inbounds %struct.conn, %struct.conn* %132, i32 0, i32 35
-  %134 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %133, i32 0, i32 2
+  %134 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %133, i32 0, i32 2
   %135 = load i64, i64* %134, align 8
   %136 = trunc i64 %135 to i32
   call void @write_and_free(%struct.conn* %127, i8* %131, i32 %136)
   %137 = load %struct.conn*, %struct.conn** %2, align 8
   %138 = getelementptr inbounds %struct.conn, %struct.conn* %137, i32 0, i32 35
-  %139 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %138, i32 0, i32 0
+  %139 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %138, i32 0, i32 0
   store i8* null, i8** %139, align 8
   br label %140
 
@@ -61535,7 +61543,7 @@ define internal void @process_bin_stat(%struct.conn* %0) #0 {
   call void @append_stats(i8* null, i16 zeroext 0, i8* null, i32 0, i8* %149)
   %150 = load %struct.conn*, %struct.conn** %2, align 8
   %151 = getelementptr inbounds %struct.conn, %struct.conn* %150, i32 0, i32 35
-  %152 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %151, i32 0, i32 0
+  %152 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %151, i32 0, i32 0
   %153 = load i8*, i8** %152, align 8
   %154 = icmp eq i8* %153, null
   br i1 %154, label %155, label %157
@@ -61549,17 +61557,17 @@ define internal void @process_bin_stat(%struct.conn* %0) #0 {
   %158 = load %struct.conn*, %struct.conn** %2, align 8
   %159 = load %struct.conn*, %struct.conn** %2, align 8
   %160 = getelementptr inbounds %struct.conn, %struct.conn* %159, i32 0, i32 35
-  %161 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %160, i32 0, i32 0
+  %161 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %160, i32 0, i32 0
   %162 = load i8*, i8** %161, align 8
   %163 = load %struct.conn*, %struct.conn** %2, align 8
   %164 = getelementptr inbounds %struct.conn, %struct.conn* %163, i32 0, i32 35
-  %165 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %164, i32 0, i32 2
+  %165 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %164, i32 0, i32 2
   %166 = load i64, i64* %165, align 8
   %167 = trunc i64 %166 to i32
   call void @write_and_free(%struct.conn* %158, i8* %162, i32 %167)
   %168 = load %struct.conn*, %struct.conn** %2, align 8
   %169 = getelementptr inbounds %struct.conn, %struct.conn* %168, i32 0, i32 35
-  %170 = getelementptr inbounds %struct.anon.12, %struct.anon.12* %169, i32 0, i32 0
+  %170 = getelementptr inbounds %struct.anon.15, %struct.anon.15* %169, i32 0, i32 0
   store i8* null, i8** %170, align 8
   br label %171
 
@@ -61582,13 +61590,13 @@ define internal void @bin_list_sasl_mechs(%struct.conn* %0) #0 {
   %9 = load %struct.conn*, %struct.conn** %2, align 8
   %10 = load %struct.conn*, %struct.conn** %2, align 8
   %11 = getelementptr inbounds %struct.conn, %struct.conn* %10, i32 0, i32 36
-  %12 = bitcast %union.protocol_binary_request_header* %11 to %struct.anon.13*
-  %13 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %12, i32 0, i32 6
+  %12 = bitcast %union.protocol_binary_request_header* %11 to %struct.anon.16*
+  %13 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %12, i32 0, i32 6
   %14 = load i32, i32* %13, align 8
   %15 = load %struct.conn*, %struct.conn** %2, align 8
   %16 = getelementptr inbounds %struct.conn, %struct.conn* %15, i32 0, i32 36
-  %17 = bitcast %union.protocol_binary_request_header* %16 to %struct.anon.13*
-  %18 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %17, i32 0, i32 2
+  %17 = bitcast %union.protocol_binary_request_header* %16 to %struct.anon.16*
+  %18 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %17, i32 0, i32 2
   %19 = load i16, i16* %18, align 2
   %20 = zext i16 %19 to i32
   %21 = sub i32 %14, %20
@@ -61647,13 +61655,13 @@ define internal void @process_bin_sasl_auth(%struct.conn* %0) #0 {
   %10 = load %struct.conn*, %struct.conn** %2, align 8
   %11 = load %struct.conn*, %struct.conn** %2, align 8
   %12 = getelementptr inbounds %struct.conn, %struct.conn* %11, i32 0, i32 36
-  %13 = bitcast %union.protocol_binary_request_header* %12 to %struct.anon.13*
-  %14 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %13, i32 0, i32 6
+  %13 = bitcast %union.protocol_binary_request_header* %12 to %struct.anon.16*
+  %14 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %13, i32 0, i32 6
   %15 = load i32, i32* %14, align 8
   %16 = load %struct.conn*, %struct.conn** %2, align 8
   %17 = getelementptr inbounds %struct.conn, %struct.conn* %16, i32 0, i32 36
-  %18 = bitcast %union.protocol_binary_request_header* %17 to %struct.anon.13*
-  %19 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %18, i32 0, i32 2
+  %18 = bitcast %union.protocol_binary_request_header* %17 to %struct.anon.16*
+  %19 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %18, i32 0, i32 2
   %20 = load i16, i16* %19, align 2
   %21 = zext i16 %20 to i32
   %22 = sub i32 %15, %21
@@ -61663,15 +61671,15 @@ define internal void @process_bin_sasl_auth(%struct.conn* %0) #0 {
 23:                                               ; preds = %1
   %24 = load %struct.conn*, %struct.conn** %2, align 8
   %25 = getelementptr inbounds %struct.conn, %struct.conn* %24, i32 0, i32 36
-  %26 = bitcast %union.protocol_binary_request_header* %25 to %struct.anon.13*
-  %27 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %26, i32 0, i32 2
+  %26 = bitcast %union.protocol_binary_request_header* %25 to %struct.anon.16*
+  %27 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %26, i32 0, i32 2
   %28 = load i16, i16* %27, align 2
   %29 = zext i16 %28 to i32
   store i32 %29, i32* %3, align 4
   %30 = load %struct.conn*, %struct.conn** %2, align 8
   %31 = getelementptr inbounds %struct.conn, %struct.conn* %30, i32 0, i32 36
-  %32 = bitcast %union.protocol_binary_request_header* %31 to %struct.anon.13*
-  %33 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %32, i32 0, i32 6
+  %32 = bitcast %union.protocol_binary_request_header* %31 to %struct.anon.16*
+  %33 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %32, i32 0, i32 6
   %34 = load i32, i32* %33, align 8
   %35 = load i32, i32* %3, align 4
   %36 = sub i32 %34, %35
@@ -61738,7 +61746,7 @@ define internal void @process_bin_sasl_auth(%struct.conn* %0) #0 {
   store i8* %72, i8** %74, align 8
   %75 = load %struct._stritem*, %struct._stritem** %6, align 8
   %76 = getelementptr inbounds %struct._stritem, %struct._stritem* %75, i32 0, i32 10
-  %77 = bitcast [0 x %union.anon.10]* %76 to i8*
+  %77 = bitcast [0 x %union.anon.13]* %76 to i8*
   %78 = load %struct._stritem*, %struct._stritem** %6, align 8
   %79 = getelementptr inbounds %struct._stritem, %struct._stritem* %78, i32 0, i32 9
   %80 = load i8, i8* %79, align 1
@@ -61791,8 +61799,8 @@ define internal i8* @binary_get_key(%struct.conn* %0) #0 {
   %5 = load i8*, i8** %4, align 8
   %6 = load %struct.conn*, %struct.conn** %2, align 8
   %7 = getelementptr inbounds %struct.conn, %struct.conn* %6, i32 0, i32 36
-  %8 = bitcast %union.protocol_binary_request_header* %7 to %struct.anon.13*
-  %9 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %8, i32 0, i32 2
+  %8 = bitcast %union.protocol_binary_request_header* %7 to %struct.anon.16*
+  %9 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %8, i32 0, i32 2
   %10 = load i16, i16* %9, align 2
   %11 = zext i16 %10 to i32
   %12 = sext i32 %11 to i64
@@ -66604,7 +66612,7 @@ define dso_local zeroext i1 @storage_validate_item(i8* %0, %struct._stritem* %1)
   store %struct._stritem* %1, %struct._stritem** %5, align 8
   %7 = load %struct._stritem*, %struct._stritem** %5, align 8
   %8 = getelementptr inbounds %struct._stritem, %struct._stritem* %7, i32 0, i32 10
-  %9 = bitcast [0 x %union.anon.10]* %8 to i8*
+  %9 = bitcast [0 x %union.anon.13]* %8 to i8*
   %10 = load %struct._stritem*, %struct._stritem** %5, align 8
   %11 = getelementptr inbounds %struct._stritem, %struct._stritem* %10, i32 0, i32 9
   %12 = load i8, i8* %11, align 1
@@ -66676,7 +66684,7 @@ define dso_local void @storage_delete(i8* %0, %struct._stritem* %1) #0 {
 12:                                               ; preds = %2
   %13 = load %struct._stritem*, %struct._stritem** %4, align 8
   %14 = getelementptr inbounds %struct._stritem, %struct._stritem* %13, i32 0, i32 10
-  %15 = bitcast [0 x %union.anon.10]* %14 to i8*
+  %15 = bitcast [0 x %union.anon.13]* %14 to i8*
   %16 = load %struct._stritem*, %struct._stritem** %4, align 8
   %17 = getelementptr inbounds %struct._stritem, %struct._stritem* %16, i32 0, i32 9
   %18 = load i8, i8* %17, align 1
@@ -67054,7 +67062,7 @@ define dso_local i32 @storage_get_item(%struct.conn* %0, %struct._stritem* %1, %
   store %struct._mc_resp* %2, %struct._mc_resp** %7, align 8
   %21 = load %struct._stritem*, %struct._stritem** %6, align 8
   %22 = getelementptr inbounds %struct._stritem, %struct._stritem* %21, i32 0, i32 10
-  %23 = bitcast [0 x %union.anon.10]* %22 to i8*
+  %23 = bitcast [0 x %union.anon.13]* %22 to i8*
   %24 = load %struct._stritem*, %struct._stritem** %6, align 8
   %25 = getelementptr inbounds %struct._stritem, %struct._stritem* %24, i32 0, i32 9
   %26 = load i8, i8* %25, align 1
@@ -67137,7 +67145,7 @@ define dso_local i32 @storage_get_item(%struct.conn* %0, %struct._stritem* %1, %
 94:                                               ; preds = %87
   %95 = load %struct._stritem*, %struct._stritem** %6, align 8
   %96 = getelementptr inbounds %struct._stritem, %struct._stritem* %95, i32 0, i32 10
-  %97 = bitcast [0 x %union.anon.10]* %96 to i8*
+  %97 = bitcast [0 x %union.anon.13]* %96 to i8*
   %98 = load %struct._stritem*, %struct._stritem** %6, align 8
   %99 = getelementptr inbounds %struct._stritem, %struct._stritem* %98, i32 0, i32 9
   %100 = load i8, i8* %99, align 1
@@ -67166,7 +67174,7 @@ define dso_local i32 @storage_get_item(%struct.conn* %0, %struct._stritem* %1, %
 117:                                              ; preds = %116, %94
   %118 = load %struct._stritem*, %struct._stritem** %6, align 8
   %119 = getelementptr inbounds %struct._stritem, %struct._stritem* %118, i32 0, i32 10
-  %120 = bitcast [0 x %union.anon.10]* %119 to i8*
+  %120 = bitcast [0 x %union.anon.13]* %119 to i8*
   %121 = load %struct._stritem*, %struct._stritem** %6, align 8
   %122 = getelementptr inbounds %struct._stritem, %struct._stritem* %121, i32 0, i32 7
   %123 = load i16, i16* %122, align 2
@@ -67269,7 +67277,7 @@ define dso_local i32 @storage_get_item(%struct.conn* %0, %struct._stritem* %1, %
   store i64 %193, i64* %18, align 8
   %194 = load %struct._stritem*, %struct._stritem** %12, align 8
   %195 = getelementptr inbounds %struct._stritem, %struct._stritem* %194, i32 0, i32 10
-  %196 = bitcast [0 x %union.anon.10]* %195 to i8*
+  %196 = bitcast [0 x %union.anon.13]* %195 to i8*
   %197 = load %struct._stritem*, %struct._stritem** %12, align 8
   %198 = getelementptr inbounds %struct._stritem, %struct._stritem* %197, i32 0, i32 9
   %199 = load i8, i8* %198, align 1
@@ -67832,14 +67840,14 @@ define internal void @_storage_get_item_cb(i8* %0, %struct._obj_io* %1, i32 %2) 
   %136 = bitcast i8* %135 to %union.protocol_binary_request_header*
   store %union.protocol_binary_request_header* %136, %union.protocol_binary_request_header** %15, align 8
   %137 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %15, align 8
-  %138 = bitcast %union.protocol_binary_request_header* %137 to %struct.anon.13*
-  %139 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %138, i32 0, i32 6
+  %138 = bitcast %union.protocol_binary_request_header* %137 to %struct.anon.16*
+  %139 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %138, i32 0, i32 6
   %140 = load i32, i32* %139, align 8
   %141 = call i32 @ntohl(i32 %140) #15
   store i32 %141, i32* %16, align 4
   %142 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %15, align 8
-  %143 = bitcast %union.protocol_binary_request_header* %142 to %struct.anon.13*
-  %144 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %143, i32 0, i32 3
+  %143 = bitcast %union.protocol_binary_request_header* %142 to %struct.anon.16*
+  %144 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %143, i32 0, i32 3
   %145 = load i8, i8* %144, align 4
   store i8 %145, i8* %17, align 1
   %146 = load %struct._mc_resp*, %struct._mc_resp** %8, align 8
@@ -67879,19 +67887,19 @@ define internal void @_storage_get_item_cb(i8* %0, %struct._obj_io* %1, i32 %2) 
   %179 = trunc i64 %178 to i32
   store i32 %179, i32* %175, align 4
   %180 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %15, align 8
-  %181 = bitcast %union.protocol_binary_request_header* %180 to %struct.anon.13*
-  %182 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %181, i32 0, i32 3
+  %181 = bitcast %union.protocol_binary_request_header* %180 to %struct.anon.16*
+  %182 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %181, i32 0, i32 3
   store i8 0, i8* %182, align 4
   %183 = call zeroext i16 @htons(i16 zeroext 1) #15
   %184 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %15, align 8
-  %185 = bitcast %union.protocol_binary_request_header* %184 to %struct.anon.13*
-  %186 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %185, i32 0, i32 5
+  %185 = bitcast %union.protocol_binary_request_header* %184 to %struct.anon.16*
+  %186 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %185, i32 0, i32 5
   store i16 %183, i16* %186, align 2
   %187 = load i32, i32* %16, align 4
   %188 = call i32 @htonl(i32 %187) #15
   %189 = load %union.protocol_binary_request_header*, %union.protocol_binary_request_header** %15, align 8
-  %190 = bitcast %union.protocol_binary_request_header* %189 to %struct.anon.13*
-  %191 = getelementptr inbounds %struct.anon.13, %struct.anon.13* %190, i32 0, i32 6
+  %190 = bitcast %union.protocol_binary_request_header* %189 to %struct.anon.16*
+  %191 = getelementptr inbounds %struct.anon.16, %struct.anon.16* %190, i32 0, i32 6
   store i32 %188, i32* %191, align 8
   %192 = load %struct._mc_resp*, %struct._mc_resp** %8, align 8
   %193 = getelementptr inbounds %struct._mc_resp, %struct._mc_resp* %192, i32 0, i32 7
@@ -68037,7 +68045,7 @@ define internal void @_storage_get_item_cb(i8* %0, %struct._obj_io* %1, i32 %2) 
 292:                                              ; preds = %285
   %293 = load %struct._stritem*, %struct._stritem** %10, align 8
   %294 = getelementptr inbounds %struct._stritem, %struct._stritem* %293, i32 0, i32 10
-  %295 = bitcast [0 x %union.anon.10]* %294 to i8*
+  %295 = bitcast [0 x %union.anon.13]* %294 to i8*
   %296 = load %struct._stritem*, %struct._stritem** %10, align 8
   %297 = getelementptr inbounds %struct._stritem, %struct._stritem* %296, i32 0, i32 9
   %298 = load i8, i8* %297, align 1
@@ -68973,7 +68981,7 @@ define internal i32 @storage_write(i8* %0, i32 %1, i32 %2) #0 {
 87:                                               ; preds = %80
   %88 = load %struct._stritem*, %struct._stritem** %11, align 8
   %89 = getelementptr inbounds %struct._stritem, %struct._stritem* %88, i32 0, i32 10
-  %90 = bitcast [0 x %union.anon.10]* %89 to i8*
+  %90 = bitcast [0 x %union.anon.13]* %89 to i8*
   %91 = load %struct._stritem*, %struct._stritem** %11, align 8
   %92 = getelementptr inbounds %struct._stritem, %struct._stritem* %91, i32 0, i32 9
   %93 = load i8, i8* %92, align 1
@@ -69002,7 +69010,7 @@ define internal i32 @storage_write(i8* %0, i32 %1, i32 %2) #0 {
 110:                                              ; preds = %109, %87
   %111 = load %struct._stritem*, %struct._stritem** %11, align 8
   %112 = getelementptr inbounds %struct._stritem, %struct._stritem* %111, i32 0, i32 10
-  %113 = bitcast [0 x %union.anon.10]* %112 to i8*
+  %113 = bitcast [0 x %union.anon.13]* %112 to i8*
   %114 = load %struct._stritem*, %struct._stritem** %11, align 8
   %115 = getelementptr inbounds %struct._stritem, %struct._stritem* %114, i32 0, i32 7
   %116 = load i16, i16* %115, align 2
@@ -69091,7 +69099,7 @@ define internal i32 @storage_write(i8* %0, i32 %1, i32 %2) #0 {
 181:                                              ; preds = %167
   %182 = load %struct._stritem*, %struct._stritem** %11, align 8
   %183 = getelementptr inbounds %struct._stritem, %struct._stritem* %182, i32 0, i32 10
-  %184 = bitcast [0 x %union.anon.10]* %183 to i8*
+  %184 = bitcast [0 x %union.anon.13]* %183 to i8*
   %185 = load %struct._stritem*, %struct._stritem** %11, align 8
   %186 = getelementptr inbounds %struct._stritem, %struct._stritem* %185, i32 0, i32 9
   %187 = load i8, i8* %186, align 1
@@ -69258,7 +69266,7 @@ define internal i32 @storage_write(i8* %0, i32 %1, i32 %2) #0 {
   call void @extstore_write(i8* %320, %struct._obj_io* %10)
   %321 = load %struct._stritem*, %struct._stritem** %14, align 8
   %322 = getelementptr inbounds %struct._stritem, %struct._stritem* %321, i32 0, i32 10
-  %323 = bitcast [0 x %union.anon.10]* %322 to i8*
+  %323 = bitcast [0 x %union.anon.13]* %322 to i8*
   %324 = load %struct._stritem*, %struct._stritem** %14, align 8
   %325 = getelementptr inbounds %struct._stritem, %struct._stritem* %324, i32 0, i32 9
   %326 = load i8, i8* %325, align 1
@@ -69332,8 +69340,8 @@ define internal i32 @storage_write(i8* %0, i32 %1, i32 %2) #0 {
 385:                                              ; preds = %378
   %386 = load %struct._stritem*, %struct._stritem** %11, align 8
   %387 = getelementptr inbounds %struct._stritem, %struct._stritem* %386, i32 0, i32 10
-  %388 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %387, i64 0, i64 0
-  %389 = bitcast %union.anon.10* %388 to i64*
+  %388 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %387, i64 0, i64 0
+  %389 = bitcast %union.anon.13* %388 to i64*
   %390 = load i64, i64* %389, align 8
   br label %392
 
@@ -69344,8 +69352,8 @@ define internal i32 @storage_write(i8* %0, i32 %1, i32 %2) #0 {
   %393 = phi i64 [ %390, %385 ], [ 0, %391 ]
   %394 = load %struct._stritem*, %struct._stritem** %14, align 8
   %395 = getelementptr inbounds %struct._stritem, %struct._stritem* %394, i32 0, i32 10
-  %396 = getelementptr inbounds [0 x %union.anon.10], [0 x %union.anon.10]* %395, i64 0, i64 0
-  %397 = bitcast %union.anon.10* %396 to i64*
+  %396 = getelementptr inbounds [0 x %union.anon.13], [0 x %union.anon.13]* %395, i64 0, i64 0
+  %397 = bitcast %union.anon.13* %396 to i64*
   store i64 %393, i64* %397, align 8
   br label %398
 
@@ -70332,7 +70340,7 @@ define internal void @storage_compact_readback(i8* %0, %struct._logger* %1, i1 z
   call void @item_lock(i32 %79)
   %80 = load %struct._stritem*, %struct._stritem** %21, align 8
   %81 = getelementptr inbounds %struct._stritem, %struct._stritem* %80, i32 0, i32 10
-  %82 = bitcast [0 x %union.anon.10]* %81 to i8*
+  %82 = bitcast [0 x %union.anon.13]* %81 to i8*
   %83 = load %struct._stritem*, %struct._stritem** %21, align 8
   %84 = getelementptr inbounds %struct._stritem, %struct._stritem* %83, i32 0, i32 7
   %85 = load i16, i16* %84, align 2
@@ -70392,7 +70400,7 @@ define internal void @storage_compact_readback(i8* %0, %struct._logger* %1, i1 z
 126:                                              ; preds = %120, %115
   %127 = load %struct._stritem*, %struct._stritem** %19, align 8
   %128 = getelementptr inbounds %struct._stritem, %struct._stritem* %127, i32 0, i32 10
-  %129 = bitcast [0 x %union.anon.10]* %128 to i8*
+  %129 = bitcast [0 x %union.anon.13]* %128 to i8*
   %130 = load %struct._stritem*, %struct._stritem** %19, align 8
   %131 = getelementptr inbounds %struct._stritem, %struct._stritem* %130, i32 0, i32 9
   %132 = load i8, i8* %131, align 1
@@ -71632,7 +71640,7 @@ define dso_local i8* @slab_automove_extstore_init(%struct.settings* %0) #0 {
   %3 = alloca %struct.settings*, align 8
   %4 = alloca i32, align 4
   %5 = alloca double, align 8
-  %6 = alloca %struct.slab_automove.433*, align 8
+  %6 = alloca %struct.slab_automove.424*, align 8
   store %struct.settings* %0, %struct.settings** %3, align 8
   %7 = load %struct.settings*, %struct.settings** %3, align 8
   %8 = getelementptr inbounds %struct.settings, %struct.settings* %7, i32 0, i32 34
@@ -71643,10 +71651,10 @@ define dso_local i8* @slab_automove_extstore_init(%struct.settings* %0) #0 {
   %12 = load double, double* %11, align 8
   store double %12, double* %5, align 8
   %13 = call noalias i8* @calloc(i64 1, i64 6464) #14
-  %14 = bitcast i8* %13 to %struct.slab_automove.433*
-  store %struct.slab_automove.433* %14, %struct.slab_automove.433** %6, align 8
-  %15 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %16 = icmp eq %struct.slab_automove.433* %15, null
+  %14 = bitcast i8* %13 to %struct.slab_automove.424*
+  store %struct.slab_automove.424* %14, %struct.slab_automove.424** %6, align 8
+  %15 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %16 = icmp eq %struct.slab_automove.424* %15, null
   br i1 %16, label %17, label %18
 
 17:                                               ; preds = %1
@@ -71658,108 +71666,108 @@ define dso_local i8* @slab_automove_extstore_init(%struct.settings* %0) #0 {
   %20 = mul i32 %19, 64
   %21 = zext i32 %20 to i64
   %22 = call noalias i8* @calloc(i64 %21, i64 32) #14
-  %23 = bitcast i8* %22 to %struct.window_data.432*
-  %24 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %25 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %24, i32 0, i32 0
-  store %struct.window_data.432* %23, %struct.window_data.432** %25, align 8
+  %23 = bitcast i8* %22 to %struct.window_data.423*
+  %24 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %25 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %24, i32 0, i32 0
+  store %struct.window_data.423* %23, %struct.window_data.423** %25, align 8
   %26 = load i32, i32* %4, align 4
   %27 = zext i32 %26 to i64
   %28 = call noalias i8* @calloc(i64 %27, i64 8) #14
-  %29 = bitcast i8* %28 to %struct.timezone*
-  %30 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %31 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %30, i32 0, i32 1
-  store %struct.timezone* %29, %struct.timezone** %31, align 8
+  %29 = bitcast i8* %28 to %struct.linger*
+  %30 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %31 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %30, i32 0, i32 1
+  store %struct.linger* %29, %struct.linger** %31, align 8
   %32 = load i32, i32* %4, align 4
-  %33 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %34 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %33, i32 0, i32 3
+  %33 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %34 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %33, i32 0, i32 3
   store i32 %32, i32* %34, align 8
   %35 = load double, double* %5, align 8
-  %36 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %37 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %36, i32 0, i32 7
+  %36 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %37 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %36, i32 0, i32 7
   store double %35, double* %37, align 8
   %38 = load %struct.settings*, %struct.settings** %3, align 8
   %39 = getelementptr inbounds %struct.settings, %struct.settings* %38, i32 0, i32 69
   %40 = load double, double* %39, align 8
-  %41 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %42 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %41, i32 0, i32 8
+  %41 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %42 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %41, i32 0, i32 8
   store double %40, double* %42, align 8
   %43 = load %struct.settings*, %struct.settings** %3, align 8
   %44 = getelementptr inbounds %struct.settings, %struct.settings* %43, i32 0, i32 60
   %45 = load i32, i32* %44, align 8
-  %46 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %47 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %46, i32 0, i32 5
+  %46 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %47 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %46, i32 0, i32 5
   store i32 %45, i32* %47, align 8
-  %48 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %49 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %48, i32 0, i32 6
+  %48 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %49 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %48, i32 0, i32 6
   store i32 0, i32* %49, align 4
   %50 = load %struct.settings*, %struct.settings** %3, align 8
-  %51 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %52 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %51, i32 0, i32 2
+  %51 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %52 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %51, i32 0, i32 2
   store %struct.settings* %50, %struct.settings** %52, align 8
-  %53 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %54 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %53, i32 0, i32 9
+  %53 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %54 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %53, i32 0, i32 9
   store i8 0, i8* %54, align 8
-  %55 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %56 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %55, i32 0, i32 0
-  %57 = load %struct.window_data.432*, %struct.window_data.432** %56, align 8
-  %58 = icmp eq %struct.window_data.432* %57, null
+  %55 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %56 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %55, i32 0, i32 0
+  %57 = load %struct.window_data.423*, %struct.window_data.423** %56, align 8
+  %58 = icmp eq %struct.window_data.423* %57, null
   br i1 %58, label %64, label %59
 
 59:                                               ; preds = %18
-  %60 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %61 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %60, i32 0, i32 1
-  %62 = load %struct.timezone*, %struct.timezone** %61, align 8
-  %63 = icmp eq %struct.timezone* %62, null
+  %60 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %61 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %60, i32 0, i32 1
+  %62 = load %struct.linger*, %struct.linger** %61, align 8
+  %63 = icmp eq %struct.linger* %62, null
   br i1 %63, label %64, label %87
 
 64:                                               ; preds = %59, %18
-  %65 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %66 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %65, i32 0, i32 0
-  %67 = load %struct.window_data.432*, %struct.window_data.432** %66, align 8
-  %68 = icmp ne %struct.window_data.432* %67, null
+  %65 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %66 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %65, i32 0, i32 0
+  %67 = load %struct.window_data.423*, %struct.window_data.423** %66, align 8
+  %68 = icmp ne %struct.window_data.423* %67, null
   br i1 %68, label %69, label %74
 
 69:                                               ; preds = %64
-  %70 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %71 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %70, i32 0, i32 0
-  %72 = load %struct.window_data.432*, %struct.window_data.432** %71, align 8
-  %73 = bitcast %struct.window_data.432* %72 to i8*
+  %70 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %71 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %70, i32 0, i32 0
+  %72 = load %struct.window_data.423*, %struct.window_data.423** %71, align 8
+  %73 = bitcast %struct.window_data.423* %72 to i8*
   call void @free(i8* %73) #14
   br label %74
 
 74:                                               ; preds = %69, %64
-  %75 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %76 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %75, i32 0, i32 1
-  %77 = load %struct.timezone*, %struct.timezone** %76, align 8
-  %78 = icmp ne %struct.timezone* %77, null
+  %75 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %76 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %75, i32 0, i32 1
+  %77 = load %struct.linger*, %struct.linger** %76, align 8
+  %78 = icmp ne %struct.linger* %77, null
   br i1 %78, label %79, label %84
 
 79:                                               ; preds = %74
-  %80 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %81 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %80, i32 0, i32 1
-  %82 = load %struct.timezone*, %struct.timezone** %81, align 8
-  %83 = bitcast %struct.timezone* %82 to i8*
+  %80 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %81 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %80, i32 0, i32 1
+  %82 = load %struct.linger*, %struct.linger** %81, align 8
+  %83 = bitcast %struct.linger* %82 to i8*
   call void @free(i8* %83) #14
   br label %84
 
 84:                                               ; preds = %79, %74
-  %85 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %86 = bitcast %struct.slab_automove.433* %85 to i8*
+  %85 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %86 = bitcast %struct.slab_automove.424* %85 to i8*
   call void @free(i8* %86) #14
   store i8* null, i8** %2, align 8
   br label %96
 
 87:                                               ; preds = %59
-  %88 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %89 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %88, i32 0, i32 11
+  %88 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %89 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %88, i32 0, i32 11
   %90 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %89, i64 0, i64 0
   call void @fill_item_stats_automove(%struct.item_stats_automove* %90)
-  %91 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %92 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %91, i32 0, i32 13
+  %91 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %92 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %91, i32 0, i32 13
   %93 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %92, i64 0, i64 0
   call void @fill_slab_stats_automove(%struct.slab_stats_automove* %93)
-  %94 = load %struct.slab_automove.433*, %struct.slab_automove.433** %6, align 8
-  %95 = bitcast %struct.slab_automove.433* %94 to i8*
+  %94 = load %struct.slab_automove.424*, %struct.slab_automove.424** %6, align 8
+  %95 = bitcast %struct.slab_automove.424* %94 to i8*
   store i8* %95, i8** %2, align 8
   br label %96
 
@@ -71771,23 +71779,23 @@ define dso_local i8* @slab_automove_extstore_init(%struct.settings* %0) #0 {
 ; Function Attrs: noinline nounwind optnone uwtable
 define dso_local void @slab_automove_extstore_free(i8* %0) #0 {
   %2 = alloca i8*, align 8
-  %3 = alloca %struct.slab_automove.433*, align 8
+  %3 = alloca %struct.slab_automove.424*, align 8
   store i8* %0, i8** %2, align 8
   %4 = load i8*, i8** %2, align 8
-  %5 = bitcast i8* %4 to %struct.slab_automove.433*
-  store %struct.slab_automove.433* %5, %struct.slab_automove.433** %3, align 8
-  %6 = load %struct.slab_automove.433*, %struct.slab_automove.433** %3, align 8
-  %7 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %6, i32 0, i32 0
-  %8 = load %struct.window_data.432*, %struct.window_data.432** %7, align 8
-  %9 = bitcast %struct.window_data.432* %8 to i8*
+  %5 = bitcast i8* %4 to %struct.slab_automove.424*
+  store %struct.slab_automove.424* %5, %struct.slab_automove.424** %3, align 8
+  %6 = load %struct.slab_automove.424*, %struct.slab_automove.424** %3, align 8
+  %7 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %6, i32 0, i32 0
+  %8 = load %struct.window_data.423*, %struct.window_data.423** %7, align 8
+  %9 = bitcast %struct.window_data.423* %8 to i8*
   call void @free(i8* %9) #14
-  %10 = load %struct.slab_automove.433*, %struct.slab_automove.433** %3, align 8
-  %11 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %10, i32 0, i32 1
-  %12 = load %struct.timezone*, %struct.timezone** %11, align 8
-  %13 = bitcast %struct.timezone* %12 to i8*
+  %10 = load %struct.slab_automove.424*, %struct.slab_automove.424** %3, align 8
+  %11 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %10, i32 0, i32 1
+  %12 = load %struct.linger*, %struct.linger** %11, align 8
+  %13 = bitcast %struct.linger* %12 to i8*
   call void @free(i8* %13) #14
-  %14 = load %struct.slab_automove.433*, %struct.slab_automove.433** %3, align 8
-  %15 = bitcast %struct.slab_automove.433* %14 to i8*
+  %14 = load %struct.slab_automove.424*, %struct.slab_automove.424** %3, align 8
+  %15 = bitcast %struct.slab_automove.424* %14 to i8*
   call void @free(i8* %15) #14
   ret void
 }
@@ -71797,28 +71805,28 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   %4 = alloca i8*, align 8
   %5 = alloca i32*, align 8
   %6 = alloca i32*, align 8
-  %7 = alloca %struct.slab_automove.433*, align 8
+  %7 = alloca %struct.slab_automove.424*, align 8
   %8 = alloca i32, align 4
-  %9 = alloca %struct.window_data.432, align 8
+  %9 = alloca %struct.window_data.423, align 8
   %10 = alloca i32, align 4
   %11 = alloca i64, align 8
   %12 = alloca i32, align 4
   %13 = alloca i64, align 8
   %14 = alloca i8, align 1
-  %15 = alloca %struct.timezone, align 4
+  %15 = alloca %struct.linger, align 4
   %16 = alloca i8, align 1
   %17 = alloca i8, align 1
-  %18 = alloca %struct.window_data.432*, align 8
+  %18 = alloca %struct.window_data.423*, align 8
   %19 = alloca i32, align 4
   %20 = alloca i64, align 8
-  %21 = alloca %struct.window_data.432*, align 8
-  %22 = alloca %struct.window_data.432*, align 8
+  %21 = alloca %struct.window_data.423*, align 8
+  %22 = alloca %struct.window_data.423*, align 8
   store i8* %0, i8** %4, align 8
   store i32* %1, i32** %5, align 8
   store i32* %2, i32** %6, align 8
   %23 = load i8*, i8** %4, align 8
-  %24 = bitcast i8* %23 to %struct.slab_automove.433*
-  store %struct.slab_automove.433* %24, %struct.slab_automove.433** %7, align 8
+  %24 = bitcast i8* %23 to %struct.slab_automove.424*
+  store %struct.slab_automove.424* %24, %struct.slab_automove.424** %7, align 8
   store i32 -1, i32* %10, align 4
   store i64 0, i64* %11, align 8
   store i32 -1, i32* %12, align 4
@@ -71828,32 +71836,32 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   store i32 -1, i32* %25, align 4
   %26 = load i32*, i32** %6, align 8
   store i32 -1, i32* %26, align 4
-  %27 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  call void @global_pool_check(%struct.slab_automove.433* %27)
-  %28 = bitcast %struct.timezone* %15 to i8*
+  %27 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  call void @global_pool_check(%struct.slab_automove.424* %27)
+  %28 = bitcast %struct.linger* %15 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 4 %28, i8 0, i64 8, i1 false)
-  %29 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %30 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %29, i32 0, i32 1
-  %31 = load %struct.timezone*, %struct.timezone** %30, align 8
-  %32 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %33 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %32, i32 0, i32 3
+  %29 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %30 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %29, i32 0, i32 1
+  %31 = load %struct.linger*, %struct.linger** %30, align 8
+  %32 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %33 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %32, i32 0, i32 3
   %34 = load i32, i32* %33, align 8
-  call void @window_global_sum(%struct.timezone* %31, %struct.timezone* %15, i32 %34)
-  %35 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %36 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %35, i32 0, i32 12
+  call void @window_global_sum(%struct.linger* %31, %struct.linger* %15, i32 %34)
+  %35 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %36 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %35, i32 0, i32 12
   %37 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %36, i64 0, i64 0
   call void @fill_item_stats_automove(%struct.item_stats_automove* %37)
-  %38 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %39 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %38, i32 0, i32 14
+  %38 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %39 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %38, i32 0, i32 14
   %40 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %39, i64 0, i64 0
   call void @fill_slab_stats_automove(%struct.slab_stats_automove* %40)
-  %41 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %42 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %41, i32 0, i32 4
+  %41 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %42 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %41, i32 0, i32 4
   %43 = load i32, i32* %42, align 4
   %44 = add i32 %43, 1
   store i32 %44, i32* %42, align 4
-  %45 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  call void @memcheck(%struct.slab_automove.433* %45)
+  %45 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  call void @memcheck(%struct.slab_automove.424* %45)
   store i32 1, i32* %8, align 4
   br label %46
 
@@ -71863,15 +71871,15 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %48, label %49, label %305
 
 49:                                               ; preds = %46
-  %50 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %51 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %50, i32 0, i32 13
+  %50 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %51 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %50, i32 0, i32 13
   %52 = load i32, i32* %8, align 4
   %53 = sext i32 %52 to i64
   %54 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %51, i64 0, i64 %53
   %55 = getelementptr inbounds %struct.slab_stats_automove, %struct.slab_stats_automove* %54, i32 0, i32 1
   %56 = load i32, i32* %55, align 4
-  %57 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %58 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %57, i32 0, i32 5
+  %57 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %58 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %57, i32 0, i32 5
   %59 = load i32, i32* %58, align 8
   %60 = icmp ult i32 %56, %59
   %61 = zext i1 %60 to i64
@@ -71880,40 +71888,40 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   %64 = zext i1 %63 to i8
   store i8 %64, i8* %16, align 1
   store i8 0, i8* %17, align 1
-  %65 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
+  %65 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
   %66 = load i32, i32* %8, align 4
-  %67 = call %struct.window_data.432* @get_window_data(%struct.slab_automove.433* %65, i32 %66)
-  store %struct.window_data.432* %67, %struct.window_data.432** %18, align 8
-  %68 = bitcast %struct.window_data.432* %9 to i8*
+  %67 = call %struct.window_data.423* @get_window_data(%struct.slab_automove.424* %65, i32 %66)
+  store %struct.window_data.423* %67, %struct.window_data.423** %18, align 8
+  %68 = bitcast %struct.window_data.423* %9 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 8 %68, i8 0, i64 32, i1 false)
   %69 = load i32, i32* %8, align 4
-  %70 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %71 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %70, i32 0, i32 3
+  %70 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %71 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %70, i32 0, i32 3
   %72 = load i32, i32* %71, align 8
   %73 = mul i32 %69, %72
   store i32 %73, i32* %19, align 4
-  %74 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %75 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %74, i32 0, i32 0
-  %76 = load %struct.window_data.432*, %struct.window_data.432** %75, align 8
+  %74 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %75 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %74, i32 0, i32 0
+  %76 = load %struct.window_data.423*, %struct.window_data.423** %75, align 8
   %77 = load i32, i32* %19, align 4
   %78 = sext i32 %77 to i64
-  %79 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %76, i64 %78
-  %80 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %81 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %80, i32 0, i32 3
+  %79 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %76, i64 %78
+  %80 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %81 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %80, i32 0, i32 3
   %82 = load i32, i32* %81, align 8
-  call void @window_sum.1352(%struct.window_data.432* %79, %struct.window_data.432* %9, i32 %82)
-  %83 = load %struct.window_data.432*, %struct.window_data.432** %18, align 8
-  %84 = bitcast %struct.window_data.432* %83 to i8*
+  call void @window_sum.1352(%struct.window_data.423* %79, %struct.window_data.423* %9, i32 %82)
+  %83 = load %struct.window_data.423*, %struct.window_data.423** %18, align 8
+  %84 = bitcast %struct.window_data.423* %83 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 8 %84, i8 0, i64 32, i1 false)
-  %85 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %86 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %85, i32 0, i32 12
+  %85 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %86 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %85, i32 0, i32 12
   %87 = load i32, i32* %8, align 4
   %88 = sext i32 %87 to i64
   %89 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %86, i64 0, i64 %88
   %90 = getelementptr inbounds %struct.item_stats_automove, %struct.item_stats_automove* %89, i32 0, i32 0
   %91 = load i64, i64* %90, align 8
-  %92 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %93 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %92, i32 0, i32 11
+  %92 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %93 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %92, i32 0, i32 11
   %94 = load i32, i32* %8, align 4
   %95 = sext i32 %94 to i64
   %96 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %93, i64 0, i64 %95
@@ -71924,15 +71932,15 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %100, label %118, label %101
 
 101:                                              ; preds = %49
-  %102 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %103 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %102, i32 0, i32 12
+  %102 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %103 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %102, i32 0, i32 12
   %104 = load i32, i32* %8, align 4
   %105 = sext i32 %104 to i64
   %106 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %103, i64 0, i64 %105
   %107 = getelementptr inbounds %struct.item_stats_automove, %struct.item_stats_automove* %106, i32 0, i32 1
   %108 = load i64, i64* %107, align 8
-  %109 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %110 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %109, i32 0, i32 11
+  %109 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %110 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %109, i32 0, i32 11
   %111 = load i32, i32* %8, align 4
   %112 = sext i32 %111 to i64
   %113 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %110, i64 0, i64 %112
@@ -71943,24 +71951,24 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %117, label %118, label %123
 
 118:                                              ; preds = %101, %49
-  %119 = load %struct.window_data.432*, %struct.window_data.432** %18, align 8
-  %120 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %119, i32 0, i32 2
+  %119 = load %struct.window_data.423*, %struct.window_data.423** %18, align 8
+  %120 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %119, i32 0, i32 2
   store i64 1, i64* %120, align 8
-  %121 = load %struct.window_data.432*, %struct.window_data.432** %18, align 8
-  %122 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %121, i32 0, i32 1
+  %121 = load %struct.window_data.423*, %struct.window_data.423** %18, align 8
+  %122 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %121, i32 0, i32 1
   store i64 1, i64* %122, align 8
   br label %123
 
 123:                                              ; preds = %118, %101
-  %124 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %125 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %124, i32 0, i32 14
+  %124 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %125 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %124, i32 0, i32 14
   %126 = load i32, i32* %8, align 4
   %127 = sext i32 %126 to i64
   %128 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %125, i64 0, i64 %127
   %129 = getelementptr inbounds %struct.slab_stats_automove, %struct.slab_stats_automove* %128, i32 0, i32 3
   %130 = load i64, i64* %129, align 8
-  %131 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %132 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %131, i32 0, i32 13
+  %131 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %132 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %131, i32 0, i32 13
   %133 = load i32, i32* %8, align 4
   %134 = sext i32 %133 to i64
   %135 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %132, i64 0, i64 %134
@@ -71971,21 +71979,21 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %139, label %140, label %143
 
 140:                                              ; preds = %123
-  %141 = load %struct.window_data.432*, %struct.window_data.432** %18, align 8
-  %142 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %141, i32 0, i32 1
+  %141 = load %struct.window_data.423*, %struct.window_data.423** %18, align 8
+  %142 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %141, i32 0, i32 1
   store i64 1, i64* %142, align 8
   br label %143
 
 143:                                              ; preds = %140, %123
-  %144 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %145 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %144, i32 0, i32 14
+  %144 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %145 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %144, i32 0, i32 14
   %146 = load i32, i32* %8, align 4
   %147 = sext i32 %146 to i64
   %148 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %145, i64 0, i64 %147
   %149 = getelementptr inbounds %struct.slab_stats_automove, %struct.slab_stats_automove* %148, i32 0, i32 2
   %150 = load i64, i64* %149, align 8
-  %151 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %152 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %151, i32 0, i32 10
+  %151 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %152 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %151, i32 0, i32 10
   %153 = load i32, i32* %8, align 4
   %154 = sext i32 %153 to i64
   %155 = getelementptr inbounds [64 x i32], [64 x i32]* %152, i64 0, i64 %154
@@ -71999,15 +72007,15 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br label %160
 
 160:                                              ; preds = %159, %143
-  %161 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %162 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %161, i32 0, i32 14
+  %161 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %162 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %161, i32 0, i32 14
   %163 = load i32, i32* %8, align 4
   %164 = sext i32 %163 to i64
   %165 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %162, i64 0, i64 %164
   %166 = getelementptr inbounds %struct.slab_stats_automove, %struct.slab_stats_automove* %165, i32 0, i32 2
   %167 = load i64, i64* %166, align 8
-  %168 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %169 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %168, i32 0, i32 10
+  %168 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %169 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %168, i32 0, i32 10
   %170 = load i32, i32* %8, align 4
   %171 = sext i32 %170 to i64
   %172 = getelementptr inbounds [64 x i32], [64 x i32]* %169, i64 0, i64 %171
@@ -72018,8 +72026,8 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %176, label %177, label %188
 
 177:                                              ; preds = %160
-  %178 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %179 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %178, i32 0, i32 10
+  %178 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %179 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %178, i32 0, i32 10
   %180 = load i32, i32* %8, align 4
   %181 = sext i32 %180 to i64
   %182 = getelementptr inbounds [64 x i32], [64 x i32]* %179, i64 0, i64 %181
@@ -72028,41 +72036,41 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %184, label %185, label %188
 
 185:                                              ; preds = %177
-  %186 = load %struct.window_data.432*, %struct.window_data.432** %18, align 8
-  %187 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %186, i32 0, i32 3
+  %186 = load %struct.window_data.423*, %struct.window_data.423** %18, align 8
+  %187 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %186, i32 0, i32 3
   store i32 1, i32* %187, align 8
   br label %188
 
 188:                                              ; preds = %185, %177, %160
-  %189 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %190 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %189, i32 0, i32 12
+  %189 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %190 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %189, i32 0, i32 12
   %191 = load i32, i32* %8, align 4
   %192 = sext i32 %191 to i64
   %193 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %190, i64 0, i64 %192
   %194 = getelementptr inbounds %struct.item_stats_automove, %struct.item_stats_automove* %193, i32 0, i32 2
   %195 = load i32, i32* %194, align 8
   %196 = zext i32 %195 to i64
-  %197 = load %struct.window_data.432*, %struct.window_data.432** %18, align 8
-  %198 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %197, i32 0, i32 0
+  %197 = load %struct.window_data.423*, %struct.window_data.423** %18, align 8
+  %198 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %197, i32 0, i32 0
   store i64 %196, i64* %198, align 8
-  %199 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %9, i32 0, i32 0
+  %199 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %9, i32 0, i32 0
   %200 = load i64, i64* %199, align 8
-  %201 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %202 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %201, i32 0, i32 3
+  %201 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %202 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %201, i32 0, i32 3
   %203 = load i32, i32* %202, align 8
   %204 = zext i32 %203 to i64
   %205 = udiv i64 %200, %204
   store i64 %205, i64* %20, align 8
-  %206 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %207 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %206, i32 0, i32 14
+  %206 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %207 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %206, i32 0, i32 14
   %208 = load i32, i32* %8, align 4
   %209 = sext i32 %208 to i64
   %210 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %207, i64 0, i64 %209
   %211 = getelementptr inbounds %struct.slab_stats_automove, %struct.slab_stats_automove* %210, i32 0, i32 2
   %212 = load i64, i64* %211, align 8
   %213 = sitofp i64 %212 to double
-  %214 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %215 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %214, i32 0, i32 14
+  %214 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %215 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %214, i32 0, i32 14
   %216 = load i32, i32* %8, align 4
   %217 = sext i32 %216 to i64
   %218 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %215, i64 0, i64 %217
@@ -72074,7 +72082,7 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %223, label %224, label %251
 
 224:                                              ; preds = %188
-  %225 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %9, i32 0, i32 1
+  %225 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %9, i32 0, i32 1
   %226 = load i64, i64* %225, align 8
   %227 = icmp eq i64 %226, 0
   br i1 %227, label %228, label %251
@@ -72099,10 +72107,10 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %237, label %249, label %238
 
 238:                                              ; preds = %235
-  %239 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %9, i32 0, i32 3
+  %239 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %9, i32 0, i32 3
   %240 = load i32, i32* %239, align 8
-  %241 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %242 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %241, i32 0, i32 3
+  %241 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %242 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %241, i32 0, i32 3
   %243 = load i32, i32* %242, align 8
   %244 = icmp uge i32 %240, %243
   br i1 %244, label %245, label %249
@@ -72134,8 +72142,8 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %257, label %258, label %270
 
 258:                                              ; preds = %254
-  %259 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %260 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %259, i32 0, i32 14
+  %259 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %260 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %259, i32 0, i32 14
   %261 = load i32, i32* %8, align 4
   %262 = sext i32 %261 to i64
   %263 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %260, i64 0, i64 %262
@@ -72158,8 +72166,8 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %273, label %274, label %300
 
 274:                                              ; preds = %270
-  %275 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %276 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %275, i32 0, i32 14
+  %275 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %276 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %275, i32 0, i32 14
   %277 = load i32, i32* %8, align 4
   %278 = sext i32 %277 to i64
   %279 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %276, i64 0, i64 %278
@@ -72169,16 +72177,16 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %282, label %283, label %300
 
 283:                                              ; preds = %274
-  %284 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %9, i32 0, i32 3
+  %284 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %9, i32 0, i32 3
   %285 = load i32, i32* %284, align 8
-  %286 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %287 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %286, i32 0, i32 3
+  %286 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %287 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %286, i32 0, i32 3
   %288 = load i32, i32* %287, align 8
   %289 = icmp ult i32 %285, %288
   br i1 %289, label %290, label %300
 
 290:                                              ; preds = %283
-  %291 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %9, i32 0, i32 4
+  %291 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %9, i32 0, i32 4
   %292 = load i32, i32* %291, align 4
   %293 = icmp ne i32 %292, 0
   br i1 %293, label %294, label %297
@@ -72208,29 +72216,29 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br label %46, !llvm.loop !232
 
 305:                                              ; preds = %46
-  %306 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %307 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %306, i32 0, i32 11
+  %306 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %307 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %306, i32 0, i32 11
   %308 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %307, i64 0, i64 0
   %309 = bitcast %struct.item_stats_automove* %308 to i8*
-  %310 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %311 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %310, i32 0, i32 12
+  %310 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %311 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %310, i32 0, i32 12
   %312 = getelementptr inbounds [64 x %struct.item_stats_automove], [64 x %struct.item_stats_automove]* %311, i64 0, i64 0
   %313 = bitcast %struct.item_stats_automove* %312 to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %309, i8* align 8 %313, i64 1536, i1 false)
-  %314 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %315 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %314, i32 0, i32 13
+  %314 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %315 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %314, i32 0, i32 13
   %316 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %315, i64 0, i64 0
   %317 = bitcast %struct.slab_stats_automove* %316 to i8*
-  %318 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %319 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %318, i32 0, i32 14
+  %318 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %319 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %318, i32 0, i32 14
   %320 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %319, i64 0, i64 0
   %321 = bitcast %struct.slab_stats_automove* %320 to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %317, i8* align 8 %321, i64 1536, i1 false)
-  %322 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %323 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %322, i32 0, i32 4
+  %322 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %323 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %322, i32 0, i32 4
   %324 = load i32, i32* %323, align 4
-  %325 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %326 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %325, i32 0, i32 3
+  %325 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %326 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %325, i32 0, i32 3
   %327 = load i32, i32* %326, align 8
   %328 = icmp ult i32 %324, %327
   br i1 %328, label %329, label %330
@@ -72239,16 +72247,16 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br label %437
 
 330:                                              ; preds = %305
-  %331 = getelementptr inbounds %struct.timezone, %struct.timezone* %15, i32 0, i32 1
+  %331 = getelementptr inbounds %struct.linger, %struct.linger* %15, i32 0, i32 1
   %332 = load i32, i32* %331, align 4
-  %333 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %334 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %333, i32 0, i32 3
+  %333 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %334 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %333, i32 0, i32 3
   %335 = load i32, i32* %334, align 8
   %336 = icmp uge i32 %332, %335
   br i1 %336, label %337, label %370
 
 337:                                              ; preds = %330
-  %338 = getelementptr inbounds %struct.timezone, %struct.timezone* %15, i32 0, i32 0
+  %338 = getelementptr inbounds %struct.linger, %struct.linger* %15, i32 0, i32 0
   %339 = load i32, i32* %338, align 4
   %340 = icmp ne i32 %339, 0
   br i1 %340, label %370, label %341
@@ -72259,15 +72267,15 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %343, label %344, label %370
 
 344:                                              ; preds = %341
-  %345 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %346 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %345, i32 0, i32 14
+  %345 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %346 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %345, i32 0, i32 14
   %347 = load i32, i32* %12, align 4
   %348 = sext i32 %347 to i64
   %349 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %346, i64 0, i64 %348
   %350 = getelementptr inbounds %struct.slab_stats_automove, %struct.slab_stats_automove* %349, i32 0, i32 2
   %351 = load i64, i64* %350, align 8
-  %352 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %353 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %352, i32 0, i32 10
+  %352 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %353 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %352, i32 0, i32 10
   %354 = load i32, i32* %12, align 4
   %355 = sext i32 %354 to i64
   %356 = getelementptr inbounds [64 x i32], [64 x i32]* %353, i64 0, i64 %355
@@ -72285,12 +72293,12 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br label %364
 
 364:                                              ; preds = %360, %344
-  %365 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
+  %365 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
   %366 = load i32, i32* %12, align 4
-  %367 = call %struct.window_data.432* @get_window_data(%struct.slab_automove.433* %365, i32 %366)
-  store %struct.window_data.432* %367, %struct.window_data.432** %21, align 8
-  %368 = load %struct.window_data.432*, %struct.window_data.432** %21, align 8
-  %369 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %368, i32 0, i32 4
+  %367 = call %struct.window_data.423* @get_window_data(%struct.slab_automove.424* %365, i32 %366)
+  store %struct.window_data.423* %367, %struct.window_data.423** %21, align 8
+  %368 = load %struct.window_data.423*, %struct.window_data.423** %21, align 8
+  %369 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %368, i32 0, i32 4
   store i32 1, i32* %369, align 4
   br label %436
 
@@ -72300,7 +72308,7 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   br i1 %372, label %384, label %373
 
 373:                                              ; preds = %370
-  %374 = getelementptr inbounds %struct.timezone, %struct.timezone* %15, i32 0, i32 0
+  %374 = getelementptr inbounds %struct.linger, %struct.linger* %15, i32 0, i32 0
   %375 = load i32, i32* %374, align 4
   %376 = icmp ne i32 %375, 0
   br i1 %376, label %377, label %384
@@ -72344,30 +72352,30 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
   %399 = uitofp i64 %398 to double
   %400 = load i64, i64* %11, align 8
   %401 = uitofp i64 %400 to double
-  %402 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %403 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %402, i32 0, i32 7
+  %402 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %403 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %402, i32 0, i32 7
   %404 = load double, double* %403, align 8
   %405 = fmul double %401, %404
   %406 = fcmp olt double %399, %405
   br i1 %406, label %407, label %433
 
 407:                                              ; preds = %397
-  %408 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
+  %408 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
   %409 = load i32, i32* %12, align 4
-  %410 = call %struct.window_data.432* @get_window_data(%struct.slab_automove.433* %408, i32 %409)
-  store %struct.window_data.432* %410, %struct.window_data.432** %22, align 8
-  %411 = load %struct.window_data.432*, %struct.window_data.432** %22, align 8
-  %412 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %411, i32 0, i32 4
+  %410 = call %struct.window_data.423* @get_window_data(%struct.slab_automove.424* %408, i32 %409)
+  store %struct.window_data.423* %410, %struct.window_data.423** %22, align 8
+  %411 = load %struct.window_data.423*, %struct.window_data.423** %22, align 8
+  %412 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %411, i32 0, i32 4
   store i32 1, i32* %412, align 4
-  %413 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %414 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %413, i32 0, i32 14
+  %413 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %414 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %413, i32 0, i32 14
   %415 = load i32, i32* %12, align 4
   %416 = sext i32 %415 to i64
   %417 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %414, i64 0, i64 %416
   %418 = getelementptr inbounds %struct.slab_stats_automove, %struct.slab_stats_automove* %417, i32 0, i32 2
   %419 = load i64, i64* %418, align 8
-  %420 = load %struct.slab_automove.433*, %struct.slab_automove.433** %7, align 8
-  %421 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %420, i32 0, i32 10
+  %420 = load %struct.slab_automove.424*, %struct.slab_automove.424** %7, align 8
+  %421 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %420, i32 0, i32 10
   %422 = load i32, i32* %12, align 4
   %423 = sext i32 %422 to i64
   %424 = getelementptr inbounds [64 x i32], [64 x i32]* %421, i64 0, i64 %423
@@ -72404,35 +72412,35 @@ define dso_local void @slab_automove_extstore_run(i8* %0, i32* %1, i32* %2) #0 {
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define internal void @global_pool_check(%struct.slab_automove.433* %0) #0 {
-  %2 = alloca %struct.slab_automove.433*, align 8
+define internal void @global_pool_check(%struct.slab_automove.424* %0) #0 {
+  %2 = alloca %struct.slab_automove.424*, align 8
   %3 = alloca i8, align 1
   %4 = alloca i32, align 4
-  %5 = alloca %struct.timezone*, align 8
+  %5 = alloca %struct.linger*, align 8
   %6 = alloca i32, align 4
-  store %struct.slab_automove.433* %0, %struct.slab_automove.433** %2, align 8
-  %7 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %8 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %7, i32 0, i32 10
+  store %struct.slab_automove.424* %0, %struct.slab_automove.424** %2, align 8
+  %7 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %8 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %7, i32 0, i32 10
   %9 = getelementptr inbounds [64 x i32], [64 x i32]* %8, i64 0, i64 0
   %10 = load i32, i32* %9, align 4
   store i32 %10, i32* %4, align 4
-  %11 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %12 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %11, i32 0, i32 1
-  %13 = load %struct.timezone*, %struct.timezone** %12, align 8
-  %14 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %15 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %14, i32 0, i32 4
+  %11 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %12 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %11, i32 0, i32 1
+  %13 = load %struct.linger*, %struct.linger** %12, align 8
+  %14 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %15 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %14, i32 0, i32 4
   %16 = load i32, i32* %15, align 4
-  %17 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %18 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %17, i32 0, i32 3
+  %17 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %18 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %17, i32 0, i32 3
   %19 = load i32, i32* %18, align 8
   %20 = urem i32 %16, %19
   %21 = zext i32 %20 to i64
-  %22 = getelementptr inbounds %struct.timezone, %struct.timezone* %13, i64 %21
-  store %struct.timezone* %22, %struct.timezone** %5, align 8
+  %22 = getelementptr inbounds %struct.linger, %struct.linger* %13, i64 %21
+  store %struct.linger* %22, %struct.linger** %5, align 8
   %23 = call i32 @global_page_pool_size(i8* %3)
   store i32 %23, i32* %6, align 4
-  %24 = load %struct.timezone*, %struct.timezone** %5, align 8
-  %25 = bitcast %struct.timezone* %24 to i8*
+  %24 = load %struct.linger*, %struct.linger** %5, align 8
+  %25 = bitcast %struct.linger* %24 to i8*
   call void @llvm.memset.p0i8.i64(i8* align 4 %25, i8 0, i64 8, i1 false)
   %26 = load i8, i8* %3, align 1
   %27 = trunc i8 %26 to i1
@@ -72449,11 +72457,11 @@ define internal void @global_pool_check(%struct.slab_automove.433* %0) #0 {
   br i1 %33, label %34, label %39
 
 34:                                               ; preds = %29
-  %35 = load %struct.timezone*, %struct.timezone** %5, align 8
-  %36 = getelementptr inbounds %struct.timezone, %struct.timezone* %35, i32 0, i32 0
+  %35 = load %struct.linger*, %struct.linger** %5, align 8
+  %36 = getelementptr inbounds %struct.linger, %struct.linger* %35, i32 0, i32 0
   store i32 1, i32* %36, align 4
-  %37 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %38 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %37, i32 0, i32 9
+  %37 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %38 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %37, i32 0, i32 9
   store i8 1, i8* %38, align 8
   br label %50
 
@@ -72464,14 +72472,14 @@ define internal void @global_pool_check(%struct.slab_automove.433* %0) #0 {
   br i1 %42, label %43, label %46
 
 43:                                               ; preds = %39
-  %44 = load %struct.timezone*, %struct.timezone** %5, align 8
-  %45 = getelementptr inbounds %struct.timezone, %struct.timezone* %44, i32 0, i32 1
+  %44 = load %struct.linger*, %struct.linger** %5, align 8
+  %45 = getelementptr inbounds %struct.linger, %struct.linger* %44, i32 0, i32 1
   store i32 1, i32* %45, align 4
   br label %49
 
 46:                                               ; preds = %39
-  %47 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %48 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %47, i32 0, i32 9
+  %47 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %48 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %47, i32 0, i32 9
   store i8 1, i8* %48, align 8
   br label %49
 
@@ -72483,14 +72491,14 @@ define internal void @global_pool_check(%struct.slab_automove.433* %0) #0 {
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define internal void @window_global_sum(%struct.timezone* %0, %struct.timezone* %1, i32 %2) #0 {
-  %4 = alloca %struct.timezone*, align 8
-  %5 = alloca %struct.timezone*, align 8
+define internal void @window_global_sum(%struct.linger* %0, %struct.linger* %1, i32 %2) #0 {
+  %4 = alloca %struct.linger*, align 8
+  %5 = alloca %struct.linger*, align 8
   %6 = alloca i32, align 4
   %7 = alloca i32, align 4
-  %8 = alloca %struct.timezone*, align 8
-  store %struct.timezone* %0, %struct.timezone** %4, align 8
-  store %struct.timezone* %1, %struct.timezone** %5, align 8
+  %8 = alloca %struct.linger*, align 8
+  store %struct.linger* %0, %struct.linger** %4, align 8
+  store %struct.linger* %1, %struct.linger** %5, align 8
   store i32 %2, i32* %6, align 4
   store i32 0, i32* %7, align 4
   br label %9
@@ -72502,24 +72510,24 @@ define internal void @window_global_sum(%struct.timezone* %0, %struct.timezone* 
   br i1 %12, label %13, label %35
 
 13:                                               ; preds = %9
-  %14 = load %struct.timezone*, %struct.timezone** %4, align 8
+  %14 = load %struct.linger*, %struct.linger** %4, align 8
   %15 = load i32, i32* %7, align 4
   %16 = sext i32 %15 to i64
-  %17 = getelementptr inbounds %struct.timezone, %struct.timezone* %14, i64 %16
-  store %struct.timezone* %17, %struct.timezone** %8, align 8
-  %18 = load %struct.timezone*, %struct.timezone** %8, align 8
-  %19 = getelementptr inbounds %struct.timezone, %struct.timezone* %18, i32 0, i32 1
+  %17 = getelementptr inbounds %struct.linger, %struct.linger* %14, i64 %16
+  store %struct.linger* %17, %struct.linger** %8, align 8
+  %18 = load %struct.linger*, %struct.linger** %8, align 8
+  %19 = getelementptr inbounds %struct.linger, %struct.linger* %18, i32 0, i32 1
   %20 = load i32, i32* %19, align 4
-  %21 = load %struct.timezone*, %struct.timezone** %5, align 8
-  %22 = getelementptr inbounds %struct.timezone, %struct.timezone* %21, i32 0, i32 1
+  %21 = load %struct.linger*, %struct.linger** %5, align 8
+  %22 = getelementptr inbounds %struct.linger, %struct.linger* %21, i32 0, i32 1
   %23 = load i32, i32* %22, align 4
   %24 = add i32 %23, %20
   store i32 %24, i32* %22, align 4
-  %25 = load %struct.timezone*, %struct.timezone** %8, align 8
-  %26 = getelementptr inbounds %struct.timezone, %struct.timezone* %25, i32 0, i32 0
+  %25 = load %struct.linger*, %struct.linger** %8, align 8
+  %26 = getelementptr inbounds %struct.linger, %struct.linger* %25, i32 0, i32 0
   %27 = load i32, i32* %26, align 4
-  %28 = load %struct.timezone*, %struct.timezone** %5, align 8
-  %29 = getelementptr inbounds %struct.timezone, %struct.timezone* %28, i32 0, i32 0
+  %28 = load %struct.linger*, %struct.linger** %5, align 8
+  %29 = getelementptr inbounds %struct.linger, %struct.linger* %28, i32 0, i32 0
   %30 = load i32, i32* %29, align 4
   %31 = add i32 %30, %27
   store i32 %31, i32* %29, align 4
@@ -72536,17 +72544,17 @@ define internal void @window_global_sum(%struct.timezone* %0, %struct.timezone* 
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
-  %2 = alloca %struct.slab_automove.433*, align 8
+define internal void @memcheck(%struct.slab_automove.424* %0) #0 {
+  %2 = alloca %struct.slab_automove.424*, align 8
   %3 = alloca i32, align 4
   %4 = alloca i32, align 4
   %5 = alloca %struct.slab_stats_automove*, align 8
   %6 = alloca i32, align 4
-  store %struct.slab_automove.433* %0, %struct.slab_automove.433** %2, align 8
+  store %struct.slab_automove.424* %0, %struct.slab_automove.424** %2, align 8
   store i32 0, i32* %3, align 4
   %7 = load volatile i32, i32* @current_time, align 4
-  %8 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %9 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %8, i32 0, i32 6
+  %8 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %9 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %8, i32 0, i32 6
   %10 = load i32, i32* %9, align 4
   %11 = add i32 %10, 60
   %12 = icmp ult i32 %7, %11
@@ -72557,8 +72565,8 @@ define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
 
 14:                                               ; preds = %1
   %15 = load volatile i32, i32* @current_time, align 4
-  %16 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %17 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %16, i32 0, i32 6
+  %16 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %17 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %16, i32 0, i32 6
   store i32 %15, i32* %17, align 4
   store i32 1, i32* %4, align 4
   br label %18
@@ -72569,8 +72577,8 @@ define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
   br i1 %20, label %21, label %98
 
 21:                                               ; preds = %18
-  %22 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %23 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %22, i32 0, i32 14
+  %22 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %23 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %22, i32 0, i32 14
   %24 = load i32, i32* %4, align 4
   %25 = sext i32 %24 to i64
   %26 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %23, i64 0, i64 %25
@@ -72592,8 +72600,8 @@ define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
   %40 = zext i32 %39 to i64
   %41 = mul nsw i64 %36, %40
   %42 = sitofp i64 %41 to double
-  %43 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %44 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %43, i32 0, i32 8
+  %43 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %44 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %43, i32 0, i32 8
   %45 = load double, double* %44, align 8
   %46 = fmul double %42, %45
   %47 = fptoui double %46 to i32
@@ -72620,14 +72628,14 @@ define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
 
 63:                                               ; preds = %56, %21
   %64 = load i32, i32* %6, align 4
-  %65 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %66 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %65, i32 0, i32 10
+  %65 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %66 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %65, i32 0, i32 10
   %67 = load i32, i32* %4, align 4
   %68 = sext i32 %67 to i64
   %69 = getelementptr inbounds [64 x i32], [64 x i32]* %66, i64 0, i64 %68
   store i32 %64, i32* %69, align 4
-  %70 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %71 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %70, i32 0, i32 2
+  %70 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %71 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %70, i32 0, i32 2
   %72 = load %struct.settings*, %struct.settings** %71, align 8
   %73 = getelementptr inbounds %struct.settings, %struct.settings* %72, i32 0, i32 71
   %74 = load i32, i32* %4, align 4
@@ -72639,16 +72647,16 @@ define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
   br i1 %79, label %80, label %94
 
 80:                                               ; preds = %63
-  %81 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %82 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %81, i32 0, i32 9
+  %81 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %82 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %81, i32 0, i32 9
   %83 = load i8, i8* %82, align 8
   %84 = trunc i8 %83 to i1
   br i1 %84, label %85, label %94
 
 85:                                               ; preds = %80
   %86 = load i32, i32* %6, align 4
-  %87 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %88 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %87, i32 0, i32 2
+  %87 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %88 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %87, i32 0, i32 2
   %89 = load %struct.settings*, %struct.settings** %88, align 8
   %90 = getelementptr inbounds %struct.settings, %struct.settings* %89, i32 0, i32 71
   %91 = load i32, i32* %4, align 4
@@ -72667,8 +72675,8 @@ define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
   br label %18, !llvm.loop !234
 
 98:                                               ; preds = %18
-  %99 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %100 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %99, i32 0, i32 14
+  %99 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %100 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %99, i32 0, i32 14
   %101 = getelementptr inbounds [64 x %struct.slab_stats_automove], [64 x %struct.slab_stats_automove]* %100, i64 0, i64 0
   %102 = getelementptr inbounds %struct.slab_stats_automove, %struct.slab_stats_automove* %101, i32 0, i32 3
   %103 = load i64, i64* %102, align 8
@@ -72679,13 +72687,13 @@ define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
   store i32 %107, i32* %3, align 4
   %108 = load i32, i32* %3, align 4
   %109 = uitofp i32 %108 to double
-  %110 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %111 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %110, i32 0, i32 8
+  %110 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %111 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %110, i32 0, i32 8
   %112 = load double, double* %111, align 8
   %113 = fmul double %109, %112
   %114 = fptoui double %113 to i32
-  %115 = load %struct.slab_automove.433*, %struct.slab_automove.433** %2, align 8
-  %116 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %115, i32 0, i32 10
+  %115 = load %struct.slab_automove.424*, %struct.slab_automove.424** %2, align 8
+  %116 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %115, i32 0, i32 10
   %117 = getelementptr inbounds [64 x i32], [64 x i32]* %116, i64 0, i64 0
   store i32 %114, i32* %117, align 4
   br label %118
@@ -72695,44 +72703,44 @@ define internal void @memcheck(%struct.slab_automove.433* %0) #0 {
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define internal %struct.window_data.432* @get_window_data(%struct.slab_automove.433* %0, i32 %1) #0 {
-  %3 = alloca %struct.slab_automove.433*, align 8
+define internal %struct.window_data.423* @get_window_data(%struct.slab_automove.424* %0, i32 %1) #0 {
+  %3 = alloca %struct.slab_automove.424*, align 8
   %4 = alloca i32, align 4
   %5 = alloca i32, align 4
-  store %struct.slab_automove.433* %0, %struct.slab_automove.433** %3, align 8
+  store %struct.slab_automove.424* %0, %struct.slab_automove.424** %3, align 8
   store i32 %1, i32* %4, align 4
   %6 = load i32, i32* %4, align 4
-  %7 = load %struct.slab_automove.433*, %struct.slab_automove.433** %3, align 8
-  %8 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %7, i32 0, i32 3
+  %7 = load %struct.slab_automove.424*, %struct.slab_automove.424** %3, align 8
+  %8 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %7, i32 0, i32 3
   %9 = load i32, i32* %8, align 8
   %10 = mul i32 %6, %9
   store i32 %10, i32* %5, align 4
-  %11 = load %struct.slab_automove.433*, %struct.slab_automove.433** %3, align 8
-  %12 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %11, i32 0, i32 0
-  %13 = load %struct.window_data.432*, %struct.window_data.432** %12, align 8
+  %11 = load %struct.slab_automove.424*, %struct.slab_automove.424** %3, align 8
+  %12 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %11, i32 0, i32 0
+  %13 = load %struct.window_data.423*, %struct.window_data.423** %12, align 8
   %14 = load i32, i32* %5, align 4
-  %15 = load %struct.slab_automove.433*, %struct.slab_automove.433** %3, align 8
-  %16 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %15, i32 0, i32 4
+  %15 = load %struct.slab_automove.424*, %struct.slab_automove.424** %3, align 8
+  %16 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %15, i32 0, i32 4
   %17 = load i32, i32* %16, align 4
-  %18 = load %struct.slab_automove.433*, %struct.slab_automove.433** %3, align 8
-  %19 = getelementptr inbounds %struct.slab_automove.433, %struct.slab_automove.433* %18, i32 0, i32 3
+  %18 = load %struct.slab_automove.424*, %struct.slab_automove.424** %3, align 8
+  %19 = getelementptr inbounds %struct.slab_automove.424, %struct.slab_automove.424* %18, i32 0, i32 3
   %20 = load i32, i32* %19, align 8
   %21 = urem i32 %17, %20
   %22 = add i32 %14, %21
   %23 = zext i32 %22 to i64
-  %24 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %13, i64 %23
-  ret %struct.window_data.432* %24
+  %24 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %13, i64 %23
+  ret %struct.window_data.423* %24
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define internal void @window_sum.1352(%struct.window_data.432* %0, %struct.window_data.432* %1, i32 %2) #0 {
-  %4 = alloca %struct.window_data.432*, align 8
-  %5 = alloca %struct.window_data.432*, align 8
+define internal void @window_sum.1352(%struct.window_data.423* %0, %struct.window_data.423* %1, i32 %2) #0 {
+  %4 = alloca %struct.window_data.423*, align 8
+  %5 = alloca %struct.window_data.423*, align 8
   %6 = alloca i32, align 4
   %7 = alloca i32, align 4
-  %8 = alloca %struct.window_data.432*, align 8
-  store %struct.window_data.432* %0, %struct.window_data.432** %4, align 8
-  store %struct.window_data.432* %1, %struct.window_data.432** %5, align 8
+  %8 = alloca %struct.window_data.423*, align 8
+  store %struct.window_data.423* %0, %struct.window_data.423** %4, align 8
+  store %struct.window_data.423* %1, %struct.window_data.423** %5, align 8
   store i32 %2, i32* %6, align 4
   store i32 0, i32* %7, align 4
   br label %9
@@ -72744,48 +72752,48 @@ define internal void @window_sum.1352(%struct.window_data.432* %0, %struct.windo
   br i1 %12, label %13, label %56
 
 13:                                               ; preds = %9
-  %14 = load %struct.window_data.432*, %struct.window_data.432** %4, align 8
+  %14 = load %struct.window_data.423*, %struct.window_data.423** %4, align 8
   %15 = load i32, i32* %7, align 4
   %16 = sext i32 %15 to i64
-  %17 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %14, i64 %16
-  store %struct.window_data.432* %17, %struct.window_data.432** %8, align 8
-  %18 = load %struct.window_data.432*, %struct.window_data.432** %8, align 8
-  %19 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %18, i32 0, i32 0
+  %17 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %14, i64 %16
+  store %struct.window_data.423* %17, %struct.window_data.423** %8, align 8
+  %18 = load %struct.window_data.423*, %struct.window_data.423** %8, align 8
+  %19 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %18, i32 0, i32 0
   %20 = load i64, i64* %19, align 8
-  %21 = load %struct.window_data.432*, %struct.window_data.432** %5, align 8
-  %22 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %21, i32 0, i32 0
+  %21 = load %struct.window_data.423*, %struct.window_data.423** %5, align 8
+  %22 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %21, i32 0, i32 0
   %23 = load i64, i64* %22, align 8
   %24 = add i64 %23, %20
   store i64 %24, i64* %22, align 8
-  %25 = load %struct.window_data.432*, %struct.window_data.432** %8, align 8
-  %26 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %25, i32 0, i32 1
+  %25 = load %struct.window_data.423*, %struct.window_data.423** %8, align 8
+  %26 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %25, i32 0, i32 1
   %27 = load i64, i64* %26, align 8
-  %28 = load %struct.window_data.432*, %struct.window_data.432** %5, align 8
-  %29 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %28, i32 0, i32 1
+  %28 = load %struct.window_data.423*, %struct.window_data.423** %5, align 8
+  %29 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %28, i32 0, i32 1
   %30 = load i64, i64* %29, align 8
   %31 = add i64 %30, %27
   store i64 %31, i64* %29, align 8
-  %32 = load %struct.window_data.432*, %struct.window_data.432** %8, align 8
-  %33 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %32, i32 0, i32 2
+  %32 = load %struct.window_data.423*, %struct.window_data.423** %8, align 8
+  %33 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %32, i32 0, i32 2
   %34 = load i64, i64* %33, align 8
-  %35 = load %struct.window_data.432*, %struct.window_data.432** %5, align 8
-  %36 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %35, i32 0, i32 2
+  %35 = load %struct.window_data.423*, %struct.window_data.423** %5, align 8
+  %36 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %35, i32 0, i32 2
   %37 = load i64, i64* %36, align 8
   %38 = add i64 %37, %34
   store i64 %38, i64* %36, align 8
-  %39 = load %struct.window_data.432*, %struct.window_data.432** %8, align 8
-  %40 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %39, i32 0, i32 3
+  %39 = load %struct.window_data.423*, %struct.window_data.423** %8, align 8
+  %40 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %39, i32 0, i32 3
   %41 = load i32, i32* %40, align 8
-  %42 = load %struct.window_data.432*, %struct.window_data.432** %5, align 8
-  %43 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %42, i32 0, i32 3
+  %42 = load %struct.window_data.423*, %struct.window_data.423** %5, align 8
+  %43 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %42, i32 0, i32 3
   %44 = load i32, i32* %43, align 8
   %45 = add i32 %44, %41
   store i32 %45, i32* %43, align 8
-  %46 = load %struct.window_data.432*, %struct.window_data.432** %8, align 8
-  %47 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %46, i32 0, i32 4
+  %46 = load %struct.window_data.423*, %struct.window_data.423** %8, align 8
+  %47 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %46, i32 0, i32 4
   %48 = load i32, i32* %47, align 4
-  %49 = load %struct.window_data.432*, %struct.window_data.432** %5, align 8
-  %50 = getelementptr inbounds %struct.window_data.432, %struct.window_data.432* %49, i32 0, i32 4
+  %49 = load %struct.window_data.423*, %struct.window_data.423** %5, align 8
+  %50 = getelementptr inbounds %struct.window_data.423, %struct.window_data.423* %49, i32 0, i32 4
   %51 = load i32, i32* %50, align 4
   %52 = add i32 %51, %48
   store i32 %52, i32* %50, align 4
@@ -73015,7 +73023,7 @@ attributes #18 = { noreturn }
 !188 = distinct !{!188, !3}
 !189 = distinct !{!189, !3}
 !190 = distinct !{!190, !3}
-!191 = !{i32 -2147248384}
+!191 = !{i32 -2147243621}
 !192 = !{i32 6375}
 !193 = distinct !{!193, !3}
 !194 = !{i32 6980, i32 7002, i32 7055}
