@@ -180,7 +180,7 @@ bool NeckAnalysis::isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
     std::vector<const llvm::Function *> WorkList(Callees.begin(),
                                                  Callees.end());
     while (!WorkList.empty()) {
-      auto *Callee = WorkList.back();
+      const auto *Callee = WorkList.back();
       WorkList.pop_back();
       if (Callee == Dst->getParent()) {
         if (CallSiteBB) {
@@ -189,7 +189,7 @@ bool NeckAnalysis::isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
         return true;
       }
       auto Callers = TA.getLLVMBasedICFG().getCallsFromWithin(Callee);
-      for (auto *Caller : Callers) {
+      for (const auto *Caller : Callers) {
         auto Callees = TA.getLLVMBasedICFG().getCalleesOfCallAt(Caller);
         // Only add to worklist if we did not analyze a callsite already
         if (VisitedCallSites.find(Caller) == VisitedCallSites.end()) {
@@ -345,62 +345,47 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
   return false;
 }
 
-/// Computes neck candidates and the definitive neck.
-neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
-                                   const std::string &TaintConfigPath,
-                                   bool FunctionLocalPTAwoGlobals,
-                                   bool UseSimplifiedDFA, bool Debug)
-    : M(M), TA(M, TaintConfigPath, FunctionLocalPTAwoGlobals, UseSimplifiedDFA,
-               Debug),
-      Neck(nullptr), Debug(Debug) {
+void neckid::NeckAnalysis::applyFilteringRules(
+    bool UseLateIntraProceduralMainReduction) {
   // Helper sets for easy erase and insert
   std::unordered_set<llvm::BasicBlock *> ToErase;
   std::unordered_set<llvm::BasicBlock *> ToInsert;
-  // Start with a list of potential neck candidates
-  std::vector<llvm::Instruction *> InterestingInstructions =
-      TA.getNeckCandidates();
-  UserBranchAndCompInstructions = TA.getUserBranchAndCompInstructions();
-  // Initialize with potential neck candidates
-  for (auto *InterestingInstruction : InterestingInstructions) {
-    NeckCandidates.insert(InterestingInstruction->getParent());
-  }
-  if (NeckCandidates.empty()) {
-    llvm::outs() << "No neck candidates found.\n";
-    return;
-  }
   if (!NeckCandidates.empty() && Debug) {
     llvm::outs() << "Neck candidates identified by the data-flow analysis:\n";
     print(NeckCandidates);
   }
-  // Remove all neck candidates that are inter-procedurally (transitively)
-  // reachable from main and instead add their origin in main, i.e., the basic
-  // block that kicks off the call chain that leads to a neck candidate.
-  for (auto *NeckCandidate : NeckCandidates) {
-    auto *Main = M.getFunction("main");
-    assert(Main && "Expected to find 'main' function!");
-    // Basic blocks within the program's entry point function are fine
-    if (NeckCandidate->getParent() == Main) {
-      continue;
+  if (!UseLateIntraProceduralMainReduction) {
+    // Remove all neck candidates that are inter-procedurally (transitively)
+    // reachable from main and instead add their origin in main, i.e., the basic
+    // block that kicks off the call chain that leads to a neck candidate.
+    for (auto *NeckCandidate : NeckCandidates) {
+      auto *Main = M.getFunction("main");
+      assert(Main && "Expected to find 'main' function!");
+      // Basic blocks within the program's entry point function are fine
+      if (NeckCandidate->getParent() == Main) {
+        continue;
+      }
+      // Replace inter-procedurally reachable neck candidates with their
+      // respective call-site basic block in the program's entry point function
+      llvm::BasicBlock *CallSiteBB = nullptr;
+      size_t Dummy;
+      if (isReachable(&Main->front(), NeckCandidate, Dummy, true,
+                      &CallSiteBB)) {
+        ToErase.insert(NeckCandidate);
+        ToInsert.insert(CallSiteBB);
+      }
     }
-    // Replace inter-procedurally reachable neck candidates with their
-    // respective call-site basic block in the program's entry point function
-    llvm::BasicBlock *CallSiteBB = nullptr;
-    size_t Dummy;
-    if (isReachable(&Main->front(), NeckCandidate, Dummy, true, &CallSiteBB)) {
-      ToErase.insert(NeckCandidate);
-      ToInsert.insert(CallSiteBB);
+    for (auto *Erase : ToErase) {
+      NeckCandidates.erase(Erase);
     }
-  }
-  for (auto Erase : ToErase) {
-    NeckCandidates.erase(Erase);
-  }
-  NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
-  ToErase.clear();
-  ToInsert.clear();
-  if (Debug) {
-    llvm::outs()
-        << "Neck candidates after intra-procedural 'main' reduction:\n";
-    print(NeckCandidates);
+    NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
+    ToErase.clear();
+    ToInsert.clear();
+    if (Debug) {
+      llvm::outs()
+          << "Neck candidates after intra-procedural 'main' reduction:\n";
+      print(NeckCandidates);
+    }
   }
   // Collect all neck candidates that are part of a loop add Loop Exits to
   // LoopBBs
@@ -435,7 +420,7 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
       }
     }
   }
-  for (auto Erase : ToErase) {
+  for (auto *Erase : ToErase) {
     NeckCandidates.erase(Erase);
   }
   NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
@@ -474,14 +459,6 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     llvm::outs() << "Neck candidates after handling loop succession:\n";
     print(NeckCandidates);
   }
-  // // Remove all basic blocks that are not loop exits (LoopBBs contains all
-  // loop
-  // // exits)
-  // eraseIf(NeckCandidates, [LoopBBs](auto *BB) { return !LoopBBs.count(BB);
-  // }); if (Debug) {
-  //   llvm::outs() << "Neck candidates after handling no-loop exits:\n";
-  //   print(NeckCandidates);
-  // }
   // Remove all basic blocks that are not reachable from main
   eraseIf(NeckCandidates, [this](auto *BB) {
     return !isReachableFromFunctionsEntry(BB, "main");
@@ -490,6 +467,39 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     llvm::outs()
         << "Neck candidates after handling reachability from 'main':\n";
     print(NeckCandidates);
+  }
+  if (UseLateIntraProceduralMainReduction) {
+    // Remove all neck candidates that are inter-procedurally (transitively)
+    // reachable from main and instead add their origin in main, i.e., the basic
+    // block that kicks off the call chain that leads to a neck candidate.
+    for (auto *NeckCandidate : NeckCandidates) {
+      auto *Main = M.getFunction("main");
+      assert(Main && "Expected to find 'main' function!");
+      // Basic blocks within the program's entry point function are fine
+      if (NeckCandidate->getParent() == Main) {
+        continue;
+      }
+      // Replace inter-procedurally reachable neck candidates with their
+      // respective call-site basic block in the program's entry point function
+      llvm::BasicBlock *CallSiteBB = nullptr;
+      size_t Dummy;
+      if (isReachable(&Main->front(), NeckCandidate, Dummy, true,
+                      &CallSiteBB)) {
+        ToErase.insert(NeckCandidate);
+        ToInsert.insert(CallSiteBB);
+      }
+    }
+    for (auto *Erase : ToErase) {
+      NeckCandidates.erase(Erase);
+    }
+    NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
+    ToErase.clear();
+    ToInsert.clear();
+    if (Debug) {
+      llvm::outs()
+          << "Neck candidates after intra-procedural 'main' reduction:\n";
+      print(NeckCandidates);
+    }
   }
   // Compute the neck candidate that is closed to the program's entry point
   Neck = closestNeckCandidateReachableFromEntry();
@@ -501,6 +511,37 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
     } else {
       llvm::outs() << *Neck << '\n';
     }
+  }
+}
+
+/// Computes neck candidates and the definitive neck.
+neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
+                                   const std::string &TaintConfigPath,
+                                   bool FunctionLocalPTAwoGlobals,
+                                   bool UseSimplifiedDFA, bool Debug)
+    : M(M), TA(M, TaintConfigPath, FunctionLocalPTAwoGlobals, UseSimplifiedDFA,
+               Debug),
+      Neck(nullptr), Debug(Debug) {
+  // Start with a list of potential neck candidates
+  std::vector<llvm::Instruction *> InterestingInstructions =
+      TA.getNeckCandidates();
+  UserBranchAndCompInstructions = TA.getUserBranchAndCompInstructions();
+  // Initialize with potential neck candidates
+  for (auto *InterestingInstruction : InterestingInstructions) {
+    NeckCandidates.insert(InterestingInstruction->getParent());
+  }
+  if (NeckCandidates.empty()) {
+    llvm::outs() << "No neck candidates found.\n";
+    return;
+  }
+  auto UnreducedNeckCandidates = NeckCandidates;
+  // Try to find a neck within the main function
+  applyFilteringRules(false /* late intra-procedural main filter */);
+  // If no neck has been found within the program's main function, look for
+  // argument parsing further down the call stack.
+  if (!Neck) {
+    std::swap(NeckCandidates, UnreducedNeckCandidates);
+    applyFilteringRules(true /* late intra-procedural main filter */);
   }
 }
 

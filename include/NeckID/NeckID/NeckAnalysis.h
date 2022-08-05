@@ -122,6 +122,8 @@ public:
 
   bool succeedsLoop(llvm::BasicBlock *BB);
 
+  void applyFilteringRules(bool UseLateIntraProceduralMainReduction);
+
   /// Computes neck candidates and the definitive neck.
   NeckAnalysis(llvm::Module &M, const std::string &TaintConfigPath,
                bool FunctionLocalPTAwoGlobals = false,

@@ -171,6 +171,8 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
             if (llvm::isa<llvm::CmpInst>(Inst) ||
                 llvm::isa<llvm::BranchInst>(Inst) ||
                 llvm::isa<llvm::PHINode>(Inst)) {
+              // NeckCandidates.push_back(
+              // const_cast<llvm::Instruction *>(Inst)); // NOLINT
               UserBranchAndCompInstructions.insert(
                   const_cast<llvm::BasicBlock *>(Inst->getParent())); // NOLINT
             }
