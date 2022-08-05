@@ -30,7 +30,7 @@ struct NeckAnalysisCFG {
   // the identified neck a highlighted (if they are located in the chosen
   // function).
   NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F,
-                  const std::string &ProgramName = "");
+                  std::string ProgramName = "");
 
   void viewCFG() const;
 
@@ -105,8 +105,8 @@ struct DOTGraphTraits<const neckid::NeckAnalysisCFG *> : DefaultDOTGraphTraits {
       IsNeckCandidate = true;
     }
     bool IsUsedInComparisonOrBranchInstruction = false;
-    if (NACFG->UserBranchAndCompInstructions.find(
-            const_cast<llvm::BasicBlock *>(Node)) !=
+    auto *UnconstNode = const_cast<llvm::BasicBlock *>(Node); // NOLINT
+    if (NACFG->UserBranchAndCompInstructions.find(UnconstNode) !=
         NACFG->UserBranchAndCompInstructions.end()) {
       IsUsedInComparisonOrBranchInstruction = true;
     }
@@ -114,7 +114,7 @@ struct DOTGraphTraits<const neckid::NeckAnalysisCFG *> : DefaultDOTGraphTraits {
       return "style=filled, fillcolor=red";
     }
     if (IsNeck && IsUsedInComparisonOrBranchInstruction) {
-      return "style=filled, fillcolor=violett";
+      return "style=filled, fillcolor=blueviolet";
     }
     if (IsNeckCandidate && !IsUsedInComparisonOrBranchInstruction) {
       return "style=filled, fillcolor=orange";

@@ -17,10 +17,10 @@
 namespace neckid {
 
 neckid::NeckAnalysisCFG::NeckAnalysisCFG(NeckAnalysis &NA, llvm::Function &F,
-                                         const std::string &ProgramName)
+                                         std::string ProgramName)
     : DisplayFunction(F), Neck(NA.getNeck()), NeckBBs(NA.getNeckCandidates()),
       UserBranchAndCompInstructions(NA.getUserBranchAndCompInstructions()),
-      ProgramName(ProgramName) {}
+      ProgramName(std::move(ProgramName)) {}
 
 void neckid::NeckAnalysisCFG::viewCFG() const {
   ViewGraph(this, "Neck-Analysis-CFG:" + DisplayFunction.getName());
