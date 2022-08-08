@@ -4,7 +4,7 @@
 ./build.sh
 
 NECK_MINER_BUILD_PATH="build/tools/neck/neck"
-LL_FILE_PATH="demo"
+LL_FILE_PATH="$1"
 
 # increase stack limit for this shell to allow for extensive phasar-based analyses
 ulimit -s 1677721
