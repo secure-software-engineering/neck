@@ -1,69 +1,39 @@
-# Automated Neck Detection
+# SLASH: Static Configuration-Analysis for Automatic Program Decomposition
 
-Automated neck detection for LLVM's intermediate representation (LLVM IR).
+Automated boundary detection for LLVM's intermediate representation (LLVM IR).
 
-## How to Build the Project?
+## Build SLASH tool
 
 ### Prerequisites: 
 
-Please perform the one-time check out of Git submodules before building the project:
+Please update all Git submodules and install the pre-requisite packages (along with a copy of custom-compiled LLVM)
 
 ```
 $ git submodule update --init --recursive
+$ ./install.sh
+$ ./build-llvm.sh
 ```
 
-On any non *nix env, use the VM's Vagrantfile provided as follows 
+### Build
+Build SLASH using `./build.sh` OR On any non *nix env, use the VM's Vagrantfile provided as follows. This will install a VM with all dependencies and pre-requisities.
 
 ```
 vagrant up
 vagrant ssh-config
+vagrant ssh
 ```
 
-This will install a VM with all dependencies and pre-requisities.
+The programs's LLVM intermediate representation (LLVM IR) are provided in `external/slash-dataset`.
 
-If you wish to use your local *nix environment, run `build.sh`.
+## Using SLASH tool
 
-### LLVM IR
+Use `$ build/tools/neck/neck --module some-file.ll` to run the SLASH tool on the `some-file.ll` LLVM IR file.
 
-Next, the coreutils programs must be compiled to LLVM intermediate representation (LLVM IR):
+## Tests
 
-```
-$ cd external/custom-coreutils/
-$ CC=wllvm configure --disable-nls CFLAGS="-g -O1 -Xclang -disable-llvm-passes -D__NO_STRING_INLINES  -D_FORTIFY_SOURCE=0 -U__OPTIMIZE__"
-$ make
-```
-
-Build the actual project using (assuming you are in the project's root directory):
+We have some tests defined in `test` and `unittests`
 
 ```
-$ mkdir build
-$ cd build/
-$ CC=clang CXX=clang++ cmake ..
-$ make
-or 
-$ cmake --build ./build --config Debug --target neck -j $nproc --
+$ cd build
+$ ctest OR ninja test
 ```
-
-Delete the auto-generated files by deleting the `build` directory: `$ rm -rf build/`.
-
-## Compiling a C/C++ Compilation Unit to LLVM IR
-
-Use `$ clang++ -std=c++17 -Wall -Wextra -emit-llvm -S -fno-discard-value-names some-file.cpp` to compile the file `some-file.cpp` to LLVM IR.
-
-## Running the Program and Analyzing LLVM IR
-
-(Assuming you are in `build/`)
-
-Use `$ tools/neck/neck --module some-file.ll` to run the small LLVM-IR-Analyzer program on the `some-file.ll` LLVM IR file.
-
-Or use `$tools/neck/neck --module ../demo/wc.ll` to run the neck id algorithm on the readily set-up wc program.
-
-## Running the Unit Tests
-
-Once the project has been build, navigate into the `build` directory and run
-
-```
-$ ctest
-```
-
-to run all unit tests specified in this project.
