@@ -15,13 +15,28 @@ $ ./build-llvm.sh
 ```
 
 ### Build
-Build SLASH using `./build.sh` OR On any non *nix env, use the VM's Vagrantfile provided as follows. This will install a VM with all dependencies and pre-requisities.
+Build SLASH using `./build.sh` 
+
+
+OR On any non *nix env, 
+
+1. use the `Dockerfile`
+
+```
+docker build -t SLASH .
+docker run --rm SLASH
+```
+
+
+2. use the `Vagrantfile` provided. This will install a VM with all dependencies and pre-requisities.
 
 ```
 vagrant up
 vagrant ssh-config
 vagrant ssh
 ```
+
+
 
 The programs's LLVM intermediate representation (LLVM IR) are provided in `external/slash-dataset`.
 
