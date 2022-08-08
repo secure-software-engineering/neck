@@ -27,7 +27,7 @@ The programs's LLVM intermediate representation (LLVM IR) are provided in `exter
 
 ## Using SLASH tool
 
-Use `$ build/tools/neck/neck --module some-file.ll` to run the SLASH tool on the `some-file.ll` LLVM IR file.
+Use `$ ./detect-neck.sh external/slash-dataset/wc.ll` to run the SLASH tool on the `external/slash-dataset/wc.ll` LLVM IR file.
 
 ## Tests
 
