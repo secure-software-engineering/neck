@@ -1,26 +1,28 @@
-#!/usr/bin/python
-from subprocess import PIPE, DEVNULL, Popen
+#!/usr/bin/env python3
+
+from asyncio import subprocess
+from subprocess import PIPE, Popen
 import re
 import sys
 import csv
 
 OUTFILE = 'benchmark.csv'
 
-def write_csv(PROGRAM, time, memory):
-    # breakpoint()
-
+def write_csv(PROGRAM, time, memory, loc):
     program = PROGRAM.split('.ll')[0].split('/')[-1]
 
     with open(OUTFILE, 'a') as csvfile:
-        fieldnames = ['Program', 'Time', 'Memory', 'LOC']
+        fieldnames = ['Program', 'Time_s', 'Memory_kbytes', 'LOC']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         # writer.writeheader()
-        writer.writerow({'Program': program, 'Time': time, 'Memory': memory, 'LOC':0})
+        writer.writerow({'Program': program, 'Time_s': time, 'Memory_kbytes': memory, 'LOC': loc})
 
 def execute(cmd):
-    with Popen(cmd, stdout=DEVNULL, stderr=PIPE, shell=True) as process:
-        output = process.communicate()[1].decode("utf-8")
-    return output
+    with Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True) as process:
+        outs, errs = process.communicate()#.decode("utf-8")
+        outs = outs.decode("utf-8")
+        errs = errs.decode("utf-8")
+        return outs, errs
 
 
 def to_seconds(timestr):
@@ -31,12 +33,14 @@ def to_seconds(timestr):
 
 
 def get_time(s):
-    # breakpoint()
-    return to_seconds(s[3].split("):")[1].strip().replace(".", ":"))
+    minutes_and_seconds = s.split(':')
+    minutes = float(minutes_and_seconds[0])
+    seconds = float(minutes_and_seconds[1])
+    return 60 * minutes + seconds
 
 
-def get_mem(s):
-    return int(s[8].split("):")[1].strip())
+def get_mem(mem):
+    return int(mem)
 
 
 def cal_average(num):
@@ -50,12 +54,11 @@ def measure(PROGRAM, N):
     mems_og = []
 
     for n in range(N):
-        out_original = execute(PROGRAM)
-        out_og = out_original.split('\n')[-23:]
-        # breakpoint()
-        og_time = get_time(out_og)
+        outs, errs = execute(PROGRAM)
+        out_og = errs.split('\n')
+        og_time = get_time(out_og[0].split(' ')[0])
         times_og.append(og_time)
-        og_mem = get_mem(out_og)
+        og_mem = get_mem(out_og[0].split(' ')[1])
         mems_og.append(og_mem)
 
     print("\nTotal iterations ", N)
@@ -67,7 +70,13 @@ def measure(PROGRAM, N):
     avg_mem_og = cal_average(mems_og)
     print("Average Memory OG (in kbytes) = ", avg_mem_og)
 
-    write_csv(PROGRAM, avg_time_og, avg_mem_og)
+    # lines of code
+    WORDCOUNT = "wc -l " + sys.argv[1]
+    outs, errs = execute(WORDCOUNT)
+    program_loc = int(outs.split(' ')[0])
+    print("Lines of Code = ", program_loc)
+
+    write_csv(PROGRAM, avg_time_og, avg_mem_og, program_loc)
     return 0
 
 
@@ -79,13 +88,14 @@ def usage():
 def main():
     if len(sys.argv) != 3:
         usage()
+    # E - Elapsed real (wall clock) time used by the process, in [hours:]minutes:seconds.
+    # M - Maximum resident set size of the process during its lifetime, in Kilobytes.
+    TIME = "/usr/bin/time -f '%E %M' "
+    LLVMBITCODE = sys.argv[1]
+    NECK = " ./build-release/tools/neck/neck -m "
+    CONFIG = " -c ./config/cmd-tool-config.json --function-local-points-to-info-wo-globals --use-simplified-dfa"
 
-    TIME = "/usr/bin/time -v "
-    BIN = sys.argv[1]
-    NECK = " ./build/tools/neck/neck -m "
-    CONFIG = " -c ./config/cmd-tool-config.json --annotate --function-local-points-to-info-wo-globals"
-
-    PROGRAM = TIME + NECK + BIN + CONFIG
+    PROGRAM = TIME + NECK + LLVMBITCODE + CONFIG
 
     N = int(sys.argv[2])
     measure(PROGRAM, N)
