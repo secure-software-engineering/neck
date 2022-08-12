@@ -19,7 +19,7 @@ def write_csv(PROGRAM, time, memory, loc):
 
 def execute(cmd):
     with Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True) as process:
-        outs, errs = process.communicate()#.decode("utf-8")
+        outs, errs = process.communicate()
         outs = outs.decode("utf-8")
         errs = errs.decode("utf-8")
         return outs, errs
