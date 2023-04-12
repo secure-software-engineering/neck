@@ -6,7 +6,7 @@ import re
 import sys
 import csv
 
-OUTFILE = 'benchmark.csv'
+OUTFILE = 'benchmarkv2.csv'
 
 def write_csv(PROGRAM, time, memory, loc):
     program = PROGRAM.split('.ll')[0].split('/')[-1]
@@ -52,9 +52,9 @@ def measure(PROGRAM, N):
 
     times_og = []
     mems_og = []
-
     for n in range(N):
         outs, errs = execute(PROGRAM)
+        print("errs: ", errs)
         out_og = errs.split('\n')
         og_time = get_time(out_og[0].split(' ')[0])
         times_og.append(og_time)
@@ -92,7 +92,7 @@ def main():
     # M - Maximum resident set size of the process during its lifetime, in Kilobytes.
     TIME = "/usr/bin/time -f '%E %M' "
     LLVMBITCODE = sys.argv[1]
-    NECK = " ./build-release/tools/neck/neck -m "
+    NECK = " ./build/tools/neck/neck -m "
     CONFIG = " -c ./config/cmd-tool-config.json --function-local-points-to-info-wo-globals --use-simplified-dfa"
 
     PROGRAM = TIME + NECK + LLVMBITCODE + CONFIG
