@@ -1,5 +1,7 @@
 # The build directory
 build*/
+new_apps/
+demo/simple_wc*
 
 # LLVM IR
 *.ll
