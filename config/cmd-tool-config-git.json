@@ -1,0 +1,14 @@
+{
+    "name": "cmd-tool-config",
+    "version": 1.0,
+    "functions": [
+        {
+            "name": "cmd_main",
+            "params": {
+                "source": [
+                    1
+                ]
+            }
+        }
+    ]
+}

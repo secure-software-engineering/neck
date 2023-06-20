@@ -1,0 +1,8 @@
+gdb commands:
+
+break NeckAnalysis.cpp:402 if NeckCandidate == 0x0
+
+run --function-local-points-to-info-wo-globals --use-simplified-dfa -m /workspaces/neck/new_apps/tmux/tmux.ll --taint-config ../config/cmd-tool-config.json --annotate
+
+
+info breakpoints

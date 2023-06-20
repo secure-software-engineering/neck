@@ -41,6 +41,8 @@
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/raw_ostream.h"
 
+#include "llvm/IR/Verifier.h"
+
 #include "NeckID/NeckID/NeckAnalysis.h"
 #include "NeckID/NeckID/TaintAnalysis.h"
 
@@ -354,7 +356,31 @@ void neckid::NeckAnalysis::applyFilteringRules(
     llvm::outs() << "Neck candidates identified by the data-flow analysis:\n";
     print(NeckCandidates);
   }
+
+  // llvm::outs() << "Size of NeckCandidates= " << NeckCandidates.size() <<
+  // "\n"; eraseIf(NeckCandidates, [](auto *BB) { return BB == nullptr; });
+  // llvm::outs() << "Size after removing Nulls NeckCandidates= "
+  //              << NeckCandidates.size() << "\n";
+
+  // llvm::outs() << "2nd Size of NeckCandidates= " << NeckCandidates.size()
+  //              << "\n";
+  // std::unordered_set<llvm::BasicBlock *> nullNeckCandidate;
+  // for (auto *NeckCandidate : NeckCandidates) {
+  //   if (NeckCandidate == nullptr)
+  //     nullNeckCandidate.insert(NeckCandidate);
+  // }
+  // for (auto *Erase : nullNeckCandidate) {
+  //   NeckCandidates.erase(Erase);
+  // }
+  // llvm::outs() << "2nd Size after removing Nulls NeckCandidates= "
+  //              << NeckCandidates.size() << "\n";
+
+  llvm::outs() << "MOH: applyFilteringRules...\n";
+
   if (!UseLateIntraProceduralMainReduction) {
+    llvm::outs() << "MOH: Conducting intra-procedural 'main' reduction "
+                    "(UseLateIntraProceduralMainReduction):"
+                 << UseLateIntraProceduralMainReduction << "\n";
     // Remove all neck candidates that are inter-procedurally (transitively)
     // reachable from main and instead add their origin in main, i.e., the basic
     // block that kicks off the call chain that leads to a neck candidate.
@@ -373,6 +399,10 @@ void neckid::NeckAnalysis::applyFilteringRules(
                       &CallSiteBB)) {
         ToErase.insert(NeckCandidate);
         ToInsert.insert(CallSiteBB);
+        // ToInsert.insert(CallSiteBB->getNextNode());
+        llvm::outs() << "CallSite= " << CallSiteBB->getNextNode() << "\n";
+        llvm::outs() << "\tCallSite= " << CallSiteBB << "\n";
+        // llvm::outs() << *CallSiteBB->getNextNode() << "\n";
       }
     }
     for (auto *Erase : ToErase) {
@@ -382,21 +412,35 @@ void neckid::NeckAnalysis::applyFilteringRules(
     ToErase.clear();
     ToInsert.clear();
     if (Debug) {
-      llvm::outs()
-          << "Neck candidates after intra-procedural 'main' reduction:\n";
+      llvm::outs() << "Neck candidates after intra-procedural 'main' reduction "
+                      "(UseLateIntraProceduralMainReduction):"
+                   << UseLateIntraProceduralMainReduction << "\n";
       print(NeckCandidates);
     }
   }
   // Collect all neck candidates that are part of a loop add Loop Exits to
   // LoopBBs
+  llvm::outs() << "MOH: Perform handling loops...\n";
   std::unordered_set<llvm::BasicBlock *> LoopBBs;
   for (auto *NeckCandidate : NeckCandidates) {
-    if (isInLoopStructue(NeckCandidate)) {
-      auto ExitBlocks = getLoopExitBlocks(NeckCandidate);
-      LoopBBs.insert(ExitBlocks.begin(), ExitBlocks.end());
-    }
+    if (NeckCandidate != nullptr)
+      if (isInLoopStructue(NeckCandidate)) {
+        auto ExitBlocks = getLoopExitBlocks(NeckCandidate);
+        LoopBBs.insert(ExitBlocks.begin(), ExitBlocks.end());
+      } else {
+        llvm::outs() << "Remove null BB\n";
+        // ToErase.insert(NeckCandidate);
+      }
+    auto temp = NeckCandidate;
+    llvm::outs() << "\ttemp = " << temp << "\n";
   }
   // Remove all basic blocks that are part of a loop (also removes loop exits)
+  llvm::outs() << "MOH: Perform handling loops 2 ...\n";
+  // llvm::outs() << "MOH: \t ToErase= " << ToErase.size() << "\n";
+  // for (auto *Erase : ToErase) {
+  //   NeckCandidates.erase(Erase);
+  // }
+  ToErase.clear();
   eraseIf(NeckCandidates, [this](auto *BB) { return isInLoopStructue(BB); });
   // Add the loops' respective exit blocks instead
   NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
@@ -408,6 +452,7 @@ void neckid::NeckAnalysis::applyFilteringRules(
   // Next, compensate for poor LLVM IR generation in case we have
   // single-instruction basic blocks that comprises an unconditional jump to the
   // next basic block.
+  llvm::outs() << "MOH: Perform cleanup...\n";
   for (auto *NeckCandidate : NeckCandidates) {
     if (NeckCandidate->size() == 1) {
       for (auto &Inst : *NeckCandidate) {
@@ -435,6 +480,7 @@ void neckid::NeckAnalysis::applyFilteringRules(
   // a BB does not dominate its single successor, but its single success does.
   // In that case, we add this single success that dominates its successor to
   // the set of potential neck candidates.
+  llvm::outs() << "MOH: handling dominators:\n";
   std::unordered_set<llvm::BasicBlock *> TransitiveDominators;
   for (auto *BB : NeckCandidates) {
     if (!dominatesSuccessors(BB) &&
@@ -454,12 +500,14 @@ void neckid::NeckAnalysis::applyFilteringRules(
     print(NeckCandidates);
   }
   // Remove all basic blocks that do not succeed a loop
+  llvm::outs() << "MOH: handling loop succession:\n";
   eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
   if (Debug) {
     llvm::outs() << "Neck candidates after handling loop succession:\n";
     print(NeckCandidates);
   }
   // Remove all basic blocks that are not reachable from main
+  llvm::outs() << "MOH: handling reachability from 'main':\n";
   eraseIf(NeckCandidates, [this](auto *BB) {
     return !isReachableFromFunctionsEntry(BB, "main");
   });
@@ -469,6 +517,9 @@ void neckid::NeckAnalysis::applyFilteringRules(
     print(NeckCandidates);
   }
   if (UseLateIntraProceduralMainReduction) {
+    llvm::outs() << "MOH: Conducting intra-procedural 'main' reduction "
+                    "(UseLateIntraProceduralMainReduction):"
+                 << UseLateIntraProceduralMainReduction << "\n";
     // Remove all neck candidates that are inter-procedurally (transitively)
     // reachable from main and instead add their origin in main, i.e., the basic
     // block that kicks off the call chain that leads to a neck candidate.
@@ -487,6 +538,7 @@ void neckid::NeckAnalysis::applyFilteringRules(
                       &CallSiteBB)) {
         ToErase.insert(NeckCandidate);
         ToInsert.insert(CallSiteBB);
+        // ToInsert.insert(CallSiteBB->getNextNode());
       }
     }
     for (auto *Erase : ToErase) {
@@ -496,8 +548,9 @@ void neckid::NeckAnalysis::applyFilteringRules(
     ToErase.clear();
     ToInsert.clear();
     if (Debug) {
-      llvm::outs()
-          << "Neck candidates after intra-procedural 'main' reduction:\n";
+      llvm::outs() << "Neck candidates after intra-procedural 'main' reduction "
+                      "(UseLateIntraProceduralMainReduction):"
+                   << UseLateIntraProceduralMainReduction << "\n";
       print(NeckCandidates);
     }
   }
