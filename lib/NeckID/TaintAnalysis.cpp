@@ -141,12 +141,12 @@ TaintAnalysis::TaintAnalysis(llvm::Module &M,
     llvm::outs() << "Solving simplified data-flow analysis ...\n";
     Solver.solve();
     llvm::outs() << "Data-flow analysis has been solved.\n";
-    if (Debug) {
-      llvm::outs() << "Raw data-flow results:\n";
-      std::stringstream RawSolverOut;
-      Solver.dumpResults(RawSolverOut);
-      llvm::outs() << RawSolverOut.str() << '\n';
-    }
+    // if (Debug) {
+    //   llvm::outs() << "Raw data-flow results:\n";
+    //   std::stringstream RawSolverOut;
+    //   Solver.dumpResults(RawSolverOut);
+    //   llvm::outs() << RawSolverOut.str() << '\n';
+    // }
     // Retrieve all usages of data that is depending on the initial seeds. In
     // case of command-line tools, these are data-flow facts that are
     // transitively reachable from the argc and argv parameters of the main

@@ -57,6 +57,7 @@ private:
   std::unordered_map<llvm::Function *, llvm::DominatorTree> DTs;
   std::unordered_map<llvm::Function *, llvm::LoopInfo> LIs;
   std::unordered_set<llvm::BasicBlock *> NeckCandidates;
+  std::unordered_set<llvm::BasicBlock *> OrigNeckCandidates;
   std::unordered_set<llvm::BasicBlock *> UserBranchAndCompInstructions;
   llvm::BasicBlock *Neck;
   [[maybe_unused]] bool Debug;
@@ -106,9 +107,26 @@ public:
   std::unordered_set<llvm::BasicBlock *>
   getLoopExitBlocks(llvm::BasicBlock *BB);
 
+  std::vector<llvm::Function *> findFunctionPath(llvm::Module &M,
+                                                 llvm::Function *targetFunc);
+
+  std::vector<llvm::BasicBlock *>
+  findBBPathToMainEntry(llvm::Module &M, llvm::BasicBlock *targetBB);
+
   llvm::BasicBlock *closestNeckCandidateReachableFromEntry();
+  llvm::BasicBlock *findCorrespondingCallSite(llvm::BasicBlock *BB);
+
+  std::unordered_set<llvm::BasicBlock *> getBBPath(llvm::BasicBlock *targetBB);
+
+  std::unordered_set<llvm::BasicBlock *>
+  getCallerBasicBlocks(llvm::BasicBlock *targetBB, llvm::BasicBlock *destBB);
+
+  std::map<llvm::BasicBlock *, std::pair<unsigned, unsigned>>
+  computeDistance(const std::unordered_set<llvm::BasicBlock *> &neckCandidates,
+                  llvm::Function *mainFunction, llvm::CallGraph &callGraph);
 
   bool isInLoopStructue(llvm::BasicBlock *BB);
+  bool isBBInsideMainFunc(llvm::BasicBlock *BB);
 
   static bool isFullDominator(const llvm::BasicBlock *BB,
                               const llvm::DominatorTree *DT);
@@ -122,7 +140,17 @@ public:
 
   bool succeedsLoop(llvm::BasicBlock *BB);
 
-  void applyFilteringRules(bool UseLateIntraProceduralMainReduction);
+  bool succeedsLoopTransitive(llvm::BasicBlock *BB);
+
+  bool isLoopinBBPathToEntry(llvm::BasicBlock *BB,
+                             llvm::ArrayRef<llvm::BasicBlock *> Blocks);
+
+  bool succeedsTaintedBBinLoop(llvm::BasicBlock *BB);
+
+  void applyFilteringRules(bool UseLateIntraProceduralMainReduction,
+                           llvm::Module &M);
+
+  void replaceBBsWithCallSites();
 
   /// Computes neck candidates and the definitive neck.
   NeckAnalysis(llvm::Module &M, const std::string &TaintConfigPath,

@@ -2,6 +2,7 @@
 build*/
 new_apps/
 demo/simple_wc*
+toy_debug
 
 # LLVM IR
 *.ll

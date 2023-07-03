@@ -7,14 +7,23 @@
  *     Philipp Schubert and others
  *****************************************************************************/
 
+#include "llvm/Analysis/CallGraph.h"
+#include "llvm/IR/Module.h"
 #include <algorithm>
 #include <deque>
 #include <limits>
+#include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+#include "llvm/IR/InstIterator.h"
+#include "llvm/IR/Module.h"
+#include <fstream>
+#include <queue>
 
 #include "llvm/ADT/GraphTraits.h"
 #include "llvm/ADT/SetVector.h"
@@ -40,8 +49,6 @@
 #include "llvm/Support/GraphWriter.h"
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/raw_ostream.h"
-
-#include "llvm/IR/Verifier.h"
 
 #include "NeckID/NeckID/NeckAnalysis.h"
 #include "NeckID/NeckID/TaintAnalysis.h"
@@ -190,6 +197,7 @@ bool NeckAnalysis::isReachable(llvm::BasicBlock *Src, llvm::BasicBlock *Dst,
         }
         return true;
       }
+
       auto Callers = TA.getLLVMBasedICFG().getCallsFromWithin(Callee);
       for (const auto *Caller : Callers) {
         auto Callees = TA.getLLVMBasedICFG().getCalleesOfCallAt(Caller);
@@ -254,7 +262,7 @@ neckid::NeckAnalysis::closestNeckCandidateReachableFromEntry() { // NOLINT
     assert(Main && !Main->isDeclaration() &&
            "Expected to find a 'main' function!");
     // FIXME update once we have an inter-procedural search
-    if (isReachable(&Main->getEntryBlock(), NeckCandidate, Dist, false,
+    if (isReachable(&Main->getEntryBlock(), NeckCandidate, Dist, true,
                     nullptr)) {
       if (Dist < ShortestDist) {
         ShortestDist = Dist;
@@ -267,6 +275,10 @@ neckid::NeckAnalysis::closestNeckCandidateReachableFromEntry() { // NOLINT
 
 bool neckid::NeckAnalysis::isInLoopStructue(llvm::BasicBlock *BB) {
   return getLoopInfo(BB).getLoopFor(BB) != nullptr;
+}
+
+bool neckid::NeckAnalysis::isBBInsideMainFunc(llvm::BasicBlock *BB) {
+  return BB->getParent()->getName() == "main";
 }
 
 // SOURCE: https://llvm.org/doxygen/SanitizerCoverage_8cpp_source.html#l00516
@@ -334,6 +346,7 @@ bool neckid::NeckAnalysis::hasSingleSuccessorThatDominatesSucessors(
 }
 
 bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
+  // llvm::outs() << "check succeedsLoop for ::: " << *BB << "\n";
   for (auto *Loop : getLoopInfo(BB)) {
     auto Blocks = Loop->getBlocks();
     for (auto *Block : Blocks) {
@@ -347,112 +360,424 @@ bool neckid::NeckAnalysis::succeedsLoop(llvm::BasicBlock *BB) {
   return false;
 }
 
-void neckid::NeckAnalysis::applyFilteringRules(
-    bool UseLateIntraProceduralMainReduction) {
+bool neckid::NeckAnalysis::isLoopinBBPathToEntry(
+    llvm::BasicBlock *BB, llvm::ArrayRef<llvm::BasicBlock *> Blocks) {
+  auto path = getBBPath(BB);
+  for (auto blk : Blocks) {
+    if (path.find(blk) != path.end())
+      return true;
+  }
+  return false;
+}
+
+// Any Succeeds loop BB should also succeeds a tainted BB inside a loop, because
+// the assumptions this loop is where config is parsed
+bool neckid::NeckAnalysis::succeedsTaintedBBinLoop(llvm::BasicBlock *BB) {
+  // llvm::outs() << "INSIED succeedsTaintedBBinLoop: " << *BB << "\n";
+  // we need to eliminate loops thar are not in the
+  // path between BB and its function entry BB
+  for (auto *Loop : getLoopInfo(BB)) {
+    // llvm::outs() << "LOOP:: " << *Loop;
+    auto Blocks = Loop->getBlocks();
+    if (isLoopinBBPathToEntry(BB, Blocks)) {
+      for (auto *Block : Blocks) {
+        // llvm::outs() << "\t\tBLOCK:: " << *Block;
+        if (OrigNeckCandidates.find(Block) != OrigNeckCandidates.end()) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+llvm::BasicBlock *
+neckid::NeckAnalysis::findCorrespondingCallSite(llvm::BasicBlock *BB) {
+  auto *Main = M.getFunction("main");
+  // Basic blocks within the program's entry point
+  // function are fine
+  if (BB->getParent() == Main) {
+    return &Main->front();
+  }
+  llvm::BasicBlock *CallSiteBB = nullptr;
+  size_t Dummy;
+  if (isReachable(&Main->front(), BB, Dummy, true, &CallSiteBB)) {
+    return CallSiteBB;
+  }
+  return CallSiteBB;
+}
+
+void neckid::NeckAnalysis::replaceBBsWithCallSites() {
   // Helper sets for easy erase and insert
   std::unordered_set<llvm::BasicBlock *> ToErase;
   std::unordered_set<llvm::BasicBlock *> ToInsert;
-  if (!NeckCandidates.empty() && Debug) {
-    llvm::outs() << "Neck candidates identified by the data-flow analysis:\n";
+  // Remove all neck candidates that are
+  // inter-procedurally (transitively) reachable from
+  // main and instead add their origin in main, i.e.,
+  // the basic block that kicks off the call chain
+  // that leads to a neck candidate.
+  for (auto *NeckCandidate : NeckCandidates) {
+    auto *Main = M.getFunction("main");
+    assert(Main && "Expected to find 'main' function!");
+    // Basic blocks within the program's entry point
+    // function are fine
+    if (NeckCandidate->getParent() == Main) {
+      continue;
+    }
+    // Replace inter-procedurally reachable neck
+    // candidates with their respective call-site
+    // basic block in the program's entry point
+    // function
+    llvm::BasicBlock *CallSiteBB = nullptr;
+    size_t Dummy;
+    if (isReachable(&Main->front(), NeckCandidate, Dummy, true, &CallSiteBB)) {
+      ToErase.insert(NeckCandidate);
+      ToInsert.insert(CallSiteBB);
+    }
+  }
+  for (auto *Erase : ToErase) {
+    NeckCandidates.erase(Erase);
+  }
+  NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
+
+  ToErase.clear();
+  ToInsert.clear();
+  if (Debug) {
+    llvm::outs() << "\tNeck candidates after intra-procedural "
+                    "'main' reduction: "
+                 << NeckCandidates.size() << "\n";
     print(NeckCandidates);
   }
+}
 
-  // llvm::outs() << "Size of NeckCandidates= " << NeckCandidates.size() <<
-  // "\n"; eraseIf(NeckCandidates, [](auto *BB) { return BB == nullptr; });
-  // llvm::outs() << "Size after removing Nulls NeckCandidates= "
-  //              << NeckCandidates.size() << "\n";
+std::vector<llvm::Function *>
+neckid::NeckAnalysis::findFunctionPath(llvm::Module &M,
+                                       llvm::Function *targetFunc) {
+  struct Node {
+    llvm::Function *func;
+    Node *pred;
+  };
+  llvm::CallGraph CG(M);
+  llvm::Function *mainFunc = M.getFunction("main");
 
-  // llvm::outs() << "2nd Size of NeckCandidates= " << NeckCandidates.size()
-  //              << "\n";
-  // std::unordered_set<llvm::BasicBlock *> nullNeckCandidate;
-  // for (auto *NeckCandidate : NeckCandidates) {
-  //   if (NeckCandidate == nullptr)
-  //     nullNeckCandidate.insert(NeckCandidate);
-  // }
-  // for (auto *Erase : nullNeckCandidate) {
-  //   NeckCandidates.erase(Erase);
-  // }
-  // llvm::outs() << "2nd Size after removing Nulls NeckCandidates= "
-  //              << NeckCandidates.size() << "\n";
+  std::stack<Node *> stack;
+  std::unordered_map<llvm::Function *, Node *> visited;
 
-  llvm::outs() << "MOH: applyFilteringRules...\n";
+  Node *start = new Node{mainFunc, nullptr};
+  stack.push(start);
+  visited[start->func] = start;
 
-  if (!UseLateIntraProceduralMainReduction) {
-    llvm::outs() << "MOH: Conducting intra-procedural 'main' reduction "
-                    "(UseLateIntraProceduralMainReduction):"
-                 << UseLateIntraProceduralMainReduction << "\n";
-    // Remove all neck candidates that are inter-procedurally (transitively)
-    // reachable from main and instead add their origin in main, i.e., the basic
-    // block that kicks off the call chain that leads to a neck candidate.
-    for (auto *NeckCandidate : NeckCandidates) {
-      auto *Main = M.getFunction("main");
-      assert(Main && "Expected to find 'main' function!");
-      // Basic blocks within the program's entry point function are fine
-      if (NeckCandidate->getParent() == Main) {
-        continue;
+  while (!stack.empty()) {
+    Node *current = stack.top();
+    stack.pop();
+
+    if (current->func == targetFunc) {
+      std::vector<llvm::Function *> path;
+      while (current) {
+        path.push_back(current->func);
+        current = current->pred;
       }
-      // Replace inter-procedurally reachable neck candidates with their
-      // respective call-site basic block in the program's entry point function
-      llvm::BasicBlock *CallSiteBB = nullptr;
-      size_t Dummy;
-      if (isReachable(&Main->front(), NeckCandidate, Dummy, true,
-                      &CallSiteBB)) {
-        ToErase.insert(NeckCandidate);
-        ToInsert.insert(CallSiteBB);
-        // ToInsert.insert(CallSiteBB->getNextNode());
-        llvm::outs() << "CallSite= " << CallSiteBB->getNextNode() << "\n";
-        llvm::outs() << "\tCallSite= " << CallSiteBB << "\n";
-        // llvm::outs() << *CallSiteBB->getNextNode() << "\n";
+      std::reverse(path.begin(), path.end());
+      return path;
+    }
+
+    // Iterate over all callees
+    for (auto &CallEntry : *CG[current->func]) {
+      llvm::Function *calledFunc = CallEntry.second->getFunction();
+
+      if (calledFunc && !calledFunc->isDeclaration() && !calledFunc->empty()) {
+        if (visited.find(calledFunc) == visited.end()) {
+          Node *calleeNode = new Node{calledFunc, current};
+          stack.push(calleeNode);
+          visited[calledFunc] = calleeNode;
+        }
       }
-    }
-    for (auto *Erase : ToErase) {
-      NeckCandidates.erase(Erase);
-    }
-    NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
-    ToErase.clear();
-    ToInsert.clear();
-    if (Debug) {
-      llvm::outs() << "Neck candidates after intra-procedural 'main' reduction "
-                      "(UseLateIntraProceduralMainReduction):"
-                   << UseLateIntraProceduralMainReduction << "\n";
-      print(NeckCandidates);
     }
   }
-  // Collect all neck candidates that are part of a loop add Loop Exits to
-  // LoopBBs
-  llvm::outs() << "MOH: Perform handling loops...\n";
+
+  return std::vector<llvm::Function *>();
+}
+
+/*Replace callsite with its corresponding BB that contains the callsite*/
+std::vector<llvm::BasicBlock *>
+neckid::NeckAnalysis::findBBPathToMainEntry(llvm::Module &M,
+                                            llvm::BasicBlock *targetBB) {
+  // Get the path at function level
+  std::vector<llvm::Function *> functionPath =
+      findFunctionPath(M, targetBB->getParent());
+
+  std::vector<llvm::BasicBlock *> path;
+  for (size_t i = 0; i < functionPath.size() - 1; ++i) {
+    llvm::Function *caller = functionPath[i];
+    llvm::Function *callee = functionPath[i + 1];
+
+    // Iterate over all basic blocks and instructions
+    // in the caller function
+    for (auto &BB : *caller) {
+      for (auto &I : BB) {
+        llvm::Function *calledFunc = nullptr;
+        if (auto *callInst = dyn_cast<llvm::CallInst>(&I)) {
+          // Check if this is the function call we're
+          // looking for
+          calledFunc = callInst->getCalledFunction();
+        } else if (auto *invokeInst = dyn_cast<llvm::InvokeInst>(&I)) {
+          calledFunc = invokeInst->getCalledFunction();
+        }
+
+        if (calledFunc == callee) {
+          path.push_back(&BB);
+          break;
+        }
+      }
+    }
+  }
+
+  // Add the target basic block
+  path.push_back(targetBB);
+
+  return path;
+}
+
+std::unordered_set<llvm::BasicBlock *>
+neckid::NeckAnalysis::getBBPath(llvm::BasicBlock *targetBB) {
+  std::unordered_set<llvm::BasicBlock *> path;
+  std::set<llvm::BasicBlock *> visited;
+  std::vector<llvm::BasicBlock *> stack;
+
+  stack.push_back(targetBB);
+
+  while (!stack.empty()) {
+    llvm::BasicBlock *currBB = stack.back();
+    stack.pop_back();
+
+    // If we've reached the entry block, stop the
+    // search.
+    if (currBB == &currBB->getParent()->getEntryBlock()) {
+      // path.insert(currBB);
+      break;
+    }
+
+    // If we've already visited this block, skip it.
+    if (visited.find(currBB) != visited.end()) {
+      continue;
+    }
+
+    visited.insert(currBB);
+    if (currBB != targetBB)
+      path.insert(currBB);
+
+    // Add all predecessors to the stack.
+    for (auto pred : predecessors(currBB)) {
+      stack.push_back(pred);
+    }
+  }
+  return path;
+}
+
+// destBB is the destination BB in the path, and we need exclude calledFunc when
+// the it's the same to the function where destBB is located
+std::unordered_set<llvm::BasicBlock *>
+neckid::NeckAnalysis::getCallerBasicBlocks(llvm::BasicBlock *targetBB,
+                                           llvm::BasicBlock *destBB) {
+  std::unordered_set<llvm::BasicBlock *> callerBlocks;
+
+  for (llvm::Instruction &I : *targetBB) {
+    if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(&I)) {
+      llvm::Function *calledFunc = callInst->getCalledFunction();
+      if (calledFunc && !calledFunc->isIntrinsic() &&
+          !calledFunc->isDeclaration() && calledFunc != destBB->getParent()) {
+        for (llvm::BasicBlock &BB : *calledFunc) {
+          callerBlocks.insert(&BB);
+        }
+      }
+    }
+  }
+  return callerBlocks;
+}
+
+/* ALL below logic just to check if the neck is
+  satisfy the condition (succeeds a loop) whether
+  immediate or transitive. The logic as follows: 1- check if BB itself is after
+  a loop that contains a tainted BB, if not 2- findBBPathToMainEntry in the path
+  from BB to the entryBB in the main 3- Identify predecessor BBs, for each preBB
+  in findBBPathToMainEntry. But make sure each preBB succeedsTaintedBBinLoop. If
+  none of preBBs satisfy succeedsTaintedBBinLoop, then we check if transitive
+  BBs satisfy succeedsTaintedBBinLoop.
+      */
+bool neckid::NeckAnalysis::succeedsLoopTransitive(llvm::BasicBlock *BB) {
+  if (succeedsTaintedBBinLoop(BB)) {
+    return true;
+  }
+
+  auto pathToMainEntry = findBBPathToMainEntry(M, BB);
+
+  std::unordered_set<llvm::BasicBlock *> transBBs;
+  bool checkLoopInPathTransitive = true;
+  for (auto bb : pathToMainEntry) {
+    auto preBBs = getBBPath(bb);
+    for (auto pre : preBBs) {
+      auto BBs = getCallerBasicBlocks(pre, BB);
+      transBBs.insert(BBs.begin(), BBs.end());
+    }
+
+    eraseIf(preBBs, [this](auto *BB) { return !succeedsTaintedBBinLoop(BB); });
+
+    if (!preBBs.empty()) {
+      checkLoopInPathTransitive = false;
+      return true;
+    }
+  }
+
+  if (checkLoopInPathTransitive) {
+    eraseIf(transBBs,
+            [this](auto *BB) { return !succeedsTaintedBBinLoop(BB); });
+    if (!transBBs.empty()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+std::map<llvm::Function *, unsigned>
+computeFunctionDistances(llvm::Function *mainFunction,
+                         llvm::CallGraph &callGraph) {
+  std::map<llvm::Function *, unsigned> distances;
+  std::queue<llvm::Function *> queue;
+
+  distances[mainFunction] = 0;
+  queue.push(mainFunction);
+
+  while (!queue.empty()) {
+    llvm::Function *currentFunction = queue.front();
+    queue.pop();
+
+    for (auto &callRecord : *callGraph[currentFunction]) {
+      llvm::Function *calleeFunction = callRecord.second->getFunction();
+
+      if (calleeFunction && distances.count(calleeFunction) == 0) {
+        distances[calleeFunction] = distances[currentFunction] + 1;
+        queue.push(calleeFunction);
+      }
+    }
+  }
+  return distances;
+}
+
+unsigned computeIntraProceduralDistance(llvm::BasicBlock *block,
+                                        llvm::BasicBlock *entry) {
+  std::queue<llvm::BasicBlock *> queue;
+  std::map<llvm::BasicBlock *, unsigned> distances;
+
+  distances[entry] = 0;
+  queue.push(entry);
+
+  while (!queue.empty()) {
+    llvm::BasicBlock *current = queue.front();
+    queue.pop();
+
+    for (llvm::BasicBlock *successor : llvm::successors(current)) {
+      if (distances.count(successor) == 0) {
+        distances[successor] = distances[current] + 1;
+        queue.push(successor);
+      }
+    }
+  }
+
+  if (distances.count(block) > 0) {
+    return distances[block];
+  } else {
+    return -1; // Indicate an error if the block is
+               // not reachable from the entry
+  }
+}
+
+std::map<llvm::BasicBlock *, std::pair<unsigned, unsigned>>
+neckid::NeckAnalysis::computeDistance(
+    const std::unordered_set<llvm::BasicBlock *> &neckCandidates,
+    llvm::Function *mainFunction, llvm::CallGraph &callGraph) {
+  std::map<llvm::BasicBlock *, std::pair<unsigned, unsigned>> distances;
+  std::map<llvm::Function *, unsigned> functionDistances =
+      computeFunctionDistances(mainFunction, callGraph);
+
+  for (llvm::BasicBlock *block : neckCandidates) {
+    llvm::Function *parentFunction = block->getParent();
+
+    if (functionDistances.count(parentFunction) > 0) {
+      distances[block] = {functionDistances[parentFunction],
+                          computeIntraProceduralDistance(
+                              block, &parentFunction->getEntryBlock())};
+    }
+  }
+
+  return distances;
+}
+
+std::vector<std::pair<llvm::BasicBlock *, std::pair<unsigned, unsigned>>>
+sortDistances(const std::map<llvm::BasicBlock *, std::pair<unsigned, unsigned>>
+                  &distances) {
+  // Convert map to a vector of pairs
+  std::vector<std::pair<llvm::BasicBlock *, std::pair<unsigned, unsigned>>> vec(
+      distances.begin(), distances.end());
+
+  // Sort vector by value (distance)
+  std::sort(vec.begin(), vec.end(),
+            [](const auto &a, const auto &b) { return a.second < b.second; });
+
+  return vec;
+}
+
+void neckid::NeckAnalysis::applyFilteringRules(
+    bool UseLateIntraProceduralMainReduction, llvm::Module &M) {
+  llvm::outs() << "\n\nConducting analysis- "
+                  "UseLateIntraProceduralMainReduction= "
+               << UseLateIntraProceduralMainReduction << "\n";
+  llvm::outs() << "=================================="
+                  "==========\n";
+  // Helper sets for easy erase and insert
+  std::unordered_set<llvm::BasicBlock *> ToErase;
+  std::unordered_set<llvm::BasicBlock *> ToInsert;
+  OrigNeckCandidates = NeckCandidates;
+  llvm::outs() << "\tTotal Number of NeckCandidates= " << NeckCandidates.size()
+               << "\n";
+  if (!NeckCandidates.empty() && Debug) {
+    llvm::outs() << "Neck candidates identified by "
+                    "the data-flow analysis:\n";
+    print(NeckCandidates);
+  }
+  if (!UseLateIntraProceduralMainReduction) {
+    replaceBBsWithCallSites();
+  } else {
+    // I need to remove BBs in the main because this
+    // analysis is more concerned about
+    // interprocedural analysis
+    eraseIf(NeckCandidates,
+            [this](auto *BB) { return isBBInsideMainFunc(BB); });
+  }
+  llvm::outs() << "\t**Start Applying Neck Properties**\n";
+  // Collect all neck candidates that are part of a
+  // loop add Loop Exits to LoopBBs
   std::unordered_set<llvm::BasicBlock *> LoopBBs;
   for (auto *NeckCandidate : NeckCandidates) {
-    if (NeckCandidate != nullptr)
-      if (isInLoopStructue(NeckCandidate)) {
-        auto ExitBlocks = getLoopExitBlocks(NeckCandidate);
-        LoopBBs.insert(ExitBlocks.begin(), ExitBlocks.end());
-      } else {
-        llvm::outs() << "Remove null BB\n";
-        // ToErase.insert(NeckCandidate);
-      }
-    auto temp = NeckCandidate;
-    llvm::outs() << "\ttemp = " << temp << "\n";
+    if (isInLoopStructue(NeckCandidate)) {
+      auto ExitBlocks = getLoopExitBlocks(NeckCandidate);
+      LoopBBs.insert(ExitBlocks.begin(), ExitBlocks.end());
+    }
   }
-  // Remove all basic blocks that are part of a loop (also removes loop exits)
-  llvm::outs() << "MOH: Perform handling loops 2 ...\n";
-  // llvm::outs() << "MOH: \t ToErase= " << ToErase.size() << "\n";
-  // for (auto *Erase : ToErase) {
-  //   NeckCandidates.erase(Erase);
-  // }
-  ToErase.clear();
+  // Remove all basic blocks that are part of a loop
+  // (also removes loop exits)
   eraseIf(NeckCandidates, [this](auto *BB) { return isInLoopStructue(BB); });
   // Add the loops' respective exit blocks instead
   NeckCandidates.insert(LoopBBs.begin(), LoopBBs.end());
   if (Debug) {
-    llvm::outs() << "Neck candidates after handling loops:\n";
+    llvm::outs() << "1- Neck candidates after handling loops: "
+                 << NeckCandidates.size() << "\n ";
     print(NeckCandidates);
   }
-  // Now, all loop blocks that aren't loop exits are removed
-  // Next, compensate for poor LLVM IR generation in case we have
-  // single-instruction basic blocks that comprises an unconditional jump to the
-  // next basic block.
-  llvm::outs() << "MOH: Perform cleanup...\n";
+  // Now, all loop blocks that aren't loop exits are
+  // removed Next, compensate for poor LLVM IR
+  // generation in case we have single-instruction
+  // basic blocks that comprises an unconditional jump
+  // to the next basic block.
   for (auto *NeckCandidate : NeckCandidates) {
     if (NeckCandidate->size() == 1) {
       for (auto &Inst : *NeckCandidate) {
@@ -472,15 +797,17 @@ void neckid::NeckAnalysis::applyFilteringRules(
   ToErase.clear();
   ToInsert.clear();
   if (Debug) {
-    llvm::outs() << "Neck candidates after IR cleanup:\n";
+    llvm::outs() << "2- Neck candidates after IR cleanup: "
+                 << NeckCandidates.size() << "\n ";
     print(NeckCandidates);
   }
-  // Remove all basic blocks that do not dominate their successors
-  // Due to some funny LLVM IR construct (cf. kill), we can have a case in which
-  // a BB does not dominate its single successor, but its single success does.
-  // In that case, we add this single success that dominates its successor to
-  // the set of potential neck candidates.
-  llvm::outs() << "MOH: handling dominators:\n";
+  // Remove all basic blocks that do not dominate
+  // their successors Due to some funny LLVM IR
+  // construct (cf. kill), we can have a case in which
+  // a BB does not dominate its single successor, but
+  // its single success does. In that case, we add
+  // this single success that dominates its successor
+  // to the set of potential neck candidates.
   std::unordered_set<llvm::BasicBlock *> TransitiveDominators;
   for (auto *BB : NeckCandidates) {
     if (!dominatesSuccessors(BB) &&
@@ -496,73 +823,69 @@ void neckid::NeckAnalysis::applyFilteringRules(
   NeckCandidates.insert(TransitiveDominators.begin(),
                         TransitiveDominators.end());
   if (Debug) {
-    llvm::outs() << "Neck candidates after handling dominators:\n";
+    llvm::outs() << "3- Neck candidates after "
+                    "handling dominators: "
+                 << NeckCandidates.size() << "\n ";
     print(NeckCandidates);
   }
-  // Remove all basic blocks that do not succeed a loop
-  llvm::outs() << "MOH: handling loop succession:\n";
-  eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
+
+  // Remove all basic blocks that do not succeed a
+  // loop
+  if (!UseLateIntraProceduralMainReduction) {
+    eraseIf(NeckCandidates, [this](auto *BB) { return !succeedsLoop(BB); });
+  } else {
+    eraseIf(NeckCandidates,
+            [this](auto *BB) { return !succeedsLoopTransitive(BB); });
+  }
   if (Debug) {
-    llvm::outs() << "Neck candidates after handling loop succession:\n";
+    llvm::outs() << "4- Neck candidates after "
+                    "handling loop succession: "
+                 << NeckCandidates.size() << "\n ";
     print(NeckCandidates);
   }
-  // Remove all basic blocks that are not reachable from main
-  llvm::outs() << "MOH: handling reachability from 'main':\n";
+
+  // Remove all basic blocks that are not reachable
+  // from main
   eraseIf(NeckCandidates, [this](auto *BB) {
     return !isReachableFromFunctionsEntry(BB, "main");
   });
   if (Debug) {
-    llvm::outs()
-        << "Neck candidates after handling reachability from 'main':\n";
+    llvm::outs() << "5- Neck candidates after handling "
+                    "reachability from 'main': "
+                 << NeckCandidates.size() << "\n ";
     print(NeckCandidates);
   }
-  if (UseLateIntraProceduralMainReduction) {
-    llvm::outs() << "MOH: Conducting intra-procedural 'main' reduction "
-                    "(UseLateIntraProceduralMainReduction):"
-                 << UseLateIntraProceduralMainReduction << "\n";
-    // Remove all neck candidates that are inter-procedurally (transitively)
-    // reachable from main and instead add their origin in main, i.e., the basic
-    // block that kicks off the call chain that leads to a neck candidate.
-    for (auto *NeckCandidate : NeckCandidates) {
-      auto *Main = M.getFunction("main");
-      assert(Main && "Expected to find 'main' function!");
-      // Basic blocks within the program's entry point function are fine
-      if (NeckCandidate->getParent() == Main) {
-        continue;
-      }
-      // Replace inter-procedurally reachable neck candidates with their
-      // respective call-site basic block in the program's entry point function
-      llvm::BasicBlock *CallSiteBB = nullptr;
-      size_t Dummy;
-      if (isReachable(&Main->front(), NeckCandidate, Dummy, true,
-                      &CallSiteBB)) {
-        ToErase.insert(NeckCandidate);
-        ToInsert.insert(CallSiteBB);
-        // ToInsert.insert(CallSiteBB->getNextNode());
-      }
-    }
-    for (auto *Erase : ToErase) {
-      NeckCandidates.erase(Erase);
-    }
-    NeckCandidates.insert(ToInsert.begin(), ToInsert.end());
-    ToErase.clear();
-    ToInsert.clear();
-    if (Debug) {
-      llvm::outs() << "Neck candidates after intra-procedural 'main' reduction "
-                      "(UseLateIntraProceduralMainReduction):"
-                   << UseLateIntraProceduralMainReduction << "\n";
-      print(NeckCandidates);
-    }
+  if (NeckCandidates.size() == 1) {
+    Neck = *NeckCandidates.begin();
+  } else if (!UseLateIntraProceduralMainReduction) {
+    // Compute the neck candidate that is closed to
+    // the program's entry point
+    Neck = closestNeckCandidateReachableFromEntry();
+  } else {
+    llvm::CallGraph CG(M);
+    llvm::Function *mainFunction = M.getFunction("main");
+    // Compute the distances
+    auto distances = computeDistance(NeckCandidates, mainFunction, CG);
+    auto sortedDistances = sortDistances(distances);
+
+    if (!sortedDistances.empty())
+      Neck = sortedDistances[0].first;
   }
-  // Compute the neck candidate that is closed to the program's entry point
-  Neck = closestNeckCandidateReachableFromEntry();
-  if (Debug) {
-    llvm::outs()
-        << "Closest neck candidate from entry point of 'main'/the neck: ";
-    if (!Neck) {
-      llvm::outs() << "No neck candidate found!\n";
-    } else {
-      llvm::outs() << *Neck << '\n';
+
+  llvm::outs() << "\tClosest neck candidate from entry point "
+                  "of 'main'/the neck: ";
+  if (!Neck) {
+    llvm::outs() << "No neck candidate found!\n";
+  } else {
+    llvm::outs() << *Neck << " \tINSIDE FUNC: " << Neck->getParent()->getName()
+                 << '\n';
+    if (UseLateIntraProceduralMainReduction) {
+      llvm::outs() << "\n\tCorresponding BB in the main is:\n";
+      auto *corres = findCorrespondingCallSite(Neck);
+      if (corres)
+        llvm::outs() << "\t" << *corres
+                     << " \tINSIDE FUNC: " << corres->getParent()->getName()
+                     << "\n";
     }
   }
 }
@@ -589,12 +912,13 @@ neckid::NeckAnalysis::NeckAnalysis(llvm::Module &M,
   }
   auto UnreducedNeckCandidates = NeckCandidates;
   // Try to find a neck within the main function
-  applyFilteringRules(false /* late intra-procedural main filter */);
-  // If no neck has been found within the program's main function, look for
-  // argument parsing further down the call stack.
+  applyFilteringRules(false /* late intra-procedural main filter */, M);
+  // If no neck has been found within the program's
+  // main function, look for argument parsing further
+  // down the call stack.
   if (!Neck) {
     std::swap(NeckCandidates, UnreducedNeckCandidates);
-    applyFilteringRules(true /* late intra-procedural main filter */);
+    applyFilteringRules(true /* late intra-procedural main filter */, M);
   }
 }
 
@@ -628,8 +952,8 @@ void neckid::NeckAnalysis::markIdentifiedNeck(const std::string &FunName) {
   llvm::IRBuilder<> Builder(CTX);
   Builder.SetInsertPoint(BB);
   Builder.CreateRetVoid();
-  // Add call to the artifical marker function in the basic block that has been
-  // identified as neck
+  // Add call to the artifical marker function in the
+  // basic block that has been identified as neck
   Builder.SetInsertPoint(&Neck->front());
   Builder.CreateCall(MarkerFun);
 }
