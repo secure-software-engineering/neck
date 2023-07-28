@@ -1,0 +1,17 @@
+HandBrakeCLI.ll,11948790
+ffmpeg.ll,9095116
+git.ll,1891080
+hashcat.ll,977989
+nginx.ll,589241
+openssl.ll,964678
+phantomjs.ll,29725
+php.ll,5831033
+postgres_backend.ll,4626301
+redis-cli-7.0.4.ll,818274
+redis-sentinel-7.0.4.ll,1446271
+redis-server-7.0.4.ll,1446271
+redis-server.ll,1437364
+rethinkdb.ll,8033206
+sort.ll,55859
+sqlite3.ll,839056
+squid.ll,786002

@@ -41,6 +41,13 @@ The steps of applyFilteringRules:
 8) Compute closestNeckCandidateReachableFromEntry
 
 
+```
+tools/neck/neck --function-local-points-to-info-wo-globals --use-simplified-dfa -m /workpaces/neck/new_apps/squid/src/squid.ll --taint-config ../config/cmd-tool-config.json --annotate --verbose > squid_taint.log 2>&1 
+```
+
+```
+tools/neck/neck --function-local-points-to-info-wo-globals --use-simplified-dfa -m /workspaces/neck/new_apps/toy_examples/toy_config_outside_main_deep.ll --taint-config ../config/cmd-tool-config.json --annotate --verbose 2>&1 | tee before_merge_func_deep.log
+```
 
 Observations:
 ============
@@ -55,16 +62,6 @@ The location of this BB in the source code is [HERE](https://github.com/squid-ca
 
 - One solution is to disable this filter when `UseLateIntraProceduralMainReduction` is `1` **OR** check if there is a reachable BB that involves a loop and is located between this BB and the entrypoint. However, this means we need to perform interprocedural analysis.
 
-```
-tools/neck/neck --function-local-points-to-info-wo-globals  -m /work
-spaces/neck/new_apps/squid/src/squid.ll --taint-config ../config/cmd-tool-config.json --annotate --verbose > squid_taint.log 2>&1 
-```
-
-
-```
-tools/neck/neck --function-local-points-to-info-wo-globals --use-simplified-dfa -m /workspaces/neck/new_apps/toy_examples/toy_config_outside_main_deep.ll --taint-config ../config/cmd-tool-config.json --annotate --verbose 2>&1 | tee before_merge_func_deep.log
-```
-
 2. It's not necessary for the neck BB outside the main to dominate subsequent BBs. There is a possibility that this BB is the last. For example, in the toy example, when there is no statement after the loop 
 ```
 for (int i = 1; i < argc; i++) {
@@ -72,5 +69,40 @@ for (int i = 1; i < argc; i++) {
   }
 ```
 
+3. **bind** 
+The function that contains the config parsing logic is `parse_command_line` and is called inside the main from this BB 
+```
+16:                                               ; preds = %2
+  call void @isc_assertion_setcallback(void (i8*, i32, i32, i8*)* @assertion_failed), !dbg !74513, !psr.id !74514
+  call void @isc_error_setfatal(void (i8*, i32, i8*, %struct.__va_list_tag*)* @library_fatal_error), !dbg !74515, !psr.id !74516
+  call void @isc_error_setunexpected(void (i8*, i32, i8*, %struct.__va_list_tag*)* @library_unexpected_error), !dbg !74517, !psr.id !74518
+  call void @named_os_init(i8* getelementptr inbounds ([255 x i8], [255 x i8]* @program_name, i64 0, i64 0)), !dbg !74519, !psr.id !74520
+  call void @dns_result_register(), !dbg !74521, !psr.id !74522
+  call void @dst_result_register(), !dbg !74523, !psr.id !74524
+  call void @isccc_result_register(), !dbg !74525, !psr.id !74526
+  %17 = load i32, i32* @isc_mem_defaultflags, align 4, !dbg !74527, !psr.id !74528
+  %18 = and i32 %17, -5, !dbg !74527, !psr.id !74529
+  store i32 %18, i32* @isc_mem_defaultflags, align 4, !dbg !74527, !psr.id !74530
+  %19 = load i32, i32* %4, align 4, !dbg !74531, !psr.id !74532
+  %20 = load i8**, i8*** %5, align 8, !dbg !74533, !psr.id !74534
+  call void @parse_command_line(i32 %19, i8** %20), !dbg !74535, !psr.id !74536
+  call void @klee_dump_memory(), !dbg !74537, !psr.id !74538
+  %21 = load i8*, i8** @named_g_chrootdir, align 8, !dbg !74539, !psr.id !74541
+  %22 = icmp ne i8* %21, null, !dbg !74542, !psr.id !74543
+  br i1 %22, label %23, label %53, !dbg !74544, !psr.id !74545
+```
 
-3. Update `closestNeckCandidateReachableFromEntry` for `UseLateIntraProceduralMainReduction` because the distance currently is computed based on the assumption that the `neck` is inside the `main`
+But slash returns a BB in a different function `named_main_earlywarning` and this BB is called from this BB inside the main 
+
+```
+64:                                               ; preds = %61
+  %65 = load i32, i32* %6, align 4, !dbg !74639, !psr.id !74641
+  %66 = call i8* @isc_result_totext(i32 %65), !dbg !74642, !psr.id !74643
+  call void (i8*, i32, i8*, ...) @isc_error_unexpected(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.19.274, i64 0, i64 0), i32 1546, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @.str.20.275, i64 0, i64 0), i8* %66), !dbg !74644, !psr.id !74645
+  store i32 0, i32* %6, align 4, !dbg !74646, !psr.id !74647
+  br label %67, !dbg !74648, !psr.id !74649
+```
+
+Now I feel the problem comes from the implementation of this function `succeedsLoopTransitive` because the BB inside the function `named_main_earlywarning` is the first BB and doesn't succeed any loop, but it satisfies the condition because of `transBBs` that checks BBs in the path and captures BB from callsites exist in the path.
+
+A potential solution is to eliminate transitive BBs in the main when we check the path

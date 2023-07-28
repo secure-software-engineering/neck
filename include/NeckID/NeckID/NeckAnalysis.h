@@ -109,9 +109,11 @@ public:
 
   std::vector<llvm::Function *> findFunctionPath(llvm::Module &M,
                                                  llvm::Function *targetFunc);
+  std::vector<const llvm::Function *>
+  findFunctionPathICFG(psr::LLVMBasedICFG &icfg, llvm::Function *targetFunc);
 
   std::vector<llvm::BasicBlock *>
-  findBBPathToMainEntry(llvm::Module &M, llvm::BasicBlock *targetBB);
+  findBBPathToMainFunc(llvm::Module &M, llvm::BasicBlock *targetBB);
 
   llvm::BasicBlock *closestNeckCandidateReachableFromEntry();
   llvm::BasicBlock *findCorrespondingCallSite(llvm::BasicBlock *BB);

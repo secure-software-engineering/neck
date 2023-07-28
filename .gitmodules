@@ -1,6 +1,7 @@
 [submodule "external/googletest"]
 	path = external/googletest
 	url = https://github.com/google/googletest.git
+	branch = main
 [submodule "external/phasar"]
 	path = external/phasar
 	url = git@github.com:secure-software-engineering/phasar.git
