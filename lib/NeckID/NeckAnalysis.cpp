@@ -408,6 +408,7 @@ neckid::NeckAnalysis::findCorrespondingCallSite(llvm::BasicBlock *BB) {
 }
 
 void neckid::NeckAnalysis::replaceBBsWithCallSites() {
+  llvm::outs() << "Inside replaceBBsWithCallSites\n";
   // Helper sets for easy erase and insert
   std::unordered_set<llvm::BasicBlock *> ToErase;
   std::unordered_set<llvm::BasicBlock *> ToInsert;
@@ -430,6 +431,7 @@ void neckid::NeckAnalysis::replaceBBsWithCallSites() {
     // function
     llvm::BasicBlock *CallSiteBB = nullptr;
     size_t Dummy;
+    llvm::outs() << "\t Check reachability\n";
     if (isReachable(&Main->front(), NeckCandidate, Dummy, true, &CallSiteBB)) {
       ToErase.insert(NeckCandidate);
       ToInsert.insert(CallSiteBB);
@@ -448,51 +450,6 @@ void neckid::NeckAnalysis::replaceBBsWithCallSites() {
                  << NeckCandidates.size() << "\n";
     print(NeckCandidates);
   }
-}
-
-std::vector<const llvm::Function *>
-neckid::NeckAnalysis::findFunctionPathICFG(psr::LLVMBasedICFG &icfg,
-                                           llvm::Function *targetFunc) {
-  std::vector<const llvm::Function *> path;
-  std::unordered_set<const llvm::Function *> visited;
-
-  // Start from the target function
-  const llvm::Function *currentFunc = targetFunc;
-
-  // Loop until we reach the main function or encounter a cycle
-  while (currentFunc->getName() != "main") {
-    // Check if we've already visited this function
-    if (visited.count(currentFunc) > 0) {
-      // We've found a cycle, so there's no path to the main function
-      return {};
-    }
-
-    // Mark the current function as visited
-    visited.insert(currentFunc);
-
-    // Add the current function to the path
-    path.push_back(currentFunc);
-
-    // Find the callers of the current function
-    auto callers = icfg.getCallersOf(currentFunc);
-
-    // Check if we found any callers
-    if (callers.empty()) {
-      // No callers found, so there's no path to the main function
-      return {};
-    }
-
-    // For simplicity, we just take the first caller
-    // In a real-world scenario, you might need to handle multiple callers
-    // Note: we're using an iterator to access the first element of the set
-    const llvm::Instruction *callerInst = *callers.begin();
-    currentFunc = callerInst->getFunction();
-  }
-
-  // Add the main function to the path
-  path.push_back(currentFunc);
-
-  return path;
 }
 
 std::vector<llvm::Function *>
@@ -550,10 +507,7 @@ neckid::NeckAnalysis::findBBPathToMainFunc(llvm::Module &M,
   // Get the path at function level
   std::vector<llvm::Function *> functionPath =
       findFunctionPath(M, targetBB->getParent());
-  // auto functionPathICFG =
-  //     findFunctionPathICFG(TA.getLLVMBasedICFG(), targetBB->getParent());
-  // llvm::outs() << "^^^^ AFTER  getLLVMBasedICFG size : "
-  //              << functionPathICFG.size() << "\n";
+
   std::vector<llvm::BasicBlock *> path;
   if (!functionPath.empty())
     for (size_t i = 0; i < functionPath.size() - 1; ++i) {
@@ -565,11 +519,11 @@ neckid::NeckAnalysis::findBBPathToMainFunc(llvm::Module &M,
       for (auto &BB : *caller) {
         for (auto &I : BB) {
           llvm::Function *calledFunc = nullptr;
-          if (auto *callInst = dyn_cast<llvm::CallInst>(&I)) {
+          if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(&I)) {
             // Check if this is the function call we're
             // looking for
             calledFunc = callInst->getCalledFunction();
-          } else if (auto *invokeInst = dyn_cast<llvm::InvokeInst>(&I)) {
+          } else if (auto *invokeInst = llvm::dyn_cast<llvm::InvokeInst>(&I)) {
             calledFunc = invokeInst->getCalledFunction();
           }
 
@@ -645,7 +599,7 @@ neckid::NeckAnalysis::getCallerBasicBlocks(llvm::BasicBlock *targetBB,
 }
 
 /* ALL below logic just to check if the neck is
-  satisfy the condition (succeeds a loop) whether
+  satisfying the condition (succeeds a loop) whether
   immediate or transitive. The logic as follows: 1- check if BB itself is after
   a loop that contains a tainted BB, if not 2- findBBPathToMainFunc in the path
   from BB to the entryBB in the main 3- Identify predecessor BBs, for each preBB
@@ -942,6 +896,7 @@ void neckid::NeckAnalysis::applyFilteringRules(
   llvm::outs() << "\t\tNeck candidates after handling "
                   "reachability from 'main': "
                << NeckCandidates.size() << "\n ";
+  print(NeckCandidates);
   if (Debug) {
     print(NeckCandidates);
   }

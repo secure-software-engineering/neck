@@ -7,11 +7,11 @@ target_link_libraries(constantconv
   phasar_config
   phasar_utils
   phasar_pointer
-  phasar_typehierarchy
+  phasar_llvm_typehierarchy
   phasar_controlflow
-  phasar_phasarllvm_utils
+  phasar_llvm_utils
   phasar_db
-  phasar_ifdside
+  phasar_llvm_ifdside
 )
 
 if(USE_LLVM_FAT_LIB)

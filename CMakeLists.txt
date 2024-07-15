@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.6)
+cmake_minimum_required(VERSION 3.6)
 
 project(Automated-Neck-Identification)
 set(CMAKE_PROJECT_NAME "Automated-Neck-Identification")
@@ -11,21 +11,22 @@ set_property(GLOBAL PROPERTY TARGET_MESSAGES OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "DebugSan" CACHE STRING "Build mode ('DebugSan', 'Debug' or 'Release', default is 'DebugSan')" FORCE)
-endif ()
+endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "DebugSan")
-# Debug build with address and undefined behavior sanitizers enabled
+  # Debug build with address and undefined behavior sanitizers enabled
   message(STATUS "Select Debug Build with Sanitizers")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -MP -fstack-protector-strong -g -fno-omit-frame-pointer -fsanitize=address,undefined")
   set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address,undefined")
+
   # Required to communicate enabled sanitizers to PhASAR
   set(LLVM_USE_SANITIZER "Address,Undefined")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-# Standard debug build
+  # Standard debug build
   message(STATUS "Select Debug Build")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -MP -fstack-protector-strong -g")
 else()
-# Release build
+  # Release build
   message(STATUS "Select Release Build")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -MP -fstack-protector-strong -march=native")
 endif()
@@ -47,14 +48,16 @@ option(NECKID_BUILD_IR "Build IR test code (default is ON)" ON)
 option(BUILD_SHARED_LIBS "Build shared libraries (default is ON)" ON)
 
 option(NECKID_ENABLE_WARNINGS "Enable warnings" ON)
-if (NECKID_ENABLE_WARNINGS)
+
+if(NECKID_ENABLE_WARNINGS)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-return-type-c-linkage ")
-endif (NECKID_ENABLE_WARNINGS)
+endif(NECKID_ENABLE_WARNINGS)
 
 option(NECKID_ENABLE_PIC "Build Position-Independed Code" ON)
-if (NECKID_ENABLE_PIC)
+
+if(NECKID_ENABLE_PIC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-endif (NECKID_ENABLE_PIC)
+endif(NECKID_ENABLE_PIC)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -65,13 +68,13 @@ include_directories(
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-if (LLVM_ENABLE_LIBCXX)
+if(LLVM_ENABLE_LIBCXX)
   set(NECKID_STD_FILESYSTEM c++fs)
 else()
   set(NECKID_STD_FILESYSTEM stdc++fs)
 endif()
 
-### Adding external libraries
+# ## Adding external libraries
 # Threads
 find_package(Threads)
 
@@ -84,29 +87,34 @@ set(CMAKE_CXX_CLANG_TIDY "")
 
 # PhASAR
 add_subdirectory(external/phasar)
+
 # find_package(phasar COMPONENTS db REQUIRED)
 include_directories(external/phasar/include/)
+
 # include_directories(${PHASAR_INCLUDE_DIR})
 link_directories(${PHASAR_LIBRARY_DIR})
 
 # Googletest
 # Set up Googletest only if it is not already available through PhASAR
-if (NOT TARGET gtest OR NOT TARGET gmock)
-  add_subdirectory(external/googletest)
-endif()
-include_directories(external/googletest/googletest/include)
-include_directories(external/googletest/googlemock/include)
+# if(NOT TARGET gtest OR NOT TARGET gmock)
+# add_subdirectory(external/googletest)
+# endif()
+
+# include_directories(external/googletest/googletest/include)
+# include_directories(external/googletest/googlemock/include)
 
 # LLVM
-find_package(LLVM 12 REQUIRED CONFIG)
+find_package(LLVM 14 REQUIRED CONFIG)
 set(USE_LLVM_FAT_LIB ON)
+
 # the remaining LLVM related setup is performed by PhASAR
 
 # Set up clang-tidy to be applied during compilation to indicate code smells
-if (NECKID_RUN_CLANGTIDY_IN_BUILD)
+if(NECKID_RUN_CLANGTIDY_IN_BUILD)
   set(CMAKE_CXX_CLANG_TIDY
-      clang-tidy;
-      -header-filter=NeckID.*;
+    clang-tidy;
+    -header-filter=NeckID.*;
+
     # -warnings-as-errors=*;
   )
 endif()
@@ -117,13 +125,13 @@ add_subdirectory(include)
 add_subdirectory(lib)
 add_subdirectory(tools)
 
-if (NECKID_BUILD_UNITTESTS)
+if(NECKID_BUILD_UNITTESTS)
   message("NeckID Unittests")
   add_subdirectory(unittests)
   set(NECKID_BUILD_IR ON)
-endif()  
+endif()
 
-if (NECKID_BUILD_IR)
+if(NECKID_BUILD_IR)
   message("Building IR Test Code")
   add_subdirectory(test)
 endif()

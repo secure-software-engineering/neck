@@ -17,11 +17,11 @@ target_link_libraries(neckid_neckid
   phasar_config
   phasar_utils
   phasar_pointer
-  phasar_typehierarchy
+  phasar_llvm_typehierarchy
   phasar_controlflow
-  phasar_phasarllvm_utils
+  phasar_llvm_utils
   phasar_db
-  phasar_ifdside
+  phasar_llvm_ifdside
 )
 
 set_target_properties(neckid_neckid

@@ -4,12 +4,12 @@
 
 #include "llvm/IR/Instruction.h"
 
-#include "phasar/DB/ProjectIRDB.h"
+#include "phasar/DataFlow/IfdsIde/Solver/IDESolver.h"
 #include "phasar/PhasarLLVM/ControlFlow/LLVMBasedICFG.h"
-#include "phasar/PhasarLLVM/DataFlowSolver/IfdsIde/Problems/IDEExtendedTaintAnalysis.h"
-#include "phasar/PhasarLLVM/DataFlowSolver/IfdsIde/Solver/IDESolver.h"
-#include "phasar/PhasarLLVM/Pointer/LLVMPointsToSet.h"
-#include "phasar/PhasarLLVM/TaintConfig/TaintConfig.h"
+#include "phasar/PhasarLLVM/DB/LLVMProjectIRDB.h"
+#include "phasar/PhasarLLVM/DataFlow/IfdsIde/Problems/IDEExtendedTaintAnalysis.h"
+#include "phasar/PhasarLLVM/Pointer/LLVMAliasSet.h"
+#include "phasar/PhasarLLVM/TaintConfig.h"
 #include "phasar/PhasarLLVM/TypeHierarchy/LLVMTypeHierarchy.h"
 #include "phasar/Utils/Logger.h"
 
@@ -24,7 +24,7 @@ int main(int argc, const char **argv) {
     return 1;
   }
   psr::initializeLogger(false);
-  psr::ProjectIRDB DB({argv[1]});
+  psr::LLVMProjectIRDB DB({argv[1]});
   const auto *Main = DB.getFunctionDefinition("main");
   if (!Main) {
     std::cout
@@ -34,12 +34,12 @@ int main(int argc, const char **argv) {
     return 1;
   }
   psr::LLVMTypeHierarchy T(DB);
-  psr::LLVMPointsToSet P(DB);
+  psr::LLVMAliasSet P(&DB, false);
   std::set<std::string> EntryPoints = {"main"};
-  psr::LLVMBasedICFG I(DB, psr::CallGraphAnalysisType::OTF, EntryPoints, &T, &P,
+  psr::LLVMBasedICFG I(&DB, psr::CallGraphAnalysisType::OTF, {"main"}, &T, &P,
                        psr::Soundness::Sound, true /* include globals */);
   const auto *Euid =
-      DB.getWPAModule()->getGlobalVariable("euid", true /* allow internal */);
+      DB.getModule()->getGlobalVariable("euid", true /* allow internal */);
   if (!Euid) {
     std::cout << "Expected to find the 'euid' (global) variable within the "
                  "'id' program.\nAbort!\n";
@@ -59,7 +59,7 @@ int main(int argc, const char **argv) {
   }
   // Set up taint configuration to generate the global variable of interest at
   // each start point of the analysis
-  psr::TaintConfig Config(DB);
+  psr::LLVMTaintConfig Config(DB);
   auto EuidSourceCB = [&StartPoints, Euid](const llvm::Instruction *I) {
     std::set<const llvm::Value *> SourceValues;
     if (StartPoints.find(I) != StartPoints.end()) {
@@ -70,10 +70,10 @@ int main(int argc, const char **argv) {
   };
   Config.registerSourceCallBack(EuidSourceCB);
   std::cout << "Using the following taint configuration:\n";
-  std::cout << Config << '\n';
-  psr::IDEExtendedTaintAnalysis<2, false> TaintAnalysis(&DB, &T, &I, &P, Config,
-                                                        EntryPoints);
-  psr::IDESolver Solver(TaintAnalysis);
+  // std::cout << Config << '\n';
+  psr::IDEExtendedTaintAnalysis<2, false> TaintAnalysis(&DB, &I, &P, Config,
+                                                        {"main"});
+  psr::IDESolver Solver(TaintAnalysis, &I);
   Solver.solve();
   Solver.dumpResults();
   return 0;

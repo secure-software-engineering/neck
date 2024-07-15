@@ -1,0 +1,39 @@
+digraph "CFG for 'main' function" {
+
+    Node0x5634e95adbc0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ef886b70",label="{Entry}"];
+    Node0x5634e95adbc0 -> Node0x5634e95b2e50;
+    
+    // Define the cluster for the nodes to be grouped
+    subgraph cluster_1 {
+        style=filled;
+        color=gray;
+        label="Configuration-logic"; // Label
+        labelloc="b"; // Position label at the bottom
+        
+        Node0x5634e95b2e50 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{Lines 2 - 16|{<s0>T|<s1>Exit}}"];
+        Node0x5634e95b2e50:s0 -> Node0x5634e95b7c80;
+        
+        Node0x5634e95b7c80 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{parse-assign-check Loop}"];
+        Node0x5634e95b7c80 -> Node0x5634e95b2e50;
+    }
+    
+    Node0x5634e95b2e50:s1 -> Node0x5634e95b3570;
+    Node0x5634e95b3570 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ef886b70",label="{Line 18\lBOUNDARY}", penwidth=2, style="filled,dotted"];
+    Node0x5634e95b3570 -> Node0x5634e95b8e30;
+
+    // Original cluster
+    subgraph cluster_0 {
+        style=filled;
+        color=gray;
+        label="Main-computation"; // Label
+        labelloc="b"; // Position label at the bottom
+        
+        Node0x5634e95b8e30 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{Lines 19 - 22 |{<s0>T|<s1>Exit}}"];
+        Node0x5634e95bcb10 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{while-loop}"];
+        Node0x5634e95bf6c0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ef886b70",label="{Lines 23 - 28}"];
+    }
+
+    Node0x5634e95b8e30:s0 -> Node0x5634e95bcb10;
+    Node0x5634e95b8e30:s1 -> Node0x5634e95bf6c0;
+    Node0x5634e95bcb10 -> Node0x5634e95b8e30;
+}

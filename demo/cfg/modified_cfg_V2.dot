@@ -1,0 +1,54 @@
+digraph {
+    subgraph cluster_0 {
+        nodesep = 0.5;
+        ranksep = 0.5;
+        A [label=Entry];
+        B [label="L2"];
+        C [label="L3"];
+        D [label="L4"];
+        E [label="L5-L7"];
+        F [label="L8-L10"];
+        G [label="L11-13"];
+        label = "Configuration-Logic";
+        labelloc = "b";
+        // style=filled;
+        // color=gray;
+    }
+
+    subgraph cluster_1 {
+        nodesep = 0.5;
+        ranksep = 0.5;
+        label = "Main-Computation";
+        labelloc = "b";
+        I [label="L19"];
+        J [label="L20"];
+        K [label="L21"];
+        L [label="L23-L24"];
+        M [label="L25-L26"];
+        N [label=Exit];
+        // style=filled;
+        // color=gray;
+    }
+
+    H [fillcolor="#ef886b70",style="filled,dotted",label="L18\lBOUNDARY"];
+
+    A -> B;
+    B -> C;
+    C -> D;
+    D -> E;
+    D -> F;
+    D -> G [label=default];
+    E -> B;
+    F -> B;
+    // G -> N [label=exit];
+    C -> B;
+    B -> H ;
+    
+    H -> I;
+    I -> J;
+    J -> K;
+    K -> I;
+    I -> L;
+    L -> M;
+    M -> N;
+}

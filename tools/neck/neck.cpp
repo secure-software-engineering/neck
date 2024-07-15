@@ -112,6 +112,7 @@ int main(int Argc, char **Argv) {
   if (BrokenDbgInfo) {
     llvm::errs() << "caution: debug info is broken!\n";
   }
+
   neckid::NeckAnalysis NA(
       *M, Vars["taint-config"].as<std::string>(),
       Vars.count("function-local-points-to-info-wo-globals"),
@@ -137,5 +138,6 @@ int main(int Argc, char **Argv) {
     llvm::raw_fd_ostream OF(FileName + "_neck.ll", EC);
     NA.dumpModule(OF);
   }
+
   return 0;
 }

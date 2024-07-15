@@ -106,3 +106,5 @@ But slash returns a BB in a different function `named_main_earlywarning` and thi
 Now I feel the problem comes from the implementation of this function `succeedsLoopTransitive` because the BB inside the function `named_main_earlywarning` is the first BB and doesn't succeed any loop, but it satisfies the condition because of `transBBs` that checks BBs in the path and captures BB from callsites exist in the path.
 
 A potential solution is to eliminate transitive BBs in the main when we check the path
+
+4. **redis-server**

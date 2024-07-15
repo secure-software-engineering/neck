@@ -17,10 +17,11 @@
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Instruction.h"
 
-#include "phasar/DB/ProjectIRDB.h"
+// #include "phasar/DB/ProjectIRDB.h"
 #include "phasar/PhasarLLVM/ControlFlow/LLVMBasedICFG.h"
-#include "phasar/PhasarLLVM/Pointer/LLVMPointsToSet.h"
-#include "phasar/PhasarLLVM/TaintConfig/TaintConfig.h"
+#include "phasar/PhasarLLVM/DB/LLVMProjectIRDB.h"
+#include "phasar/PhasarLLVM/Pointer/LLVMAliasSet.h"
+#include "phasar/PhasarLLVM/TaintConfig.h"
 #include "phasar/PhasarLLVM/TypeHierarchy/LLVMTypeHierarchy.h"
 
 namespace neckid {
@@ -35,16 +36,29 @@ public:
 
   std::unordered_set<llvm::BasicBlock *> getUserBranchAndCompInstructions();
 
+  std::unordered_set<const llvm::BasicBlock *>
+  processBranchInst(const llvm::BranchInst *brInst);
+  std::unordered_set<const llvm::BasicBlock *>
+  processSwitchInst(const llvm::SwitchInst *swInst);
+  bool valueDependsOnTaint(const llvm::Value *value,
+                           const llvm::Value *taintedBase);
+  bool isDependentOnTaint(const llvm::Value *value,
+                          const llvm::Value *taintedBase);
+
   psr::LLVMBasedICFG &getLLVMBasedICFG();
 
 private:
-  psr::ProjectIRDB IR;
-  psr::TaintConfig Config;
+  psr::LLVMProjectIRDB IR;
+  // psr::TaintConfigData Config;
+  psr::LLVMTaintConfig Config;
   psr::LLVMTypeHierarchy T;
-  psr::LLVMPointsToSet P;
+  psr::LLVMAliasSet P;
+  // psr::LLVMAliasInfoRef PT{};
   psr::LLVMBasedICFG I;
   std::vector<llvm::Instruction *> NeckCandidates;
   std::unordered_set<llvm::BasicBlock *> UserBranchAndCompInstructions;
+  std::unordered_set<const llvm::BasicBlock *>
+      UserBranchAndCompInstructionsConst;
 };
 
 } // namespace neckid

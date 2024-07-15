@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-LLVM_VERSION=12
+LLVM_VERSION=14
 
 echo "Installing dependencies."
 
